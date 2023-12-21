@@ -1,0 +1,180 @@
+/*
+    DEMO STYLE
+*/
+
+/* @import "https://fonts.googleapis.com/css?family=Source+Serif+4:300,400,500,600,700";
+@import "https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700"; */
+@import "https://fonts.googleapis.com/css?family=Mukta:300,400,500,600,700";
+
+body {
+    /* font-family: 'Montserrat', sans-serif; */
+    /* font-family: 'Source Serif 4', sans-serif; */
+    font-family: 'Mukta', sans-serif;
+    background: #f8f9fa;
+}
+
+.shadow{
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.05)!important;
+}
+
+.shadow-card{
+    box-shadow: .5rem 0rem 1rem rgba(0,0,0,.05)!important;
+}
+
+.material-symbols-rounded {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.material-symbols-rounded.fill-1 {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.hover-icon:hover{
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 300px;
+    max-width: 300px;
+    background: #f8f9fa;
+    transition: all 0.3s;
+    min-height: 100vh;
+    z-index: 1031;
+}
+
+#sidebar.active {
+    margin-left: -300px;
+}
+
+#sidebar .sidebar-header {
+    min-height: 4rem;
+    height: 4rem;
+    background: #fff;
+}
+
+#sidebarMenu{
+    height: calc(100vh - 4rem);
+}
+
+#sidebarMenu input{
+    height: 3rem;
+}
+
+#sidebarMenu a{
+    padding: 1rem 1.5rem;
+    display: flex;
+}
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+    margin-top: 4rem;
+    margin-left: 300px;
+}
+
+#content.active, #navbar.active {
+    margin-left: 0;
+}
+
+#navbar {
+    margin-left: 300px;
+    transition: all 0.3s;
+    min-height: 4rem;
+}
+
+#menus{
+    display: block;
+}
+
+/* ---------------------------------------------------
+    MAIN
+----------------------------------------------------- */
+
+main {
+    padding: 2rem;
+    /* font-family: 'Source Serif 4', sans-serif; */
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -300px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+    #content, #navbar{
+        margin-left: 0;
+    }
+}
+
+
+/* LOGIN PAGE */
+#loginPage{
+    min-width: 100vw;
+    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+#loginPage .card{
+    margin-top: 30vh;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: auto;
+}
+
+@media(min-width: 992px){
+    #loginPage .card{
+        min-width: 700px;
+    }
+}
+@media(min-width: 768px){
+    #loginPage .card{
+        min-width: 500px;
+    }
+}
+@media(min-width: 576px){
+    #loginPage .card{
+        min-width: 400px;
+    }
+}
+@media(max-width: 576px){
+    #loginPage .card{
+        min-width: 100vw;
+    }
+}
+/* END OF LOGIN PAGE */
