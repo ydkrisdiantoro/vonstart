@@ -21,6 +21,10 @@ body {
     box-shadow: .5rem 0rem 1rem rgba(0,0,0,.05)!important;
 }
 
+.small{
+    font-size: smaller;
+}
+
 .material-symbols-rounded {
     font-variation-settings:
     'FILL' 0,
@@ -151,7 +155,7 @@ main {
 }
 
 #loginPage .card{
-    margin-top: 30vh;
+    margin-top: 25vh;
     margin-right: auto;
     margin-left: auto;
     margin-bottom: auto;

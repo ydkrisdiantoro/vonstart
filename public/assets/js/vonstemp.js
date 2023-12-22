@@ -11,8 +11,6 @@ $(document).ready(function () {
     });
 });
 
-feather.replace();
-
 function searchMenu() {
     var input, filter, ul, li, a, i;
     input = document.getElementById("searchMenu");

@@ -13,22 +13,47 @@
 
 <div id="loginPage">
     <div class="card shadow border-0">
-        <div class="card-body text-center">
-            <h4>Login</h4>
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" autofocus>
-                <label for="floatingInput">Email address</label>
+        <div class="card-body text-center px-3 py-5 p-sm-5">
+            <h4>Vonstart</h4>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill"></i>
+                Just click <b>Login</b> to try!
             </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
-            </div>
-            <div class="mx-auto d-flex justify-content-between mt-3">
-                <a href="#" class="my-auto">Lupa Password?</a>
-                <button type="submit" class="btn btn-primary">
-                    <i data-feather="log-in" class="me-2"></i> Login
-                </button>
-            </div>
+            <form method="POST" action="{{ route('login.store') }}">
+                @csrf
+                <div class="form-floating mb-3">
+                    <input type="email"
+                        name="email"
+                        class="form-control"
+                        id="floatingInput"
+                        placeholder="name@example.com"
+                        autofocus>
+                    <label for="floatingInput">Email Address</label>
+                </div>
+                @error('email')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+                <div class="form-floating mb-3">
+                    <input type="password"
+                        name="password"
+                        class="form-control"
+                        id="floatingPassword"
+                        placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                @error('password')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+                <div class="mx-auto d-flex justify-content-between">
+                    <a class="icon-link icon-link-hover" href="#">
+                        Forgot Password?
+                    </a>
+                    <button type="submit" class="btn btn-outline-primary">
+                        Login
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

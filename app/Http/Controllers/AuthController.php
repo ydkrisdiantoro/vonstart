@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\AuthService;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -35,25 +36,34 @@ class AuthController extends Controller
     public function goLogin(Request $request)
     {
         $this->validate($request, [
-            'email' => ['required','unique:users, email'],
-            'password' => ['required','min:6'],
+            'email' => ['required', 'email'],
+            'password' => ['required','string','min:6', 'max:20'],
         ]);
 
         $datas = $request->except('_token');
-        $logged = $this->service->goLogin($datas('email'), $datas['password']);
+        $logged = $this->service->goLogin($datas['email'], $datas['password']);
 
         if($logged){
-            $dashboardRoute = config('dashboard_route');
+            $dashboardRoute = config('vcontrol.dashboard_route');
+            // dd('masuk dashboard', Auth::check(), session()->all());
             return redirect()->route($dashboardRoute);
         } else{
+            dd('gagal login');
             $alert = $this->help->returnAlert(false);
-            return redirect()->back()->with($alert[0], $alert[1]);
+            return redirect()->back()->withErrors('Error');
         }
+    }
+
+    public function logout()
+    {
+        return $this->service->logout();
     }
 
     public function dashboard()
     {
         $datas['title'] = 'Dahsboard';
+        $datas['session'] = session()->all();
+
         return view('home.dashboard', $datas);
     }
 }

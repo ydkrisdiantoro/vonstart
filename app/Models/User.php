@@ -21,12 +21,12 @@ class User extends Authenticatable
     ];
     protected $table = 'users';
 
-    public function role()
+    public function userRoles()
     {
         return $this->hasMany(UserRole::class);
     }
 
-    public function menu()
+    public function menus()
     {
         return $this->hasManyThrough(Menu::class, UserRole::class);
     }

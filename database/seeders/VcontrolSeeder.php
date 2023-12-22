@@ -9,6 +9,7 @@ use App\Models\RoleMenu;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class VcontrolSeeder extends Seeder
 {
@@ -124,7 +125,7 @@ class VcontrolSeeder extends Seeder
         // USER
         $userList = [
             // sup3rUSER
-            ['997a3d89-b0f6-4cc2-98c4-90ecaaae1649', 'Superuser', 'su@admin.dev', null, null, '$2y$10$z.qk8fugED9Evmrr69t2J.8ljAMmkhS/nRBBfJxWqSbLJNzR1rU1a', null],
+            ['997a3d89-b0f6-4cc2-98c4-90ecaaae1649', 'Superuser', 'su@admin.dev', null, null, Hash::make('sup3rUSER'), null],
         ];
         foreach($userList as $m){
             $user = [

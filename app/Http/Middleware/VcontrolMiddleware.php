@@ -3,25 +3,38 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class VcontrolMiddleware
 {
-    public function handle($request, Closure $next, $slug, $access)
+    public function handle(Request $request, Closure $next)
     {
+        $response = $next($request);
         $menus = Session::get('menus');
+        $routeName = explode('.', $request->route()->getName());
+        $slug = $routeName[0] ?? null;
+        $access = $routeName[1] ?? null;
+
+        // dd($routeName, $menu, $access, $menus, session()->all());
 
         if($menus != null){
             $mapAccess = config('vcontrol.map_access.'.$access);
-            $matchingMenu = collect($menus)->first(function ($menu) use ($slug, $access, $mapAccess) {
-                return $menu['route'] === $slug && $access === $mapAccess;
-            });
-    
-            if (!$matchingMenu) {
-                return redirect('/')->with('error', 'Anda tidak memiliki akses yang diperlukan.');
+            $hasAccess = false;
+            foreach ($menus as $route => $listAccess) {
+                if($slug == $route){
+                    if($listAccess[$mapAccess] == 1){
+                        $hasAccess = true;
+                    }
+                }
             }
+    
+            if (!$hasAccess) {
+                return redirect('/dashboard')->withErrors('error');
+            }
+            return $response;
         }
 
-        return $next($request);
+        return $response;
     }
 }

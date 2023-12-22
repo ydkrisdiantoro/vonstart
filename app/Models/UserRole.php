@@ -14,7 +14,7 @@ class UserRole extends Model
     protected $fillable = ['role_id','user_id'];
     protected $table = 'user_roles';
 
-    public function role()
+    public function roles()
     {
         return $this->belongsTo(Role::class);
     }

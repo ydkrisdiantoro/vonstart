@@ -11,5 +11,5 @@ return [
         'delete' => 'delete',
         'validate' => 'validate',
     ],
-    'dashboard_route' => env('DASHBOARD_ROUTE', 'dashboard'),
+    'dashboard_route' => env('DASHBOARD_ROUTE', 'dashboard.read'),
 ];
