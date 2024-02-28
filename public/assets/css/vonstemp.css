@@ -87,7 +87,7 @@ body {
 }
 
 #sidebarMenu a{
-    padding: 1rem 1.5rem;
+    padding: .5rem 1.5rem;
     display: flex;
 }
 /* ---------------------------------------------------
@@ -96,7 +96,6 @@ body {
 
 #content {
     width: 100%;
-    min-height: 100vh;
     transition: all 0.3s;
     margin-top: 4rem;
     margin-left: 300px;

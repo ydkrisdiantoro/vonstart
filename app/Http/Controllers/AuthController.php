@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -45,10 +46,8 @@ class AuthController extends Controller
 
         if($logged){
             $dashboardRoute = config('vcontrol.dashboard_route');
-            // dd('masuk dashboard', Auth::check(), session()->all());
             return redirect()->route($dashboardRoute);
         } else{
-            dd('gagal login');
             $alert = $this->help->returnAlert(false);
             return redirect()->back()->withErrors('Error');
         }
@@ -61,8 +60,8 @@ class AuthController extends Controller
 
     public function dashboard()
     {
+        Session::put('active_menu', 'dashboard');
         $datas['title'] = 'Dahsboard';
-        $datas['session'] = session()->all();
 
         return view('home.dashboard', $datas);
     }

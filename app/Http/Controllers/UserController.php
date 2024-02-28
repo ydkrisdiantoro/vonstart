@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -21,6 +22,7 @@ class UserController extends Controller
 
     public function index()
     {
+        Session::put('active_menu', 'user');
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getUser();
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\RoleMenuService;
+use Illuminate\Support\Facades\Session;
 
 class RoleMenuController extends Controller
 {
@@ -21,6 +22,7 @@ class RoleMenuController extends Controller
 
     public function index()
     {
+        Session::put('active_menu', 'role-menu');
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getRoleMenu();
 

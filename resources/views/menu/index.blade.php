@@ -14,7 +14,7 @@ Dashboard
 @endsection
 
 @section('add-content-title')
-    Dashboard
+    Menu
 @endsection
 
 @section('add-content')

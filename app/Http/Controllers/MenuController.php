@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\MenuService;
+use Illuminate\Support\Facades\Session;
 
 class MenuController extends Controller
 {
@@ -21,6 +22,7 @@ class MenuController extends Controller
 
     public function index()
     {
+        Session::put('active_menu', 'menu');
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getMenu();
 

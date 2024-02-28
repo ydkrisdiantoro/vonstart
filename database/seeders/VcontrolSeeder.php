@@ -39,12 +39,10 @@ class VcontrolSeeder extends Seeder
         // MENU
         $menuList = [
             // MAIN
-            ['e89c913f-dc4f-4a43-9b58-10e7abd99412', 'db0447b8-0342-42e1-a3a5-ec8342dbaf26',
-                'Dashboard', 'home', 'welcome', 1, null, 1],
 
             // SETTINGS
             ['819c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'User', 'users', 'user', 1, null, 1],
+                'User', 'person', 'user', 1, null, 1],
             ['829c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
                 'Role', 'eye', 'role', 1, null, 2],
             ['839c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
@@ -52,9 +50,9 @@ class VcontrolSeeder extends Seeder
             ['849c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
                 'Menu', 'grid', 'menu', 1, null, 4],
             ['859c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'Role Menu', 'coffee', 'role-menu', 1, null, 5],
+                'Role Menu', 'person-gear', 'role-menu', 1, null, 5],
             ['869c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'User Role', 'at-sign', 'user-role', 1, null, 6],
+                'User Role', 'person-check', 'user-role', 1, null, 6],
         ];
         foreach($menuList as $m){
             $menu = [

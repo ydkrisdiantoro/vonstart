@@ -14,7 +14,7 @@ Dashboard
 @endsection
 
 @section('add-content-title')
-    Dashboard
+    User
 @endsection
 
 @section('add-content')

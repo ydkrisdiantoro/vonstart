@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\MenuGroupService;
+use Illuminate\Support\Facades\Session;
 
 class MenuGroupController extends Controller
 {
@@ -21,6 +22,7 @@ class MenuGroupController extends Controller
 
     public function index()
     {
+        Session::put('active_menu', 'menu-group');
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getMenuGroup();
 
