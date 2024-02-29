@@ -35,10 +35,10 @@ Dashboard
 
             <div>
                 <a href="{{ route('dashboard.read') }}"
-                    class="d-flex list-group-item list-group-item-action border-0 {{ session('active_menu') == 'dashboard' ? 'text-primary' : '' }}">
-                    <span class="my-auto">
+                    class="list-group-item list-group-item-action border-0 {{ session('active_menu') == 'dashboard' ? 'text-primary' : '' }}">
+                    <div class="my-auto">
                         <i class="bi bi-speedometer me-3 fs-5"></i>
-                    </span>
+                    </div>
                     <span class="my-auto">Dashboard</span>
                 </a>
                 @if (sizeof(session('menu_groups') ?? []) > 0)
@@ -53,7 +53,7 @@ Dashboard
                                 href="#">
                                 <div class="row px-2 rounded fw-bold">
                                     <div class="col-auto my-auto">
-                                        <span class="small m-0">{{ strtoupper($menu_group->name) }}</span>
+                                        <div class="small m-0">{{ strtoupper($menu_group->name) }}</div>
                                     </div>
                                     <div class="col my-auto">
                                         <hr class="m-0">
@@ -66,10 +66,10 @@ Dashboard
                             <div id="group{{ $loop->iteration }}" class="collapse show">
                                 @foreach (session('menus')[$menu_group_id] as $menu)
                                     <a href="{{ route($menu->route.'.read') }}"
-                                        class="d-flex list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
-                                        <span class="my-auto">
+                                        class="list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
+                                        <div class="my-auto">
                                             <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
-                                        </span>
+                                        </div>
                                         <span class="my-auto">{{ $menu['name'] }}</span>
                                     </a>
                                 @endforeach

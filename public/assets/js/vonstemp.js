@@ -19,7 +19,7 @@ function searchMenu() {
     menus = sidebarMenu.getElementsByTagName("a");
 
     for (i = 0; i < menus.length; i++) {
-        span = menus[i].getElementsByTagName("span")[1];
+        span = menus[i].getElementsByTagName("span")[0];
         namaMenu = span.innerText.toLowerCase();
         if (namaMenu.indexOf(filter) > -1) {
             menus[i].style.display = "";
