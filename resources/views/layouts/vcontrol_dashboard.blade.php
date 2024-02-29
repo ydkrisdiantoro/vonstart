@@ -44,7 +44,8 @@ Dashboard
                 @if (sizeof(session('menu_groups') ?? []) > 0)
                     @foreach (session('menu_groups') as $menu_group_id => $menu_group)
                         @if (sizeof(session('menus')[$menu_group_id] ?? []) > 0)
-                            <div type="button" class="list-group-item border-0 mx-3 py-0 my-2"
+                            <div type="button"
+                                class="list-group-item border-0 mx-3 py-0 my-2"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#group{{ $loop->iteration }}"
                                 aria-expanded="true"
@@ -58,7 +59,7 @@ Dashboard
                                         <hr class="m-0">
                                     </div>
                                     <div class="col-auto my-auto">
-                                        <i class="bi bi-three-dots m-0"></i>
+                                        <i class="bi bi-caret-down-fill m-0 collapse-icon" data-target="group{{ $loop->iteration }}"></i>
                                     </div>
                                 </div>
                             </div>
@@ -94,15 +95,16 @@ Dashboard
 
                     <div class="dropdown">
                         <a class="dropdown-toggle text-decoration-none d-flex text-dark"
-                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person me-1 text-primary"></i>
-                            <span class="d-none d-md-block me-1">{{ session('user')['name'] ?? 'Username' }}</span>
-                            <i class="bi bi-caret-down"></i>
+                            href="#" role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <span class="d-none d-md-block me-2 my-auto">{{ session('user')['name'] ?? 'Username' }}</span>
+                            <i class="bi bi-gear-fill my-auto me-1"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
                             <li>
                                 <a class="dropdown-item" href="{{ '#' }}">
-                                    <i class="bi bi-gear-fill"></i> Setting
+                                    <i class="bi bi-tools me-2"></i> Setting
                                 </a>
                             </li>
 
@@ -110,7 +112,7 @@ Dashboard
 
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout.read') }}">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                    <i class="bi bi-box-arrow-right me-2 text-danger"></i> Logout
                                 </a>
                             </li>
                         </ul>
@@ -142,5 +144,27 @@ Dashboard
 @endsection
 
 @section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var collapseIcons = document.querySelectorAll('.collapse-icon');
+
+        collapseIcons.forEach(function(icon) {
+            var targetId = icon.dataset.target;
+            var collapseElement = document.getElementById(targetId);
+
+            collapseElement.addEventListener('show.bs.collapse', function () {
+                icon.classList.remove('bi-caret-up');
+                icon.classList.remove('bi-caret-down-fill');
+                icon.classList.add('bi-caret-down-fill');
+            });
+
+            collapseElement.addEventListener('hide.bs.collapse', function () {
+                icon.classList.remove('bi-caret-up');
+                icon.classList.remove('bi-caret-down-fill');
+                icon.classList.add('bi-caret-up');
+            });
+        });
+    });
+</script>
 @yield('add-js')
 @endsection
