@@ -13,18 +13,26 @@ class UserController extends Controller
     protected $service;
     protected $help;
     protected $title = 'User';
+    protected $route;
 
     public function __construct(UserService $service, VcontrolHelper $help)
     {
         $this->service = $service;
         $this->help = $help;
+        $this->route = 'user';
     }
 
     public function index()
     {
-        Session::put('active_menu', 'user');
+        Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
-        $datas['datas'] = $this->service->getUser();
+        $datas['route'] = $this->route;
+        $datas['datas'] = $this->service->getUser(userId: null, paginate: 25);
+        $datas['show'] = [
+            'name' => 'Name',
+            'email' => 'Email',
+            'phone' => 'Phone',
+        ];
 
         return view('user.index', $datas);
     }

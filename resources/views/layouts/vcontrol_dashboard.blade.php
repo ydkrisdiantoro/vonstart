@@ -46,7 +46,7 @@
 
             <div>
                 <a href="{{ route('dashboard.read') }}"
-                    class="list-group-item list-group-item-action border-0 {{ session('active_menu') == 'dashboard' ? 'text-primary' : '' }}">
+                    class="link-hover list-group-item list-group-item-action border-0 {{ session('active_menu') == 'dashboard' ? 'text-primary' : '' }}">
                     <div class="my-auto">
                         <i class="bi bi-speedometer me-3 fs-5"></i>
                     </div>
@@ -72,7 +72,7 @@
                                 href="#">
                                 <div class="row px-2 rounded fw-bold">
                                     <div class="col-auto my-auto">
-                                        <div class="small m-0">{{ strtoupper($menu_group->name) }}</div>
+                                        <div class="small m-0">{{ strtoupper($menu_group['name']) }}</div>
                                     </div>
                                     <div class="col my-auto">
                                         <hr class="m-0 text-secondary">
@@ -84,18 +84,18 @@
                             </div>
                             <div id="group{{ $loop->iteration }}" class="collapse show">
                                 @foreach (session('menus')[$menu_group_id] as $menu)
-                                    <a href="{{ route($menu->route.'.read') }}"
-                                        class="list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
+                                    <a href="{{ route($menu['route'].'.read') }}"
+                                        class="link-hover list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
                                         <div class="my-auto">
                                             <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
                                         </div>
                                         <span class="my-auto">{{ $menu['name'] }}</span>
-                                        @if ((session('notification')[$menu->route]['text'] ?? false))
+                                        @if ((session('notification')[$menu['route']]['text'] ?? false))
                                             @php
-                                                $color = session('active_menu') == $menu->route ? session('notification')[$menu->route]['color'] : 'secondary';
+                                                $color = session('active_menu') == $menu['route'] ? session('notification')[$menu['route']]['color'] : 'secondary';
                                             @endphp
                                             <small class="my-auto ms-2 badge text-bg-{{ $color }}">
-                                                {!! session('notification')[$menu->route]['text'] !!}
+                                                {!! session('notification')[$menu['route']]['text'] !!}
                                             </small>
                                         @endif
                                     </a>
@@ -110,7 +110,7 @@
     </nav>
 
     <!-- Page Content  -->
-    <div id="content" class="bg-light">
+    <div id="content">
 
         <nav id="navbar" class="navbar text-dark bg-white fixed-top px-md-3 px-2 shadow"
             aria-labelledby="navbar">
@@ -121,11 +121,14 @@
                 <div>
 
                     <div class="dropdown">
-                        <a class="dropdown-toggle text-decoration-none d-flex text-dark"
-                            href="#" role="button"
+                        <a class="link-hover dropdown-toggle text-decoration-none d-flex text-dark"
+                            href="#"
+                            role="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="d-none d-md-block me-2 my-auto">{{ session('user')['name'] ?? 'Username' }}</span>
+                            <span class="d-none d-md-block me-2 my-auto">
+                                {{ session('user')['name'] ?? 'Username' }}
+                            </span>
                             <i class="bi bi-gear-fill my-auto me-1"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
@@ -157,7 +160,7 @@
                         @yield('add-content-title')
                     </h4>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pt-2">
                     @yield('add-content')
                 </div>
             </div>

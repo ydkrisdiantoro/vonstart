@@ -6,11 +6,24 @@
 @import "https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700"; */
 @import "https://fonts.googleapis.com/css?family=Mukta:300,400,500,600,700";
 
+:root {
+    --bs-primary: #ff0000;
+}
+
 body {
     /* font-family: 'Montserrat', sans-serif; */
     /* font-family: 'Source Serif 4', sans-serif; */
     font-family: 'Mukta', sans-serif;
     background: #f8f9fa;
+}
+
+.svg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
 .shadow{
@@ -181,3 +194,29 @@ main {
     }
 }
 /* END OF LOGIN PAGE */
+
+/* START OF COMMON CSS */
+
+.card-body{
+    padding: 1.5rem;
+}
+
+.link-hover:hover{
+    color: var(--bs-primary) !important;
+}
+
+.pagination{
+    margin: 0!important;
+}
+
+/* END OF COMMON CSS */
+
+/* BOOTSTRAP OVERRIDE */
+
+.btn-primary,
+.bg-primary{
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+/* END OF BOOTSTRAP OVERRIDE */

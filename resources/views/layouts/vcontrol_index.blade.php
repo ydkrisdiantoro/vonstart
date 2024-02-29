@@ -14,11 +14,19 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="{{ asset('assets/css/vonstemp.css') }}">
 
+        <style>
+            .svg-container{
+                background-image: url('{{ asset('assets/img/circuit.svg') }}');
+                background-repeat: repeat;
+                opacity: .02;
+            }
+        </style>
         @yield('extra-css')
 
     </head>
 
     <body>
+        <div class="svg-container"></div>
 
         @yield('body')
 

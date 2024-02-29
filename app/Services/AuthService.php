@@ -19,7 +19,16 @@ class AuthService
      */
     public function goLogin($email, $password)
     {
-        $user = (new User)->where('email', $email)->with('userRoles.role')->first();
+        $user = (new User)->where('email', $email)
+            ->select('id', 'name','email','phone', 'password')
+            ->with(['userRoles' => function($query){
+                $query->select('id', 'role_id', 'user_id');
+                $query->with(['role' => function($query){
+                    $query->select('id', 'code', 'name', 'icon', 'order');
+                }]);
+            }])
+            ->first();
+
         $hashedPassword = $user->password ?? null;
 
         if($hashedPassword !== null && Hash::check($password, $hashedPassword)){
@@ -36,29 +45,50 @@ class AuthService
                     $menus = [];
                     $routeMenus = [];
                     $notification = [];
+                    $accessMenus = [];
                     $roleMenus = RoleMenu::where('role_id', $firstRole->role_id)
                         ->whereHas('menu', function($query){
                             $query->orderBy('order', 'asc');
+                            $query->where('is_show', true);
                         })
-                        ->with('menu.menuGroup')
+                        ->with(['menu' => function($query){
+                            $query->select('id', 'menu_group_id', 'name', 'icon', 'route', 'cluster', 'order');
+                            $query->with(['menuGroup' => function($query){
+                                $query->select('id', 'name', 'order');
+                            }]);
+                        }])
                         ->get();
     
                     foreach($roleMenus as $roleMenu){
-                        $menuGroups[$roleMenu->menu->menu_group_id] = $roleMenu->menu->menuGroup;
-                        $menus[$roleMenu->menu->menu_group_id][$roleMenu->menu_id] = $roleMenu->menu;
-                        $routeMenus[$roleMenu->menu->route] = $roleMenu->menu;
+                        $menusArray = $roleMenu->menu->toArray();
+                        unset($menusArray['menu_group']);
+
+                        $menuGroups[$roleMenu->menu->menu_group_id] = $roleMenu->menu->menuGroup->toArray();
+                        $menus[$roleMenu->menu->menu_group_id][$roleMenu->menu_id] = $menusArray;
+                        $routeMenus[$roleMenu->menu->route] = $menusArray;
                         $notification[$roleMenu->menu->route]['color'] = 'info';
                         $notification[$roleMenu->menu->route]['text'] = null;
+                        $accessMenus[$roleMenu->menu->route] = [
+                            'is_create' => $roleMenu->is_create,
+                            'is_read' => $roleMenu->is_read,
+                            'is_update' => $roleMenu->is_update,
+                            'is_delete' => $roleMenu->is_delete,
+                            'is_validate' => $roleMenu->is_validate,
+                        ];
                     }
-    
+
+                    $user_array = $user->toArray();
+                    unset($user_array['roles']);
+
                     Session::put('active_role_id', $firstRole->id);
-                    Session::put('roles', $mapRoles);
+                    Session::put('roles', $mapRoles->toArray());
                     Session::put('menu_groups', $menuGroups);
                     Session::put('menus', $menus);
-                    Session::put('user', $user->toArray());
+                    Session::put('user', $user_array);
                     Session::put('active_menu', 'dashboard');
                     Session::put('notification', $notification);
                     Session::put('route_menus', $routeMenus);
+                    Session::put('access_menus', $accessMenus);
                     Session::save();
 
                     Auth::login($user);

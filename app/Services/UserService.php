@@ -25,12 +25,16 @@ class UserService
      * @param uuid $userId optional
      * @return model_instance from find() or get()
      */
-    public function getUser($userId = null)
+    public function getUser($userId = null, $paginate = null)
     {
         if($userId != null){
             $data = User::find($userId);
         } else{
-            $data = User::get();
+            if ($paginate === null) {
+                $data = User::get();
+            } else{
+                $data = User::paginate($paginate);
+            }
         }
         return $data;
     }
