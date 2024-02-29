@@ -2,7 +2,7 @@
 @extends('layouts.vcontrol_dashboard')
 
 @section('add-title')
-Dashboard
+
 @endsection
 
 @section('add-css')
@@ -14,7 +14,7 @@ Dashboard
 @endsection
 
 @section('add-content-title')
-    Menu Group
+
 @endsection
 
 @section('add-content')

@@ -61,6 +61,8 @@ class AuthController extends Controller
     public function dashboard()
     {
         Session::put('active_menu', 'dashboard');
+        Session::put('notification.dashboard.text', '10');
+        Session::put('notification.dashboard.color', 'primary');
         $datas['title'] = 'Dahsboard';
 
         return view('home.dashboard', $datas);

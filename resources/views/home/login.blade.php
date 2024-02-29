@@ -21,29 +21,37 @@
             </div>
             <form method="POST" action="{{ route('login.store') }}">
                 @csrf
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="email"
                         name="email"
                         class="form-control"
                         id="floatingInput"
                         placeholder="name@example.com"
+                        value="{{ old('email') ?? 'su@admin.dev' }}"
                         autofocus>
                     <label for="floatingInput">Email Address</label>
                 </div>
-                @error('email')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-                <div class="form-floating mb-3">
+                <div class="mb-3 text-start">
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="form-floating">
                     <input type="password"
                         name="password"
                         class="form-control"
                         id="floatingPassword"
-                        placeholder="Password">
+                        placeholder="Password"
+                        value="{{ old('password') !== null ? old('password') : 'sup3rUSER' }}">
                     <label for="floatingPassword">Password</label>
                 </div>
-                @error('password')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <div class="mb-3 text-start">
+                    @error('password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
                 <div class="mx-auto d-flex justify-content-between">
                     <a class="icon-link icon-link-hover" href="#">
                         Forgot Password?

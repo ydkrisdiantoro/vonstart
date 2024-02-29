@@ -2,8 +2,19 @@
 @extends('layouts.vcontrol_index')
 
 @section('title')
-Dashboard
-@yield('add-title')
+    @php
+        $semuaMenu = session('route_menus')[session('active_menu')] ?? null;
+        $namaMenuAktif = 'Dashboard';
+        if($semuaMenu !== null){
+            $namaMenuAktif = $semuaMenu->name ?? '-';
+        }
+    @endphp
+
+    {{ $namaMenuAktif }}
+
+    @yield('add-title')
+
+    {{ ' - '.env('APP_NAME') }}
 @endsection
 
 @section('extra-css')
@@ -40,6 +51,14 @@ Dashboard
                         <i class="bi bi-speedometer me-3 fs-5"></i>
                     </div>
                     <span class="my-auto">Dashboard</span>
+                    @if ((session('notification')['dashboard']['text'] ?? false))
+                        @php
+                            $color = session('active_menu') == 'dashboard' ? session('notification')['dashboard']['color'] : 'secondary';
+                        @endphp
+                        <small class="my-auto ms-2 badge text-bg-{{ $color }}">
+                            {!! session('notification')['dashboard']['text'] !!}
+                        </small>
+                    @endif
                 </a>
                 @if (sizeof(session('menu_groups') ?? []) > 0)
                     @foreach (session('menu_groups') as $menu_group_id => $menu_group)
@@ -56,10 +75,10 @@ Dashboard
                                         <div class="small m-0">{{ strtoupper($menu_group->name) }}</div>
                                     </div>
                                     <div class="col my-auto">
-                                        <hr class="m-0">
+                                        <hr class="m-0 text-secondary">
                                     </div>
                                     <div class="col-auto my-auto">
-                                        <i class="bi bi-caret-down-fill m-0 collapse-icon" data-target="group{{ $loop->iteration }}"></i>
+                                        <i class="bi bi-caret-down-fill text-primary m-0 collapse-icon" data-target="group{{ $loop->iteration }}"></i>
                                     </div>
                                 </div>
                             </div>
@@ -71,6 +90,14 @@ Dashboard
                                             <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
                                         </div>
                                         <span class="my-auto">{{ $menu['name'] }}</span>
+                                        @if ((session('notification')[$menu->route]['text'] ?? false))
+                                            @php
+                                                $color = session('active_menu') == $menu->route ? session('notification')[$menu->route]['color'] : 'secondary';
+                                            @endphp
+                                            <small class="my-auto ms-2 badge text-bg-{{ $color }}">
+                                                {!! session('notification')[$menu->route]['text'] !!}
+                                            </small>
+                                        @endif
                                     </a>
                                 @endforeach
                             </div>
@@ -126,6 +153,7 @@ Dashboard
             <div class="row">
                 <div class="col-12">
                     <h4>
+                        {{ $namaMenuAktif }}
                         @yield('add-content-title')
                     </h4>
                 </div>
@@ -153,15 +181,21 @@ Dashboard
             var collapseElement = document.getElementById(targetId);
 
             collapseElement.addEventListener('show.bs.collapse', function () {
-                icon.classList.remove('bi-caret-up');
+                icon.classList.remove('bi-caret-right-fill');
                 icon.classList.remove('bi-caret-down-fill');
+                icon.classList.remove('text-secondary');
+                icon.classList.remove('text-primary');
                 icon.classList.add('bi-caret-down-fill');
+                icon.classList.add('text-primary');
             });
 
             collapseElement.addEventListener('hide.bs.collapse', function () {
-                icon.classList.remove('bi-caret-up');
+                icon.classList.remove('bi-caret-right-fill');
                 icon.classList.remove('bi-caret-down-fill');
-                icon.classList.add('bi-caret-up');
+                icon.classList.remove('text-secondary');
+                icon.classList.remove('text-primary');
+                icon.classList.add('bi-caret-right-fill');
+                icon.classList.add('text-secondary');
             });
         });
     });

@@ -34,6 +34,8 @@ class AuthService
     
                     $menuGroups = [];
                     $menus = [];
+                    $routeMenus = [];
+                    $notification = [];
                     $roleMenus = RoleMenu::where('role_id', $firstRole->role_id)
                         ->whereHas('menu', function($query){
                             $query->orderBy('order', 'asc');
@@ -44,6 +46,9 @@ class AuthService
                     foreach($roleMenus as $roleMenu){
                         $menuGroups[$roleMenu->menu->menu_group_id] = $roleMenu->menu->menuGroup;
                         $menus[$roleMenu->menu->menu_group_id][$roleMenu->menu_id] = $roleMenu->menu;
+                        $routeMenus[$roleMenu->menu->route] = $roleMenu->menu;
+                        $notification[$roleMenu->menu->route]['color'] = 'info';
+                        $notification[$roleMenu->menu->route]['text'] = null;
                     }
     
                     Session::put('active_role_id', $firstRole->id);
@@ -52,6 +57,8 @@ class AuthService
                     Session::put('menus', $menus);
                     Session::put('user', $user->toArray());
                     Session::put('active_menu', 'dashboard');
+                    Session::put('notification', $notification);
+                    Session::put('route_menus', $routeMenus);
                     Session::save();
 
                     Auth::login($user);
