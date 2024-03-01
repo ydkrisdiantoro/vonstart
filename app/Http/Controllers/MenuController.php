@@ -13,6 +13,8 @@ class MenuController extends Controller
     protected $service;
     protected $help;
     protected $title = 'Menu';
+    protected $route = 'menu';
+    protected $view = 'menu';
 
     public function __construct(MenuService $service, VcontrolHelper $help)
     {
@@ -22,17 +24,17 @@ class MenuController extends Controller
 
     public function index()
     {
-        Session::put('active_menu', 'menu');
+        Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getMenu();
 
-        return view('menu.index', $datas);
+        return view($this->view.'.index', $datas);
     }
 
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-        return view('menu.create', $datas);
+        return view($this->view.'.create', $datas);
     }
 
     public function store(Request $request)
@@ -45,7 +47,7 @@ class MenuController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('menu.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
@@ -65,7 +67,7 @@ class MenuController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('menu.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -77,6 +79,6 @@ class MenuController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('menu.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 }

@@ -13,6 +13,8 @@ class RoleController extends Controller
     protected $service;
     protected $help;
     protected $title = 'Role';
+    protected $route = 'role';
+    protected $view = 'role';
 
     public function __construct(RoleService $service, VcontrolHelper $help)
     {
@@ -22,17 +24,17 @@ class RoleController extends Controller
 
     public function index()
     {
-        Session::put('active_menu', 'role');
+        Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getRole();
 
-        return view('role.index', $datas);
+        return view($this->view.'.index', $datas);
     }
 
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-        return view('role.create');
+        return view($this->view.'.create');
     }
 
     public function store(Request $request)
@@ -45,7 +47,7 @@ class RoleController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('role.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
@@ -65,7 +67,7 @@ class RoleController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('role.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -77,6 +79,6 @@ class RoleController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('role.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 }

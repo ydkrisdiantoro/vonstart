@@ -13,13 +13,13 @@ class UserController extends Controller
     protected $service;
     protected $help;
     protected $title = 'User';
-    protected $route;
+    protected $route = 'user';
+    protected $view = 'user';
 
     public function __construct(UserService $service, VcontrolHelper $help)
     {
         $this->service = $service;
         $this->help = $help;
-        $this->route = 'user';
     }
 
     public function index()
@@ -34,13 +34,13 @@ class UserController extends Controller
             'phone' => 'Phone',
         ];
 
-        return view('user.index', $datas);
+        return view($this->view.'.index', $datas);
     }
 
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-        return view('user.create');
+        return view($this->view.'.create');
     }
 
     public function store(Request $request)
@@ -53,7 +53,7 @@ class UserController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('user.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
@@ -73,7 +73,7 @@ class UserController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('user.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -85,6 +85,6 @@ class UserController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('user.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 }

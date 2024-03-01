@@ -13,6 +13,8 @@ class MenuGroupController extends Controller
     protected $service;
     protected $help;
     protected $title = 'Menu Group';
+    protected $route = 'menu-group';
+    protected $view = 'menu_group';
 
     public function __construct(MenuGroupService $service, VcontrolHelper $help)
     {
@@ -22,17 +24,17 @@ class MenuGroupController extends Controller
 
     public function index()
     {
-        Session::put('active_menu', 'menu-group');
+        Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['datas'] = $this->service->getMenuGroup();
 
-        return view('menu_group.index', $datas);
+        return view($this->view.'.index', $datas);
     }
 
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-        return view('menu_group.create');
+        return view($this->view.'.create');
     }
 
     public function store(Request $request)
@@ -45,7 +47,7 @@ class MenuGroupController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('menu_group.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
@@ -65,7 +67,7 @@ class MenuGroupController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('menu_group.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -77,6 +79,6 @@ class MenuGroupController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route('menu_group.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
     }
 }
