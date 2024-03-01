@@ -6,7 +6,7 @@
         $semuaMenu = session('route_menus')[session('active_menu')] ?? null;
         $namaMenuAktif = 'Dashboard';
         if($semuaMenu !== null){
-            $namaMenuAktif = $semuaMenu->name ?? '-';
+            $namaMenuAktif = $semuaMenu['name'] ?? '-';
         }
     @endphp
 
