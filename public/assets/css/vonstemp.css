@@ -7,7 +7,8 @@
 @import "https://fonts.googleapis.com/css?family=Mukta:300,400,500,600,700";
 
 :root {
-    --bs-primary: #ff0000;
+    --bs-primary: #40A2E3;
+    --bs-white: #FFFFFF;
 }
 
 body {
@@ -215,8 +216,18 @@ main {
 
 .btn-primary,
 .bg-primary{
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
+    background-color: var(--bs-primary)!important;
+    border-color: var(--bs-primary)!important;
+    fill-opacity: .5;
+}
+
+.text-primary{
+    color: var(--bs-primary)!important;
+}
+
+.text-bg-primary{
+    color: var(--bs-white)!important;
+    background-color: var(--bs-primary)!important;
 }
 
 /* END OF BOOTSTRAP OVERRIDE */
