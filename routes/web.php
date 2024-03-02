@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () use($slug){
     Route::post('/'.$slug.'/store', [UserController::class, 'store'])->name($slug.'.store');
     Route::get('/'.$slug.'/edit/{id}', [UserController::class, 'edit'])->name($slug.'.edit');
     Route::post('/'.$slug.'/update', [UserController::class, 'update'])->name($slug.'.update');
-    Route::get('/'.$slug.'/delete/{id}', [UserController::class, 'delete'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/delete/{id}', [UserController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [UserController::class, 'validate'])->name($slug.'.validate');
 });
 
@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () use($slug){
     Route::post('/'.$slug.'/store', [RoleController::class, 'store'])->name($slug.'.store');
     Route::get('/'.$slug.'/edit/{id}', [RoleController::class, 'edit'])->name($slug.'.edit');
     Route::post('/'.$slug.'/update', [RoleController::class, 'update'])->name($slug.'.update');
-    Route::get('/'.$slug.'/delete/{id}', [RoleController::class, 'delete'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/delete/{id}', [RoleController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [RoleController::class, 'validate'])->name($slug.'.validate');
 });
 
@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () use($slug){
     Route::post('/'.$slug.'/store', [MenuGroupController::class, 'store'])->name($slug.'.store');
     Route::get('/'.$slug.'/edit/{id}', [MenuGroupController::class, 'edit'])->name($slug.'.edit');
     Route::post('/'.$slug.'/update', [MenuGroupController::class, 'update'])->name($slug.'.update');
-    Route::get('/'.$slug.'/delete/{id}', [MenuGroupController::class, 'delete'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/delete/{id}', [MenuGroupController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [MenuGroupController::class, 'validate'])->name($slug.'.validate');
 });
 
@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () use($slug){
     Route::post('/'.$slug.'/store', [MenuController::class, 'store'])->name($slug.'.store');
     Route::get('/'.$slug.'/edit/{id}', [MenuController::class, 'edit'])->name($slug.'.edit');
     Route::post('/'.$slug.'/update', [MenuController::class, 'update'])->name($slug.'.update');
-    Route::get('/'.$slug.'/delete/{id}', [MenuController::class, 'delete'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/delete/{id}', [MenuController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [MenuController::class, 'validate'])->name($slug.'.validate');
 });
 
@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () use($slug){
     Route::post('/'.$slug.'/store', [RoleMenuController::class, 'store'])->name($slug.'.store');
     Route::get('/'.$slug.'/edit/{id}', [RoleMenuController::class, 'edit'])->name($slug.'.edit');
     Route::post('/'.$slug.'/update', [RoleMenuController::class, 'update'])->name($slug.'.update');
-    Route::get('/'.$slug.'/delete/{id}', [RoleMenuController::class, 'delete'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/delete/{id}', [RoleMenuController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [RoleMenuController::class, 'validate'])->name($slug.'.validate');
 });
 
@@ -88,6 +88,6 @@ Route::middleware('auth')->group(function () use($slug){
     Route::post('/'.$slug.'/store', [UserRoleController::class, 'store'])->name($slug.'.store');
     Route::get('/'.$slug.'/edit/{id}', [UserRoleController::class, 'edit'])->name($slug.'.edit');
     Route::post('/'.$slug.'/update', [UserRoleController::class, 'update'])->name($slug.'.update');
-    Route::get('/'.$slug.'/delete/{id}', [UserRoleController::class, 'delete'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/delete/{id}', [UserRoleController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [UserRoleController::class, 'validate'])->name($slug.'.validate');
 });

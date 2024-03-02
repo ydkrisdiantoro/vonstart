@@ -38,10 +38,10 @@
             <div class="card-body">
                 <h5>{{ $title }}</h5>
                 <form method="POST"
-                    action="{{ route(session('active_menu').'.store') }}"
+                    action="{{ route(session('active_menu').'.update') }}"
                     class="form">
                     @csrf
-                    
+                    <input type="hidden" name="id" value="{{ $datas->id }}">
                     <div class="form-floating">
                         <input autocomplete="off"
                             type="text"
@@ -49,7 +49,7 @@
                             class="form-control"
                             id="floatingName"
                             placeholder="Bambang"
-                            value="{{ old('name') }}"
+                            value="{{ old('name') ?? $datas->name }}"
                             autofocus>
                         <label for="floatingName">Name</label>
                     </div>
@@ -68,7 +68,7 @@
                                     class="form-control"
                                     id="floatingEmail"
                                     placeholder="name@example.com"
-                                    value="{{ old('email') }}"
+                                    value="{{ old('email') ?? $datas->email }}"
                                     autofocus>
                                 <label for="floatingEmail">Email Address</label>
                             </div>
@@ -87,7 +87,7 @@
                                     class="form-control"
                                     id="floatingPhone"
                                     placeholder="010100001111"
-                                    value="{{ old('phone') }}"
+                                    value="{{ old('phone') ?? $datas->phone }}"
                                     autofocus>
                                 <label for="floatingPhone">Phone</label>
                             </div>

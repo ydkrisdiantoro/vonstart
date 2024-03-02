@@ -14,9 +14,10 @@ class UserService
     {
         return [
             'name' => ['required','string'],
-            'email' => ['required','unique:users, email'],
+            'email' => ['required','unique:users,email'],
             'photo' => ['nullable','image'],
             'password' => ['required','string'],
+            'confirm_password' => ['required','string','same:password'],
         ];
     }
 
@@ -62,7 +63,10 @@ class UserService
      */
     public function update($userId, $datas)
     {
-        return User::find($userId)->update([$datas]);
+        if($datas['password'] === null){
+            unset($datas['password'], $datas['confirm_password']);
+        }
+        return User::find($userId)->update($datas);
     }
 
     /**
