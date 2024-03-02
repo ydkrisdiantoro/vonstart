@@ -15,7 +15,7 @@
     <div class="card shadow border-0">
         <div class="card-body text-center px-3 py-5 p-sm-5">
             <h4>Vonstart</h4>
-            <div class="alert alert-info">
+            <div class="alert alert-primary">
                 <i class="bi bi-info-circle-fill"></i>
                 Just click <b>Login</b> to try!
             </div>
@@ -53,10 +53,10 @@
                 </div>
 
                 <div class="mx-auto d-flex justify-content-between">
-                    <a class="icon-link icon-link-hover" href="#">
+                    <a class="link" href="#">
                         Forgot Password?
                     </a>
-                    <button type="submit" class="btn btn-outline-primary">
+                    <button type="submit" class="btn btn-primary">
                         Login
                         <i class="bi bi-box-arrow-in-right"></i>
                     </button>

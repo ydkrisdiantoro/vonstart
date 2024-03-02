@@ -34,10 +34,21 @@
                     </a>
                 @endif
             </div>
+            <div class="col-12 mt-2">
+                @if ($filters)
+                    @foreach ($filters as $filterKey => $filter)
+                        @if ($filter !== null)
+                            <span class="badge text-bg-secondary">
+                                #{{ $show[$filterKey].': '.$filter }}
+                            </span>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
         </div>
 
-        <div class="pt-3">
-            <table class="table table-responsive table-hover">
+        <div class="pt-3 table-responsive">
+            <table class="table tr-hover table-striped">
                 <caption class="fst-italic text-secondary">
                     <small>
                         {{ session('route_menus')[session('active_menu')]['name'] }} Table
@@ -64,14 +75,16 @@
                                         @endif
                                     </td>
                                 @endforeach
-                                <td>
+                                <td class="nowrap">
                                     @if (session('access_menus.'.$route.'.is_update') ?? false)
-                                        <a href="{{ route($route.'.edit', $data->id) }}" class="btn btn-sm btn-outline-secondary me-1">
+                                        <a href="{{ route($route.'.edit', $data->id) }}"
+                                            class="btn btn-sm btn-secondary me-1 btn-action">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                     @endif
                                     @if (session('access_menus.'.$route.'.is_delete') ?? false)
-                                        <a href="{{ route($route.'.delete', $data->id) }}" class="btn btn-sm btn-outline-danger">
+                                        <a href="{{ route($route.'.delete', $data->id) }}"
+                                            class="btn btn-sm btn-danger btn-action">
                                             <i class="bi bi-trash-fill"></i>
                                         </a>
                                     @endif
@@ -94,7 +107,7 @@
                     <nav aria-label="...">
                         <ul class="pagination">
                             <!-- Tombol Previous -->
-                            <li class="page-item {{ $datas->previousPageUrl() ? '' : 'disabled' }}">
+                            <li class="page-prev page-item {{ $datas->previousPageUrl() ? '' : 'disabled' }}">
                                 <a class="page-link" href="{{ $datas->previousPageUrl() }}">Previous</a>
                             </li>
                         
@@ -119,7 +132,7 @@
                             @endfor
                         
                             <!-- Tombol Next -->
-                            <li class="page-item {{ $datas->nextPageUrl() ? '' : 'disabled' }}">
+                            <li class="page-next page-item {{ $datas->nextPageUrl() ? '' : 'disabled' }}">
                                 <a class="page-link" href="{{ $datas->nextPageUrl() }}">Next</a>
                             </li>
                         </ul>                        

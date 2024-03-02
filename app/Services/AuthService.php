@@ -77,14 +77,26 @@ class AuthService
                         ];
                     }
 
-                    $user_array = $user->toArray();
-                    unset($user_array['roles']);
+                    $userArray = $user->toArray();
+                    unset($userArray['roles']);
 
-                    Session::put('active_role_id', $firstRole->id);
+                    $useYear = config('vcontrol.year');
+                    if($useYear){
+                        $yearNow = date('Y');
+                        $yearStart = config('vcontrol.year_start') ?? ($yearNow - 3);
+                        $yearEnd = config('vcontrol.year_end') ?? ($yearNow + 1);
+                        for($i = $yearEnd; $i >= $yearStart; $i--){
+                            $years[] = $i;
+                        }
+                        Session::put('years', $years);
+                        Session::put('active_year', $yearNow);
+                    }
+
+                    Session::put('active_role_id', $firstRole->role_id);
                     Session::put('roles', $mapRoles->toArray());
                     Session::put('menu_groups', $menuGroups);
                     Session::put('menus', $menus);
-                    Session::put('user', $user_array);
+                    Session::put('user', $userArray);
                     Session::put('active_menu', 'dashboard');
                     Session::put('notification', $notification);
                     Session::put('route_menus', $routeMenus);

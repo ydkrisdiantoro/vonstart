@@ -8,6 +8,7 @@ use App\Helpers\VcontrolHelper;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -66,5 +67,33 @@ class AuthController extends Controller
         $datas['title'] = 'Dahsboard';
 
         return view('home.dashboard', $datas);
+    }
+
+    public function year($year)
+    {
+        $validator = Validator::make(['year' => $year], [
+            'year' => 'required|string|min:4|max:4'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors('Gagal mengubah tahun!');
+        } else {
+            Session::put('active_year', $year);
+        }
+
+        return redirect()->back();
+    }
+
+    public function changeRole($role_id)
+    {
+        $validator = Validator::make(['role_id' => $role_id], [
+            'role_id' => 'required|string|min:36|max:36'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors('Gagal mengubah Role!');
+        } else {
+            Session::put('active_role_id', $role_id);
+        }
+
+        return redirect()->back();
     }
 }

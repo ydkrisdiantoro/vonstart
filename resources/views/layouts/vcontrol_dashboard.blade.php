@@ -14,7 +14,7 @@
 
     @yield('add-title')
 
-    {{ ' - '.env('APP_NAME') }}
+    {{ env('APP_NAME') }}
 @endsection
 
 @section('extra-css')
@@ -118,7 +118,68 @@
                 <a type="button" id="btnToggleSidebar" class="fs-4 hover-icon">
                     <i class="bi bi-list"></i>
                 </a>
-                <div>
+                <div class="d-flex">
+
+                    <div class="dropdown">
+                        <a class="link-hover dropdown-toggle text-decoration-none d-flex text-dark me-3"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <span class="d-block me-1" style="vertical-align: center;">
+                                <i class="bi bi-calendar"></i>
+                            </span>
+                            <span class="d-none d-md-block" style="vertical-align: center;">
+                                {{ session('active_year') ?? date('Y') }}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
+                            @if (session('years'))
+                                @foreach (session('years') as $year)
+                                    <li>
+                                        <a class="dropdown-item {{ $year == session('active_year') ? 'active' : '' }}"
+                                            href="{{ $year == session('active_year') ? '#' : route('year.read', $year) }}">
+                                            {{ $year }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="link-hover dropdown-toggle text-decoration-none d-flex text-dark me-3"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <span class="d-block me-1" style="vertical-align: center;">
+                                <i class="bi bi-shield-fill-check"></i>
+                            </span>
+                            <span class="d-none d-md-block" style="vertical-align: center;">
+                                {{ session('roles')[session('active_role_id')]['name'] ?? '-' }}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
+                            @if (session('roles'))
+                                @foreach (session('roles') as $role_id => $role)
+                                    <li>
+                                        <a class="dropdown-item {{ $role_id == session('active_role_id') ? 'active' : '' }}"
+                                            href="{{ $role_id == session('active_role_id') ? '#' : route('change-role.read', $role_id) }}">
+                                            {{ $role['name'] ?? '-' }}
+                                        </a>
+                                    </li>
+                                    @if ($loop->last == 1)
+                                        <li>
+                                            <a class="dropdown-item disabled" href="#">
+                                                <small>No Other Role</small>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
 
                     <div class="dropdown">
                         <a class="link-hover dropdown-toggle text-decoration-none d-flex text-dark"
@@ -126,15 +187,14 @@
                             role="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="d-none d-md-block me-2 my-auto">
-                                {{ session('user')['name'] ?? 'Username' }}
-                            </span>
-                            <i class="bi bi-gear-fill my-auto me-1"></i>
+                            <i class="bi bi-gear-fill me-1"></i>
+                            <span class="d-none d-md-block me-2 my-auto">Tools</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
                             <li>
-                                <a class="dropdown-item" href="{{ '#' }}">
-                                    <i class="bi bi-tools me-2"></i> Setting
+                                <a class="dropdown-item active" href="{{ '#' }}">
+                                    <i class="bi bi-person me-2"></i>
+                                    {{ substr(session('user')['name'], 0, 20).'...' }}
                                 </a>
                             </li>
 

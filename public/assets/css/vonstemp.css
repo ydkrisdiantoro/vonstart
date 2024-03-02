@@ -7,8 +7,26 @@
 @import "https://fonts.googleapis.com/css?family=Mukta:300,400,500,600,700";
 
 :root {
-    --bs-primary: #40A2E3;
-    --bs-white: #FFFFFF;
+    --white: #FFFFFF;
+
+    --blue-primary: #1D24CA;
+    --blue-light: #dadcfa;
+    --blue-light-outline: #ced0f8;
+    --blue-dark: #131783;
+
+    --black-primary: #212529;
+
+    --dark-primary: #343b41;
+    --dark-light: #dbdee2;
+    --dark-light-outline: #c7ccd2;
+    --dark-dark: #050305;
+    --dark-muted: #7d8b97;
+    --dark-muted-dark: #f5f6f7;
+
+    --danger-primary: #D24545;
+    --danger-light: #f8e3e3;
+    --danger-light-outline: #f4d0d0;
+    --danger-dark: #b42b2b;
 }
 
 body {
@@ -203,31 +221,201 @@ main {
 }
 
 .link-hover:hover{
-    color: var(--bs-primary) !important;
+    color: var(--blue-primary) !important;
+}
+
+.link-hover:hover .badge{
+    background-color: var(--blue-primary) !important;
+    color: var(--white);
 }
 
 .pagination{
-    margin: 0!important;
+    margin: 4px!important;
 }
 
+#btnToggleSidebar,
+#btnDismissSidebar{
+    color: var(--blue-primary);
+}
+
+.nowrap{
+    white-space: nowrap;
+}
+
+.btn-action{
+    padding-left: .75rem;
+    padding-right: .75rem;
+}
 /* END OF COMMON CSS */
 
 /* BOOTSTRAP OVERRIDE */
-
-.btn-primary,
 .bg-primary{
-    background-color: var(--bs-primary)!important;
-    border-color: var(--bs-primary)!important;
-    fill-opacity: .5;
+    background-color: var(--blue-primary)!important;
+}
+
+.btn-primary{
+    background-color: var(--blue-light)!important;
+    border-color: var(--blue-light-outline)!important;
+    color: var(--blue-primary)!important;
+}
+
+.btn-primary:hover{
+    background-color: var(--blue-primary)!important;
+    border-color: var(--blue-primary)!important;
+    color: var(--white)!important;
+}
+
+.btn-primary:focus{
+    border-color: var(--blue-dark)!important;
+    background-color: var(--blue-dark)!important;
+    color: var(--white)!important;
+    box-shadow: 0px 0px 3px 4px var(--blue-light-outline)!important;
+}
+
+.btn-secondary{
+    background-color: var(--dark-light)!important;
+    border-color: var(--dark-light-outline)!important;
+    color: var(--dark-primary)!important;
+}
+
+.btn-secondary:hover{
+    background-color: var(--dark-primary)!important;
+    border-color: var(--dark-primary)!important;
+    color: var(--white)!important;
+}
+
+.btn-secondary:focus{
+    border-color: var(--dark-dark)!important;
+    background-color: var(--dark-dark)!important;
+    color: var(--white)!important;
+    box-shadow: 0px 0px 3px 4px var(--dark-light-outline)!important;
+}
+
+.btn-danger{
+    background-color: var(--danger-light)!important;
+    border-color: var(--danger-light-outline)!important;
+    color: var(--danger-primary)!important;
+}
+
+.btn-danger:hover{
+    background-color: var(--danger-primary)!important;
+    border-color: var(--danger-primary)!important;
+    color: var(--white)!important;
+}
+
+.btn-danger:focus{
+    border-color: var(--danger-dark)!important;
+    background-color: var(--danger-dark)!important;
+    color: var(--white)!important;
+    box-shadow: 0px 0px 3px 4px var(--danger-light-outline)!important;
 }
 
 .text-primary{
-    color: var(--bs-primary)!important;
+    color: var(--blue-primary)!important;
 }
 
 .text-bg-primary{
-    color: var(--bs-white)!important;
-    background-color: var(--bs-primary)!important;
+    color: var(--white)!important;
+    background-color: var(--blue-primary)!important;
+}
+
+.text-secondary{
+    color: var(--dark-primary)!important;
+}
+
+.text-bg-secondary{
+    color: var(--white)!important;
+    background-color: var(--dark-primary)!important;
+}
+
+.text-danger{
+    color: var(--danger-primary)!important;
+}
+
+.text-bg-danger{
+    color: var(--white)!important;
+    background-color: var(--danger-primary)!important;
+}
+
+.pagination .page-link{
+    color: var(--blue-primary)!important;
+    background-color: var(--dark-muted-dark)!important;
+    border-color: var(--blue-light-outline)!important;
+}
+
+.pagination .page-link:hover{
+    color: var(--white)!important;
+    background-color: var(--blue-primary)!important;
+    border-color: var(--blue-primary)!important;
+}
+
+.pagination .active .page-link{
+    background-color: var(--blue-primary)!important;
+    border-color: var(--blue-primary)!important;
+    color: var(--white)!important;
+}
+
+
+.pagination .disabled .page-link{
+    color: var(--dark-muted)!important;
+    background-color: var(--dark-muted-dark)!important;
+    border-color: var(--dark-light)!important;
+}
+
+.pagination .page-link:focus{
+    border-color: var(--blue-dark)!important;
+    background-color: var(--blue-dark)!important;
+    color: var(--white)!important;
+    box-shadow: unset!important;
+}
+
+.tr-hover tbody tr:hover td{
+    background-color: var(--dark-muted-dark)!important;
+    border-color: var(--blue-primary)!important;
+}
+
+.form-control:focus {
+    border-color: var(--blue-light-outline);
+    outline: 0;
+    box-shadow: 0px 0px 3px 4px var(--blue-light-outline)!important;
+}
+
+.alert-primary{
+    background-color: var(--blue-light)!important;
+    border-color: var(--blue-light-outline)!important;
+    color: var(--blue-primary)!important;
+}
+
+.list-group-item-action{
+    border-color: var(--white)!important;
+}
+
+.list-group-item-action:hover{
+    background-color: var(--white)!important;
+    border-color: var(--white)!important;
+    color: var(--blue-primary)!important;
+}
+
+.list-group-item-action.active{
+    background-color: var(--white)!important;
+    border-color: var(--white)!important;
+    color: var(--blue-primary)!important;
+}
+
+.dropdown-item:focus,
+.dropdown-item.active{
+    background-color: var(--blue-primary)!important;
+    border-color: var(--blue-primary)!important;
+    color: var(--white)!important;
 }
 
 /* END OF BOOTSTRAP OVERRIDE */
+
+.link{
+    color: var(--blue-primary)!important;
+    text-decoration: none;
+}
+
+.link:hover{
+    text-decoration: underline;
+}

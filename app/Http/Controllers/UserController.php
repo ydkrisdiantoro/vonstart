@@ -28,6 +28,7 @@ class UserController extends Controller
         $datas['title'] = $this->title;
         $datas['route'] = $this->route;
         $datas['datas'] = $this->service->getUser(userId: null, paginate: 25);
+        $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
         $datas['show'] = [
             'name' => 'Name',
             'email' => 'Email',
@@ -40,7 +41,8 @@ class UserController extends Controller
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-        return view($this->view.'.create');
+
+        return view($this->view.'.create', $datas);
     }
 
     public function store(Request $request)
