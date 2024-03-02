@@ -91,7 +91,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors('Gagal mengubah Role!');
         } else {
-            Session::put('active_role_id', $role_id);
+            $this->service->changeRole($role_id);
         }
 
         return redirect()->back();
