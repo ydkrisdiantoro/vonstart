@@ -27,14 +27,27 @@ class RoleMenuService
     /**
      * Get RoleMenu
      * @param uuid $roleMenuId optional
-     * @return model_instance from find() or get()
+     * @return collection from find() or get()
      */
-    public function getRoleMenu($roleMenuId = null)
+    public function getRoleMenu($roleMenuId = null, $paginate = null)
     {
         if($roleMenuId != null){
-            $data = RoleMenu::find($roleMenuId);
+            $data = RoleMenu::with(['menu', 'role'])
+                ->whereHas('menu')
+                ->whereHas('role')
+                ->find($roleMenuId);
         } else{
-            $data = RoleMenu::get();
+            if($paginate === null){
+                $data = RoleMenu::with(['menu', 'role'])
+                    ->whereHas('menu')
+                    ->whereHas('role')
+                    ->get();
+            } else{
+                $data = RoleMenu::with(['menu', 'role'])
+                    ->whereHas('menu')
+                    ->whereHas('role')
+                    ->paginate($paginate);
+            }
         }
         return $data;
     }
@@ -42,7 +55,7 @@ class RoleMenuService
     /**
      * Create RoleMenu
      * @param array $datas
-     * @return model_instance return from save()
+     * @return collection return from save()
      */
     public function create($datas)
     {
@@ -58,17 +71,17 @@ class RoleMenuService
      * Update RoleMenu by Id
      * @param uuid $roleMenuId
      * @param array $datas
-     * @return model_instance return from update()
+     * @return collection return from update()
      */
     public function update($roleMenuId, $datas)
     {
-        return RoleMenu::find($roleMenuId)->update([$datas]);
+        return RoleMenu::find($roleMenuId)->update($datas);
     }
 
     /**
      * Delete RoleMenu
      * @param uuid $roleMenuId
-     * @return model_instance from delete()
+     * @return collection from delete()
      */
     public function delete($roleMenuId)
     {

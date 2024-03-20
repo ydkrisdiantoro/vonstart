@@ -13,6 +13,7 @@
     --blue-light: #dadcfa;
     --blue-light-outline: #ced0f8;
     --blue-dark: #131783;
+    --blue-light-light: #f0f1fd;
 
     --black-primary: #212529;
 
@@ -25,8 +26,15 @@
 
     --danger-primary: #D24545;
     --danger-light: #f8e3e3;
+    --danger-light-light: #fbeeee;
     --danger-light-outline: #f4d0d0;
     --danger-dark: #b42b2b;
+
+    --success-primary: #177f4f;
+    --success-light: #d1f7e5;
+    --success-light-light: #e3faef;
+    --success-light-outline: #b3f1d4;
+    --success-dark: #146c43;
 }
 
 body {
@@ -310,6 +318,25 @@ main {
     box-shadow: 0px 0px 3px 4px var(--danger-light-outline)!important;
 }
 
+.btn-success{
+    background-color: var(--success-light)!important;
+    border-color: var(--success-light-outline)!important;
+    color: var(--success-primary)!important;
+}
+
+.btn-success:hover{
+    background-color: var(--success-primary)!important;
+    border-color: var(--success-primary)!important;
+    color: var(--white)!important;
+}
+
+.btn-success:focus{
+    border-color: var(--success-dark)!important;
+    background-color: var(--success-dark)!important;
+    color: var(--white)!important;
+    box-shadow: 0px 0px 3px 4px var(--success-light-outline)!important;
+}
+
 .text-primary{
     color: var(--blue-primary)!important;
 }
@@ -326,6 +353,7 @@ main {
 .text-bg-secondary{
     color: var(--white)!important;
     background-color: var(--dark-primary)!important;
+    border: 1px solid var(--dark-light-outline)!important;
 }
 
 .text-danger{
@@ -333,8 +361,19 @@ main {
 }
 
 .text-bg-danger{
-    color: var(--white)!important;
-    background-color: var(--danger-primary)!important;
+    color: var(--danger-primary)!important;
+    background-color: var(--danger-light-light)!important;
+    border: 1px solid var(--danger-light-outline)!important;
+}
+
+.text-success{
+    color: var(--success-primary)!important;
+}
+
+.text-bg-success{
+    color: var(--success-primary)!important;
+    background-color: var(--success-light-light)!important;
+    border: 1px solid var(--success-light-outline)!important;
 }
 
 .pagination .page-link{
@@ -370,7 +409,7 @@ main {
 }
 
 .tr-hover tbody tr:hover td{
-    background-color: var(--dark-muted-dark)!important;
+    background-color: var(--blue-light-light)!important;
     border-color: var(--blue-primary)!important;
 }
 

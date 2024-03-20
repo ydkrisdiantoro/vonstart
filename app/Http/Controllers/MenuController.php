@@ -26,7 +26,18 @@ class MenuController extends Controller
     {
         Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
-        $datas['datas'] = $this->service->getMenu();
+        $datas['route'] = $this->route;
+        $datas['datas'] = $this->service->getMenu(null, 25);
+        $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
+        $datas['show'] = [
+            'menuGroup.name' => 'Menu Group',
+            'name' => 'Name',
+            'icon' => 'Icon',
+            'route' => 'Route',
+            'is_show' => 'Show?',
+            'cluster' => 'Cluster',
+            'order' => 'Order',
+        ];
 
         return view($this->view.'.index', $datas);
     }
@@ -34,6 +45,7 @@ class MenuController extends Controller
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
+
         return view($this->view.'.create', $datas);
     }
 
@@ -47,27 +59,32 @@ class MenuController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
     {
         $datas['title'] = 'Edit '.$this->title;
         $datas['datas'] = $this->service->getMenu($id);
-        return view('datas.edit', $datas);
+        return view($this->route.'.edit', $datas);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $this->validate($request, $this->service->rules());
+        $rules = $this->service->rules();
+        $rules['email'] = 'required|email';
+        $rules['id'] = 'required|string|min:36|max:36';
+        unset($rules['password'], $rules['confirm_password']);
+        $this->validate($request, $rules);
         $alert = $this->help->returnAlert();
 
+        $id = $request->input('id');
         $updated = $this->service->update($id, $request->except('_token'));
         if(!$updated){
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -79,6 +96,6 @@ class MenuController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 }

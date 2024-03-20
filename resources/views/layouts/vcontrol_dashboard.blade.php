@@ -84,21 +84,23 @@
                             </div>
                             <div id="group{{ $loop->iteration }}" class="collapse show">
                                 @foreach (session('menus')[$menu_group_id] as $menu)
-                                    <a href="{{ route($menu['route'].'.read') }}"
-                                        class="link-hover list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
-                                        <div class="my-auto">
-                                            <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
-                                        </div>
-                                        <span class="my-auto">{{ $menu['name'] }}</span>
-                                        @if ((session('notification')[$menu['route']]['text'] ?? false))
-                                            @php
-                                                $color = session('active_menu') == $menu['route'] ? session('notification')[$menu['route']]['color'] : 'secondary';
-                                            @endphp
-                                            <small class="my-auto ms-2 badge text-bg-{{ $color }}">
-                                                {!! session('notification')[$menu['route']]['text'] !!}
-                                            </small>
-                                        @endif
-                                    </a>
+                                    @if ($menu['is_show'])
+                                        <a href="{{ route($menu['route'].'.read') }}"
+                                            class="link-hover list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
+                                            <div class="my-auto">
+                                                <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
+                                            </div>
+                                            <span class="my-auto">{{ $menu['name'] }}</span>
+                                            @if ((session('notification')[$menu['route']]['text'] ?? false))
+                                                @php
+                                                    $color = session('active_menu') == $menu['route'] ? session('notification')[$menu['route']]['color'] : 'secondary';
+                                                @endphp
+                                                <small class="my-auto ms-2 badge text-bg-{{ $color }}">
+                                                    {!! session('notification')[$menu['route']]['text'] !!}
+                                                </small>
+                                            @endif
+                                        </a>
+                                    @endif
                                 @endforeach
                             </div>
                         @endif

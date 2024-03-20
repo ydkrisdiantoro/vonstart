@@ -48,7 +48,7 @@
         </div>
 
         <div class="pt-3 table-responsive">
-            <table class="table tr-hover table-striped">
+            <table class="table tr-hover table-stripe">
                 <caption class="fst-italic text-secondary">
                     <small>
                         {{ session('route_menus')[session('active_menu')]['name'] }} Table
@@ -60,7 +60,7 @@
                             @foreach ($show as $column => $title)
                                 <th>{{ $title }}</th>
                             @endforeach
-                            <th>Action</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,12 +70,29 @@
                                     <td>
                                         @if ($data->{$col} ?? false)
                                             {{ $data->{$col} ?? '-' }}
+                                        @elseif(str($col)->contains('.'))
+                                            @php
+                                                $print_relation = '-';
+                                                $relations = explode('.', $col);
+                                                if(sizeof($relations) == 2){
+                                                    $print_relation = $data->{$relations[0]}->{$relations[1]};
+                                                } elseif(sizeof($relations) === 3){
+                                                    $print_relation = $data->{$relations[0]}->{$relations[1]}->{$relations[2]};
+                                                }
+                                            @endphp
+                                            {{ $print_relation }}
                                         @else
                                             <span class="badge text-bg-danger">Empty</span>
                                         @endif
                                     </td>
                                 @endforeach
-                                <td class="nowrap">
+                                <td class="nowrap text-center">
+                                    @if (session('access_menus.'.$role_route.'.is_read') ?? false)
+                                        <a href="{{ route($role_route.'.read', ['id' => $data->id]) }}"
+                                            class="btn btn-sm btn-primary me-1 btn-action">
+                                            <i class="bi bi-person-gear"></i> User Role
+                                        </a>
+                                    @endif
                                     @if (session('access_menus.'.$route.'.is_update') ?? false)
                                         <a href="{{ route($route.'.edit', $data->id) }}"
                                             class="btn btn-sm btn-secondary me-1 btn-action">
@@ -103,41 +120,43 @@
             </table>
 
             @if (sizeof($datas ?? []) > 0)
-                <div class="d-flex justify-content-center">
-                    <nav aria-label="...">
-                        <ul class="pagination">
-                            <!-- Tombol Previous -->
-                            <li class="page-prev page-item {{ $datas->previousPageUrl() ? '' : 'disabled' }}">
-                                <a class="page-link" href="{{ $datas->previousPageUrl() }}">Previous</a>
-                            </li>
-                        
-                            <!-- Tombol Nomor Halaman -->
-                            @php
-                                $prevNumber = $datas->currentPage() - 2;
-                                $nextNumber = $datas->currentPage() + 2;
-                                if($prevNumber < 0){
-                                    $prevNumber = 1;
-                                }
-                                if($nextNumber > $datas->lastPage()){
-                                    $nextNumber = $datas->lastPage();
-                                }
-                            @endphp
-                            @for ($i = $prevNumber; $i <= $nextNumber; $i++)
-                                <li class="page-item {{ $i == $datas->currentPage() ? 'active' : '' }}">
-                                    <a class="page-link"
-                                        href="{{ $i == $datas->currentPage() ? '#' : $datas->url($i) }}">
-                                        {{ $i }}
-                                    </a>
+                @if($datas->total() > 1)
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                                <!-- Tombol Previous -->
+                                <li class="page-prev page-item {{ $datas->previousPageUrl() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $datas->previousPageUrl() }}">Previous</a>
                                 </li>
-                            @endfor
-                        
-                            <!-- Tombol Next -->
-                            <li class="page-next page-item {{ $datas->nextPageUrl() ? '' : 'disabled' }}">
-                                <a class="page-link" href="{{ $datas->nextPageUrl() }}">Next</a>
-                            </li>
-                        </ul>                        
-                    </nav>
-                </div>
+                            
+                                <!-- Tombol Nomor Halaman -->
+                                @php
+                                    $prevNumber = $datas->currentPage() - 2;
+                                    $nextNumber = $datas->currentPage() + 2;
+                                    if($prevNumber < 0){
+                                        $prevNumber = 1;
+                                    }
+                                    if($nextNumber > $datas->lastPage()){
+                                        $nextNumber = $datas->lastPage();
+                                    }
+                                @endphp
+                                @for ($i = $prevNumber; $i <= $nextNumber; $i++)
+                                    <li class="page-item {{ $i == $datas->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link"
+                                            href="{{ $i == $datas->currentPage() ? '#' : $datas->url($i) }}">
+                                            {{ $i }}
+                                        </a>
+                                    </li>
+                                @endfor
+                            
+                                <!-- Tombol Next -->
+                                <li class="page-next page-item {{ $datas->nextPageUrl() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $datas->nextPageUrl() }}">Next</a>
+                                </li>
+                            </ul>                        
+                        </nav>
+                    </div>
+                @endif
             @endif
         </div>
     </div>

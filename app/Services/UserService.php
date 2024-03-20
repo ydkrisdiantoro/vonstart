@@ -24,7 +24,7 @@ class UserService
     /**
      * Get User
      * @param uuid $userId optional
-     * @return model_instance from find() or get()
+     * @return collection from find() or get()
      */
     public function getUser($userId = null, $paginate = null)
     {
@@ -43,7 +43,7 @@ class UserService
     /**
      * Create User
      * @param array $datas
-     * @return model_instance return from save()
+     * @return collection return from save()
      */
     public function create($datas)
     {
@@ -59,7 +59,7 @@ class UserService
      * Update User by Id
      * @param uuid $userId
      * @param array $datas
-     * @return model_instance return from update()
+     * @return collection return from update()
      */
     public function update($userId, $datas)
     {
@@ -72,7 +72,7 @@ class UserService
     /**
      * Delete User
      * @param uuid $userId
-     * @return model_instance from delete()
+     * @return collection from delete()
      */
     public function delete($userId)
     {

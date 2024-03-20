@@ -41,7 +41,7 @@ class AuthService
                         ];
                     });
 
-                    $changeRole = $this->changeRole($$firstRole->role_id)['success'];
+                    $changeRole = $this->changeRole($firstRole->role_id)['success'];
 
                     $userArray = $user->toArray();
                     unset($userArray['roles']);
@@ -94,10 +94,9 @@ class AuthService
             $roleMenus = RoleMenu::where('role_id', $role_id)
                 ->whereHas('menu', function($query){
                     $query->orderBy('order', 'asc');
-                    $query->where('is_show', true);
                 })
                 ->with(['menu' => function($query){
-                    $query->select('id', 'menu_group_id', 'name', 'icon', 'route', 'cluster', 'order');
+                    $query->select('id', 'menu_group_id', 'name', 'icon', 'route', 'cluster', 'order', 'is_show');
                     $query->with(['menuGroup' => function($query){
                         $query->select('id', 'name', 'order');
                     }]);

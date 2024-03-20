@@ -22,14 +22,18 @@ class MenuGroupService
     /**
      * Get MenuGroup
      * @param uuid $menuGroupId optional
-     * @return model_instance from find() or get()
+     * @return collection from find() or get()
      */
-    public function getMenuGroup($menuGroupId = null)
+    public function getMenuGroup($menuGroupId = null, $paginate = null)
     {
         if($menuGroupId != null){
-            $data = MenuGroup::find($menuGroupId);
+            $data = MenuGroup::orderBy('order', 'asc')->find($menuGroupId);
         } else{
-            $data = MenuGroup::get();
+            if ($paginate === null) {
+                $data = MenuGroup::orderBy('order', 'asc')->get();
+            } else{
+                $data = MenuGroup::orderBy('order', 'asc')->paginate($paginate);
+            }
         }
         return $data;
     }
@@ -37,7 +41,7 @@ class MenuGroupService
     /**
      * Create MenuGroup
      * @param array $datas
-     * @return model_instance return from save()
+     * @return collection return from save()
      */
     public function create($datas)
     {
@@ -53,17 +57,17 @@ class MenuGroupService
      * Update MenuGroup by Id
      * @param uuid $menuGroupId
      * @param array $datas
-     * @return model_instance return from update()
+     * @return collection return from update()
      */
     public function update($menuGroupId, $datas)
     {
-        return MenuGroup::find($menuGroupId)->update([$datas]);
+        return MenuGroup::find($menuGroupId)->update($datas);
     }
 
     /**
      * Delete MenuGroup
      * @param uuid $menuGroupId
-     * @return model_instance from delete()
+     * @return collection from delete()
      */
     public function delete($menuGroupId)
     {

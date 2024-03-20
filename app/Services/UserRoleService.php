@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\UserRole;
 
 class UserRoleService
@@ -21,14 +22,28 @@ class UserRoleService
     /**
      * Get UserRole
      * @param uuid $userRoleId optional
-     * @return model_instance from find() or get()
+     * @return collection from find() or get()
      */
-    public function getUserRole($userRoleId = null)
+    public function getUserRole($userRoleId = null, $paginate = null, $userId = null)
     {
         if($userRoleId != null){
-            $data = UserRole::find($userRoleId);
+            $data = UserRole::with(['role', 'user'])
+                ->whereHas('role')
+                ->whereHas('user')
+                ->find($userRoleId);
         } else{
-            $data = UserRole::get();
+            $data = UserRole::with(['role'])->whereHas('role');
+            $data = $data->whereHas('user', function($query) use($userId){
+                if($userId !== null){
+                    $query->where('user_id', $userId);
+                }
+            });
+
+            if ($paginate === null) {
+                $data = $data->get();
+            } else{
+                $data = $data->paginate($paginate);
+            }
         }
         return $data;
     }
@@ -36,7 +51,7 @@ class UserRoleService
     /**
      * Create UserRole
      * @param array $datas
-     * @return model_instance return from save()
+     * @return collection return from save()
      */
     public function create($datas)
     {
@@ -52,20 +67,24 @@ class UserRoleService
      * Update UserRole by Id
      * @param uuid $userRoleId
      * @param array $datas
-     * @return model_instance return from update()
+     * @return collection return from update()
      */
     public function update($userRoleId, $datas)
     {
-        return UserRole::find($userRoleId)->update([$datas]);
+        return UserRole::find($userRoleId)->update($datas);
     }
 
     /**
      * Delete UserRole
      * @param uuid $userRoleId
-     * @return model_instance from delete()
+     * @return collection from delete()
      */
     public function delete($userRoleId)
     {
         return UserRole::find($userRoleId)->delete();
+    }
+
+    public function findUser($userId){
+        return User::find($userId);
     }
 }

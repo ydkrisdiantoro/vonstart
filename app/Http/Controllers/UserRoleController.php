@@ -24,9 +24,27 @@ class UserRoleController extends Controller
 
     public function index()
     {
-        Session::put('active_menu', $this->route);
+        $this->validate(request(), [
+            'id' => 'required|string|min:36|max:36'
+        ], [
+            'id' => 'You are in Pluto, not Earth!'
+        ]);
+
+        Session::put('active_menu', 'user');
         $datas['title'] = $this->title;
-        $datas['datas'] = $this->service->getUserRole();
+        $datas['route'] = $this->route;
+        $datas['datas'] = $this->service->getUserRole(null, 25, request()->input('id'));
+        $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
+        $datas['show'] = [
+            'role.name' => 'Role',
+            // 'user.name' => 'User Name',
+        ];
+        $datas['user'] = $this->service->findUser(request()->input('id'));
+        $datas['user_columns'] = [
+            'name' => 'Full Name',
+            'email' => 'Email Address',
+            'phone' => 'Phone Number',
+        ];
 
         return view($this->view.'.index', $datas);
     }
@@ -34,7 +52,8 @@ class UserRoleController extends Controller
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-        return view($this->view.'.create');
+
+        return view($this->view.'.create', $datas);
     }
 
     public function store(Request $request)
@@ -47,27 +66,32 @@ class UserRoleController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
     {
         $datas['title'] = 'Edit '.$this->title;
         $datas['datas'] = $this->service->getUserRole($id);
-        return view('datas.edit', $datas);
+        return view($this->route.'.edit', $datas);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $this->validate($request, $this->service->rules());
+        $rules = $this->service->rules();
+        $rules['email'] = 'required|email';
+        $rules['id'] = 'required|string|min:36|max:36';
+        unset($rules['password'], $rules['confirm_password']);
+        $this->validate($request, $rules);
         $alert = $this->help->returnAlert();
 
+        $id = $request->input('id');
         $updated = $this->service->update($id, $request->except('_token'));
         if(!$updated){
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -79,6 +103,6 @@ class UserRoleController extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.index')->with($alert[0], $alert[1]);
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 }

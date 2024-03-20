@@ -27,14 +27,24 @@ class MenuService
     /**
      * Get Menu
      * @param uuid $menuId optional
-     * @return model_instance from find() or get()
+     * @return collection from find() or get()
      */
-    public function getMenu($menuId = null)
+    public function getMenu($menuId = null, $paginate = null)
     {
         if($menuId != null){
-            $data = Menu::find($menuId);
+            $data = Menu::with(['menuGroup'])
+                ->whereHas('menuGroup')
+                ->find($menuId);
         } else{
-            $data = Menu::get();
+            if ($paginate === null) {
+                $data = Menu::with(['menuGroup'])
+                    ->whereHas('menuGroup')
+                    ->get();
+            } else{
+                $data = Menu::with(['menuGroup'])
+                    ->whereHas('menuGroup')
+                    ->paginate($paginate);
+            }
         }
         return $data;
     }
@@ -42,7 +52,7 @@ class MenuService
     /**
      * Create Menu
      * @param array $datas
-     * @return model_instance|false return from save()
+     * @return collection|false return from save()
      */
     public function create($datas)
     {
@@ -58,17 +68,17 @@ class MenuService
      * Update Menu by Id
      * @param uuid $menuId
      * @param array $datas
-     * @return model_instance return from update()
+     * @return collection return from update()
      */
     public function update($menuId, $datas)
     {
-        return Menu::find($menuId)->update([$datas]);
+        return Menu::find($menuId)->update($datas);
     }
 
     /**
      * Delete Menu
      * @param uuid $menuId
-     * @return model_instance from delete()
+     * @return collection from delete()
      */
     public function delete($menuId)
     {

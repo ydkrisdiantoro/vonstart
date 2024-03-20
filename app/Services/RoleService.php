@@ -24,14 +24,18 @@ class RoleService
     /**
      * Get Role
      * @param uuid $roleId optional
-     * @return model_instance from find() or get()
+     * @return collection from find() or get()
      */
-    public function getRole($roleId = null)
+    public function getRole($roleId = null, $paginate = null)
     {
         if($roleId != null){
             $data = Role::find($roleId);
         } else{
-            $data = Role::get();
+            if ($paginate === null) {
+                $data = Role::get();
+            } else{
+                $data = Role::paginate($paginate);
+            }
         }
         return $data;
     }
@@ -39,7 +43,7 @@ class RoleService
     /**
      * Create Role
      * @param array $datas
-     * @return model_instance return from save()
+     * @return collection return from save()
      */
     public function create($datas)
     {
@@ -55,17 +59,17 @@ class RoleService
      * Update Role by Id
      * @param uuid $roleId
      * @param array $datas
-     * @return model_instance return from update()
+     * @return collection return from update()
      */
     public function update($roleId, $datas)
     {
-        return Role::find($roleId)->update([$datas]);
+        return Role::find($roleId)->update($datas);
     }
 
     /**
      * Delete Role
      * @param uuid $roleId
-     * @return model_instance from delete()
+     * @return collection from delete()
      */
     public function delete($roleId)
     {

@@ -34,6 +34,7 @@ class UserController extends Controller
             'email' => 'Email',
             'phone' => 'Phone',
         ];
+        $datas['role_route'] = 'user-role';
 
         return view($this->view.'.index', $datas);
     }
