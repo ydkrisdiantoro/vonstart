@@ -19,6 +19,11 @@
 
 @section('add-content')
 
+@error('id')
+    <div class="alert alert-danger">{{ $message }}</div>
+@enderror
+
+
 <div class="row">
     <div class="col-12 col-md-3">
         <div class="list-group shadow-card mb-3">
@@ -29,6 +34,7 @@
             <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
                 <i class="bi bi-arrow-return-right"></i>
                 <span class="">{{ $title }}</span>
+                <i class="bi bi-check-circle-fill"></i>
             </a>
         </div>
         <div class="card shadow-card mb-3 border-0">
@@ -55,8 +61,8 @@
                     </div>
                     <div class="col text-end">
                         @if (session('access_menus.'.$route.'.is_create') ?? false)
-                            <a href="{{ route($route.'.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-circle-fill me-1"></i> Create
+                            <a href="{{ route($route.'.create', ['id' => $id]) }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle-fill me-1"></i> Add
                             </a>
                         @endif
                     </div>
@@ -115,12 +121,6 @@
                                             </td>
                                         @endforeach
                                         <td class="nowrap text-center">
-                                            @if (session('access_menus.'.$route.'.is_update') ?? false)
-                                                <a href="{{ route($route.'.edit', $data->id) }}"
-                                                    class="btn btn-sm btn-secondary me-1 btn-action">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                </a>
-                                            @endif
                                             @if (session('access_menus.'.$route.'.is_delete') ?? false)
                                                 <a href="{{ route($route.'.delete', $data->id) }}"
                                                     class="btn btn-sm btn-danger btn-action">

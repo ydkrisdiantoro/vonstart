@@ -21,15 +21,38 @@
 
 <div class="row">
     <div class="col-12 col-md-3">
-        <div class="list-group shadow-card">
-            <a href="{{ route(session('active_menu').'.read') }}"
+        <div class="list-group shadow-card mb-3">
+            <a href="#" class="list-group-item border-0 fw-bold">Navigate To</a>
+            <a href="{{ route(session('active_menu').'.read', []) }}"
                 class="list-group-item list-group-item-action">
-                <i class="bi bi-arrow-left"></i> Back
+                <i class="bi bi-arrow-return-right"></i>
+                {{ session('route_menus')[session('active_menu')]['name'] }}
             </a>
+            @foreach ($breadcrumbs as $breadcrumbRoute => $breadcrumb)
+                <a href="{{ route($breadcrumbRoute, $breadcrumb['params']) }}"
+                    class="list-group-item list-group-item-action {{ $breadcrumb['is_active'] === true ? 'active' : '' }}"
+                    aria-current="true">
+                    <i class="bi bi-arrow-return-right"></i>
+                    <span>{{ $breadcrumb['title'] }}</span>
+                </a>
+            @endforeach
             <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
                 <i class="bi bi-arrow-return-right"></i>
                 <span class="">{{ $title }}</span>
+                <i class="bi bi-check-circle-fill"></i>
             </a>
+        </div>
+
+        <div class="card shadow-card mb-3 border-0">
+            <div class="card-body">
+                <p class="fw-bold">User Details</p>
+                @foreach ($user_columns as $user_column => $user_title)
+                    <p class="{{ $loop->last ? 'mb-0' : '' }}">
+                        <span class="fst-italic">{{ $user_title }}</span><br>
+                        <span class="fw-bold">{{ $user->{$user_column} ?? '-' }}</span>
+                    </p>
+                @endforeach
+            </div>
         </div>
     </div>
 

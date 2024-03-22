@@ -25,11 +25,12 @@ class UserRoleController extends Controller
     public function index()
     {
         $this->validate(request(), [
-            'id' => 'required|string|min:36|max:36'
+            'id' => app('uuid_validation')
         ], [
             'id' => 'You are in Pluto, not Earth!'
         ]);
 
+        $datas['id'] = request()->input('id');
         Session::put('active_menu', 'user');
         $datas['title'] = $this->title;
         $datas['route'] = $this->route;
@@ -49,9 +50,30 @@ class UserRoleController extends Controller
         return view($this->view.'.index', $datas);
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $this->validate($request, [
+            'id' => app('uuid_validation'),
+        ], [
+            'id' => 'User not found!'
+        ]);
+
         $datas['title'] = 'Create '.$this->title;
+        $datas['id'] = $request->input('id');
+        $datas['breadcrumbs'] = [
+            $this->route.'.read' => [
+                'title' => $this->title,
+                'params' => ['id' => $datas['id']],
+                'is_active' => false
+            ],
+        ];
+
+        $datas['user'] = $this->service->findUser(request()->input('id'));
+        $datas['user_columns'] = [
+            'name' => 'Full Name',
+            'email' => 'Email Address',
+            'phone' => 'Phone Number',
+        ];
 
         return view($this->view.'.create', $datas);
     }
