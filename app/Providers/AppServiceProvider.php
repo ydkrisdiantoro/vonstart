@@ -14,6 +14,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('uuid_validation', function () {
             return 'required|string|min:36|max:36';
         });
+        $this->app->singleton('uuid_validation_nullable', function () {
+            return 'nullable|string|min:36|max:36';
+        });
     }
 
     /**

@@ -10,11 +10,11 @@ class VcontrolHelper
     protected const TRUE_MESSAGE = 'Berhasil!';
     protected const FALSE_MESSAGE = 'Gagal!';
 
-    public static function returnAlert($success = true)
+    public static function returnAlert($success = true, $customMessage = null)
     {
-        $datas = [self::TRUE_COLOR, self::TRUE_MESSAGE];
+        $datas = [self::TRUE_COLOR, $customMessage ?? self::TRUE_MESSAGE];
         if(!$success){
-            $datas = [self::FALSE_COLOR, self::FALSE_MESSAGE];
+            $datas = [self::FALSE_COLOR, $customMessage ?? self::FALSE_MESSAGE];
         }
 
         return ['alert', $datas];

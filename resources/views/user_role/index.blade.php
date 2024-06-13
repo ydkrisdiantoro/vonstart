@@ -14,7 +14,7 @@
 @endsection
 
 @section('add-content-title')
-
+<span class="fs-6"> | {{ $title }}</span>
 @endsection
 
 @section('add-content')
@@ -23,9 +23,8 @@
     <div class="alert alert-danger">{{ $message }}</div>
 @enderror
 
-
 <div class="row">
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-lg-3">
         <div class="list-group shadow-card mb-3">
             <a href="{{ route(session('active_menu').'.read') }}"
                 class="list-group-item list-group-item-action">
@@ -50,31 +49,40 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-lg-9">
         <div class="card shadow-card border-0 mb-3">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter">
-                            <i class="bi bi-filter-circle-fill me-1"></i> Filter
-                        </button>
-                    </div>
                     <div class="col text-end">
-                        @if (session('access_menus.'.$route.'.is_create') ?? false)
-                            <a href="{{ route($route.'.create', ['id' => $id]) }}" class="btn btn-primary">
-                                <i class="bi bi-plus-circle-fill me-1"></i> Add
-                            </a>
-                        @endif
-                    </div>
-                    <div class="col-12 mt-2">
-                        @if ($filters)
-                            @foreach ($filters as $filterKey => $filter)
-                                @if ($filter !== null)
-                                    <span class="badge text-bg-secondary">
-                                        #{{ $show[$filterKey].': '.$filter }}
-                                    </span>
-                                @endif
-                            @endforeach
+                        @if ($session['access_menus'][$route]['is_create'] ?? false)
+                            <form method="POST"
+                                action="{{ route($route.'.store') }}"
+                                class="form">
+                                @csrf
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="d-none" for="floatingSelect">Roles</label>
+                                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                                        <select class="form-select" id="floatingSelect" name="role_id" required>
+                                            <option>-- Select Role to Add</option>
+                                            @if (@$roles && sizeof($roles) > 0)
+                                                @foreach ($roles as $id => $name)
+                                                    <option value="{{ $id }}">{{ $name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        {{-- <div class="form-floating">
+                                        </div> --}}
+                                    </div>
+                                    <div class="col-auto d-flex">
+                                        <div class="mx-auto d-flex justify-content-end mt-auto">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-check-circle-fill me-1"></i> Add Role
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         @endif
                     </div>
                 </div>
@@ -83,7 +91,7 @@
                     <table class="table tr-hover table-stripe">
                         <caption class="fst-italic text-secondary">
                             <small>
-                                {{ session('route_menus')[session('active_menu')]['name'] }} Table
+                                {{ $title }} Table
                             </small>
                         </caption>
                         @if (sizeof($datas ?? []) > 0)

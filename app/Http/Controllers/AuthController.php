@@ -94,6 +94,12 @@ class AuthController extends Controller
             $this->service->changeRole($role_id);
         }
 
-        return redirect()->back();
+        $session = session()->all();
+        if(in_array($session['active_menu'], $session['access_menus'])){
+            return redirect()->back();
+        } else{
+            return redirect()->route('dashboard.read');
+        }
+
     }
 }

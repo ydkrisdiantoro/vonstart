@@ -47,11 +47,12 @@
                             type="text"
                             name="name"
                             class="form-control"
-                            id="floatingName"
-                            placeholder="Bambang"
+                            id="name"
+                            placeholder="Administrator"
                             value="{{ old('name') }}"
-                            autofocus>
-                        <label for="floatingName">Name</label>
+                            autofocus
+                            required>
+                        <label for="name">Name</label>
                     </div>
                     <div class="mb-3 text-start">
                         @error('name')
@@ -60,39 +61,20 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input autocomplete="off"
-                                    type="email"
-                                    name="email"
-                                    class="form-control"
-                                    id="floatingEmail"
-                                    placeholder="name@example.com"
-                                    value="{{ old('email') }}"
-                                    autofocus>
-                                <label for="floatingEmail">Email Address</label>
-                            </div>
-                            <div class="mb-3 text-start">
-                                @error('email')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-lg-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
                                     type="text"
-                                    name="phone"
+                                    name="code"
                                     class="form-control"
-                                    id="floatingPhone"
-                                    placeholder="010100001111"
-                                    value="{{ old('phone') }}"
-                                    autofocus>
-                                <label for="floatingPhone">Phone</label>
+                                    id="code"
+                                    placeholder="admin"
+                                    value="{{ old('name') }}"
+                                    required>
+                                <label for="code">Code</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('phone')
+                                @error('code')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -100,37 +82,38 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-lg-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
-                                    type="password"
-                                    name="password"
+                                    type="text"
+                                    name="icon"
                                     class="form-control"
-                                    id="floatingPassword"
-                                    placeholder="Password"
-                                    value="{{ old('password') }}">
-                                <label for="floatingPassword">Password</label>
+                                    id="icon"
+                                    placeholder="person"
+                                    value="{{ old('icon') }}"
+                                    required>
+                                <label for="icon">Bootstrap Icon</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('password')
+                                @error('icon')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-lg-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
-                                    type="password"
-                                    name="confirm_password"
+                                    type="number"
+                                    name="order"
                                     class="form-control"
-                                    id="floatingConfirmPassword"
-                                    placeholder="Confirm Password"
-                                    value="{{ old('confirm_password') }}">
-                                <label for="floatingConfirmPassword">Confirm Password</label>
+                                    id="order"
+                                    placeholder="person"
+                                    value="{{ old('order') }}"
+                                    required>
+                                <label for="order">Order</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('confirm_password')
+                                @error('order')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>

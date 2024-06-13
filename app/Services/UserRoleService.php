@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
 
@@ -14,8 +15,8 @@ class UserRoleService
     public function rules()
     {
         return [
-            'role_id' => ['required','string','max:36'],
-            'user_id' => ['required','string','max:36'],
+            'role_id' => ['required','string','min:36','max:36'],
+            'user_id' => ['required','string','min:36','max:36'],
         ];
     }
 
@@ -86,5 +87,15 @@ class UserRoleService
 
     public function findUser($userId){
         return User::find($userId);
+    }
+
+    /**
+     * Pluck Roles with Except in array
+     * @param array $except
+     * @return collection $datas
+     */
+    public function pluckRoles($except)
+    {
+        return Role::whereNotIn('id', $except)->pluck('name', 'id');
     }
 }

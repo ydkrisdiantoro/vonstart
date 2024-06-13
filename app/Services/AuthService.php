@@ -95,6 +95,13 @@ class AuthService
                 ->whereHas('menu', function($query){
                     $query->orderBy('order', 'asc');
                 })
+                ->where(function($q){
+                    $q->where('is_read', true);
+                    $q->orWhere('is_create', true);
+                    $q->orWhere('is_update', true);
+                    $q->orWhere('is_delete', true);
+                    $q->orWhere('is_validate', true);
+                })
                 ->with(['menu' => function($query){
                     $query->select('id', 'menu_group_id', 'name', 'icon', 'route', 'cluster', 'order', 'is_show');
                     $query->with(['menuGroup' => function($query){

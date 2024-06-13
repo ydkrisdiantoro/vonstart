@@ -3,7 +3,7 @@
 
 @section('title')
     @php
-        $semuaMenu = session('route_menus')[session('active_menu')] ?? null;
+        $semuaMenu = $session['route_menus'][$session['active_menu']] ?? null;
         $namaMenuAktif = 'Dashboard';
         if($semuaMenu !== null){
             $namaMenuAktif = $semuaMenu['name'] ?? '-';
@@ -46,23 +46,23 @@
 
             <div>
                 <a href="{{ route('dashboard.read') }}"
-                    class="link-hover list-group-item list-group-item-action border-0 {{ session('active_menu') == 'dashboard' ? 'text-primary' : '' }}">
+                    class="link-hover list-group-item list-group-item-action border-0 {{ $session['active_menu'] == 'dashboard' ? 'text-primary' : '' }}">
                     <div class="my-auto">
                         <i class="bi bi-speedometer me-3 fs-5"></i>
                     </div>
                     <span class="my-auto">Dashboard</span>
-                    @if ((session('notification')['dashboard']['text'] ?? false))
+                    @if (($session['notification']['dashboard']['text'] ?? false))
                         @php
-                            $color = session('active_menu') == 'dashboard' ? session('notification')['dashboard']['color'] : 'secondary';
+                            $color = $session['active_menu'] == 'dashboard' ? $session['notification']['dashboard']['color'] : 'secondary';
                         @endphp
                         <small class="my-auto ms-2 badge text-bg-{{ $color }}">
-                            {!! session('notification')['dashboard']['text'] !!}
+                            {!! $session['notification']['dashboard']['text'] !!}
                         </small>
                     @endif
                 </a>
-                @if (sizeof(session('menu_groups') ?? []) > 0)
-                    @foreach (session('menu_groups') as $menu_group_id => $menu_group)
-                        @if (sizeof(session('menus')[$menu_group_id] ?? []) > 0)
+                @if (sizeof($session['menu_groups'] ?? []) > 0)
+                    @foreach ($session['menu_groups'] as $menu_group_id => $menu_group)
+                        @if (sizeof($session['menus'][$menu_group_id] ?? []) > 0)
                             <div type="button"
                                 class="list-group-item border-0 mx-3 py-0 my-2"
                                 data-bs-toggle="collapse"
@@ -83,20 +83,20 @@
                                 </div>
                             </div>
                             <div id="group{{ $loop->iteration }}" class="collapse show">
-                                @foreach (session('menus')[$menu_group_id] as $menu)
-                                    @if ($menu['is_show'])
+                                @foreach ($session['menus'][$menu_group_id] as $menu)
+                                    @if ($menu['is_show'] && $session['access_menus'][$menu['route']]['is_read'] == true)
                                         <a href="{{ route($menu['route'].'.read') }}"
-                                            class="link-hover list-group-item list-group-item-action border-0 {{ session('active_menu') == $menu['route'] ? 'text-primary' : '' }}">
+                                            class="link-hover list-group-item list-group-item-action border-0 {{ $session['active_menu'] == $menu['route'] ? 'text-primary' : '' }}">
                                             <div class="my-auto">
                                                 <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
                                             </div>
                                             <span class="my-auto">{{ $menu['name'] }}</span>
-                                            @if ((session('notification')[$menu['route']]['text'] ?? false))
+                                            @if (($session['notification'][$menu['route']]['text'] ?? false))
                                                 @php
-                                                    $color = session('active_menu') == $menu['route'] ? session('notification')[$menu['route']]['color'] : 'secondary';
+                                                    $color = $session['active_menu'] == $menu['route'] ? $session['notification'][$menu['route']]['color'] : 'secondary';
                                                 @endphp
                                                 <small class="my-auto ms-2 badge text-bg-{{ $color }}">
-                                                    {!! session('notification')[$menu['route']]['text'] !!}
+                                                    {!! $session['notification'][$menu['route']]['text'] !!}
                                                 </small>
                                             @endif
                                         </a>
@@ -132,21 +132,21 @@
                                 <i class="bi bi-calendar"></i>
                             </span>
                             <span class="d-none d-md-block" style="vertical-align: center;">
-                                {{ session('active_year') ?? date('Y') }}
+                                {{ $session['active_year'] ?? date('Y') }}
                             </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
-                            @if (session('years'))
-                                @foreach (session('years') as $year)
+                        @if ($session['years'] ?? false)
+                            <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
+                                @foreach ($session['years'] as $year)
                                     <li>
-                                        <a class="dropdown-item {{ $year == session('active_year') ? 'active' : '' }}"
-                                            href="{{ $year == session('active_year') ? '#' : route('year.read', $year) }}">
+                                        <a class="dropdown-item {{ $year == $session['active_year'] ? 'active' : '' }}"
+                                            href="{{ $year == $session['active_year'] ? '#' : route('year.read', $year) }}">
                                             {{ $year }}
                                         </a>
                                     </li>
                                 @endforeach
-                            @endif
-                        </ul>
+                            </ul>
+                        @endif
                     </div>
 
                     <div class="dropdown">
@@ -159,15 +159,15 @@
                                 <i class="bi bi-shield-fill-check"></i>
                             </span>
                             <span class="d-none d-md-block" style="vertical-align: center;">
-                                {{ session('roles')[session('active_role_id')]['name'] ?? '-' }}
+                                {{ $session['roles'][$session['active_role_id']]['name'] ?? '-' }}
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
-                            @if (session('roles'))
-                                @foreach (session('roles') as $role_id => $role)
+                            @if ($session['roles'])
+                                @foreach ($session['roles'] as $role_id => $role)
                                     <li>
-                                        <a class="dropdown-item {{ $role_id == session('active_role_id') ? 'active' : '' }}"
-                                            href="{{ $role_id == session('active_role_id') ? '#' : route('change-role.read', $role_id) }}">
+                                        <a class="dropdown-item {{ $role_id == $session['active_role_id'] ? 'active' : '' }}"
+                                            href="{{ $role_id == $session['active_role_id'] ? '#' : route('change-role.read', $role_id) }}">
                                             {{ $role['name'] ?? '-' }}
                                         </a>
                                     </li>
@@ -196,7 +196,7 @@
                             <li>
                                 <a class="dropdown-item active" href="{{ '#' }}">
                                     <i class="bi bi-person me-2"></i>
-                                    {{ substr(session('user')['name'], 0, 20).'...' }}
+                                    {{ substr($session['user']['name'], 0, 20).'...' }}
                                 </a>
                             </li>
 
@@ -222,6 +222,16 @@
                         @yield('add-content-title')
                     </h4>
                 </div>
+
+                @php
+                    $alert = $session['alert'] ?? false;
+                @endphp
+                @if($alert)
+                    <div class="col-12 mt-3">
+                        <div class="alert alert-{{ $alert[0] }} mb-0">{{ $alert[1] }}</div>
+                    </div>
+                @endif
+
                 <div class="col-12 pt-2">
                     @yield('add-content')
                 </div>

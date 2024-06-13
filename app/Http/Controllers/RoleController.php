@@ -35,6 +35,7 @@ class RoleController extends Controller
             'icon' => 'Icon',
             'order' => 'Order',
         ];
+        $datas['role_menu_route'] = 'role-menu';
 
         return view($this->view.'.index', $datas);
     }
@@ -69,14 +70,12 @@ class RoleController extends Controller
     public function update(Request $request)
     {
         $rules = $this->service->rules();
-        $rules['email'] = 'required|email';
         $rules['id'] = 'required|string|min:36|max:36';
-        unset($rules['password'], $rules['confirm_password']);
         $this->validate($request, $rules);
         $alert = $this->help->returnAlert();
 
         $id = $request->input('id');
-        $updated = $this->service->update($id, $request->except('_token'));
+        $updated = $this->service->update($id, $request->except(['_token', 'id']));
         if(!$updated){
             $alert = $this->help->returnAlert(false);
         }

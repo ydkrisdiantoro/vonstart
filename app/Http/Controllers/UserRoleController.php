@@ -47,6 +47,9 @@ class UserRoleController extends Controller
             'phone' => 'Phone Number',
         ];
 
+        $roleNow = $datas['datas']->pluck('role_id')->toArray();
+        $datas['roles'] = $this->service->pluckRoles(except: $roleNow);
+
         return view($this->view.'.index', $datas);
     }
 
@@ -80,15 +83,17 @@ class UserRoleController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, $this->service->rules());
-        $alert = $this->help->returnAlert();
+        $this->validate($request, $this->service->rules(), [
+            'role_id' => 'Wajib memilih salah satu role!'
+        ]);
+        $alert = $this->help->returnAlert(customMessage: 'Berhasil menambahkan role!');
 
         $stored = $this->service->create($request->except('_token'));
         if(!$stored){
-            $alert = $this->help->returnAlert(false);
+            $alert = $this->help->returnAlert(false, 'Gagal menambahkan role!');
         }
 
-        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
+        return redirect()->back()->with($alert[0], $alert[1]);
     }
 
     public function edit($id)
@@ -118,13 +123,13 @@ class UserRoleController extends Controller
 
     public function destroy($id)
     {
-        $alert = $this->help->returnAlert();
+        $alert = $this->help->returnAlert(customMessage: 'Berhasil menghapus role!');
 
         $deleted = $this->service->delete($id);
         if(!$deleted){
-            $alert = $this->help->returnAlert(false);
+            $alert = $this->help->returnAlert(false, 'Gagal menghapus role!');
         }
 
-        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
+        return redirect()->back()->with($alert[0], $alert[1]);
     }
 }

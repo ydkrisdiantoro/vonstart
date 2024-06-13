@@ -11,7 +11,7 @@ use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login.read');
 });
 
 Route::middleware('guest')->group(function (){
