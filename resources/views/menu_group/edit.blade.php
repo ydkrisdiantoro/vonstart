@@ -47,11 +47,12 @@
                             type="text"
                             name="name"
                             class="form-control"
-                            id="floatingName"
+                            id="name"
                             placeholder="Bambang"
                             value="{{ old('name') ?? $datas->name }}"
-                            autofocus>
-                        <label for="floatingName">Name</label>
+                            autofocus
+                            required>
+                        <label for="name">Name</label>
                     </div>
                     <div class="mb-3 text-start">
                         @error('name')
@@ -63,74 +64,17 @@
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
-                                    type="email"
-                                    name="email"
+                                    type="number"
+                                    name="order"
                                     class="form-control"
                                     id="floatingEmail"
-                                    placeholder="name@example.com"
-                                    value="{{ old('email') ?? $datas->email }}"
-                                    autofocus>
-                                <label for="floatingEmail">Email Address</label>
+                                    placeholder="1"
+                                    value="{{ old('order') ?? $datas->order }}"
+                                    required>
+                                <label for="floatingEmail">Order</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('email')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input autocomplete="off"
-                                    type="text"
-                                    name="phone"
-                                    class="form-control"
-                                    id="floatingPhone"
-                                    placeholder="010100001111"
-                                    value="{{ old('phone') ?? $datas->phone }}"
-                                    autofocus>
-                                <label for="floatingPhone">Phone</label>
-                            </div>
-                            <div class="mb-3 text-start">
-                                @error('phone')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input autocomplete="off"
-                                    type="password"
-                                    name="password"
-                                    class="form-control"
-                                    id="floatingPassword"
-                                    placeholder="Password"
-                                    value="{{ old('password') }}">
-                                <label for="floatingPassword">Password</label>
-                            </div>
-                            <div class="mb-3 text-start">
-                                @error('password')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input autocomplete="off"
-                                    type="password"
-                                    name="confirm_password"
-                                    class="form-control"
-                                    id="floatingConfirmPassword"
-                                    placeholder="Confirm Password"
-                                    value="{{ old('confirm_password') }}">
-                                <label for="floatingConfirmPassword">Confirm Password</label>
-                            </div>
-                            <div class="mb-3 text-start">
-                                @error('confirm_password')
+                                @error('order')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>

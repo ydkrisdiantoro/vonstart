@@ -26,9 +26,14 @@
                 class="list-group-item list-group-item-action">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
+            <a href="{{ route('menu.read', ['id' => $id]) }}" class="list-group-item list-group-item-action" aria-current="true">
+                <i class="bi bi-arrow-return-right"></i>
+                <span class="">Menu</span>
+            </a>
             <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
                 <i class="bi bi-arrow-return-right"></i>
                 <span class="">{{ $title }}</span>
+                <i class="bi bi-check-circle-fill"></i>
             </a>
         </div>
     </div>
@@ -36,12 +41,12 @@
     <div class="col-12 col-md-9">
         <div class="card shadow-card border-0 mb-3">
             <div class="card-body">
-                <h5>{{ $title }}</h5>
+                <h5>{{ $title }} <span class="text-primary">in {{ $menu_group->name }}</span></h5>
                 <form method="POST"
-                    action="{{ route(session('active_menu').'.store') }}"
+                    action="{{ route($route.'.store') }}"
                     class="form">
                     @csrf
-                    
+                    <input type="hidden" name="menu_group_id" value="{{ $id }}">
                     <div class="form-floating">
                         <input autocomplete="off"
                             type="text"
@@ -63,17 +68,17 @@
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
-                                    type="email"
-                                    name="email"
+                                    type="text"
+                                    name="icon"
                                     class="form-control"
-                                    id="floatingEmail"
-                                    placeholder="name@example.com"
-                                    value="{{ old('email') }}"
+                                    id="icon"
+                                    placeholder="person"
+                                    value="{{ old('icon') }}"
                                     autofocus>
-                                <label for="floatingEmail">Email Address</label>
+                                <label for="icon">Icon</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('email')
+                                @error('icon')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -83,16 +88,16 @@
                             <div class="form-floating">
                                 <input autocomplete="off"
                                     type="text"
-                                    name="phone"
+                                    name="route"
                                     class="form-control"
-                                    id="floatingPhone"
-                                    placeholder="010100001111"
-                                    value="{{ old('phone') }}"
+                                    id="route"
+                                    placeholder="profil"
+                                    value="{{ old('route') }}"
                                     autofocus>
-                                <label for="floatingPhone">Phone</label>
+                                <label for="route">Route</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('phone')
+                                @error('route')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -103,16 +108,17 @@
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
-                                    type="password"
-                                    name="password"
+                                    type="text"
+                                    name="cluster"
                                     class="form-control"
-                                    id="floatingPassword"
-                                    placeholder="Password"
-                                    value="{{ old('password') }}">
-                                <label for="floatingPassword">Password</label>
+                                    id="cluster"
+                                    placeholder="person"
+                                    value="{{ old('cluster') }}"
+                                    autofocus>
+                                <label for="cluster">Cluster</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('password')
+                                @error('cluster')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -121,18 +127,32 @@
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <input autocomplete="off"
-                                    type="password"
-                                    name="confirm_password"
+                                    type="number"
+                                    name="order"
                                     class="form-control"
-                                    id="floatingConfirmPassword"
-                                    placeholder="Confirm Password"
-                                    value="{{ old('confirm_password') }}">
-                                <label for="floatingConfirmPassword">Confirm Password</label>
+                                    id="order"
+                                    placeholder="0"
+                                    value="{{ old('order') }}"
+                                    autofocus>
+                                <label for="order">Order</label>
                             </div>
                             <div class="mb-3 text-start">
-                                @error('confirm_password')
+                                @error('order')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-check form-check-inline">
+                                <input name="is_show" class="form-check-input" type="radio" id="show" value="1" checked>
+                                <label class="form-check-label" for="show">Show Menu in Sidebar</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input name="is_show" class="form-check-input" type="radio" id="hide" value="0">
+                                <label class="form-check-label" for="hide">Hide Menu</label>
                             </div>
                         </div>
                     </div>

@@ -33,6 +33,7 @@ class MenuGroupController extends Controller
             'name' => 'Name',
             'order' => 'Order',
         ];
+        $datas['menu_route'] = 'menu';
 
         return view($this->view.'.index', $datas);
     }
@@ -61,20 +62,17 @@ class MenuGroupController extends Controller
     {
         $datas['title'] = 'Edit '.$this->title;
         $datas['datas'] = $this->service->getMenuGroup($id);
-        return view($this->route.'.edit', $datas);
+        return view($this->view.'.edit', $datas);
     }
 
     public function update(Request $request)
     {
         $rules = $this->service->rules();
-        $rules['email'] = 'required|email';
-        $rules['id'] = 'required|string|min:36|max:36';
-        unset($rules['password'], $rules['confirm_password']);
         $this->validate($request, $rules);
         $alert = $this->help->returnAlert();
 
         $id = $request->input('id');
-        $updated = $this->service->update($id, $request->except('_token'));
+        $updated = $this->service->update($id, $request->except(['_token', 'id']));
         if(!$updated){
             $alert = $this->help->returnAlert(false);
         }

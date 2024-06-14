@@ -156,7 +156,7 @@
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <span class="d-block me-1" style="vertical-align: center;">
-                                <i class="bi bi-shield-fill-check"></i>
+                                <i class="bi bi-{{ $session['roles'][$session['active_role_id']]['icon'] ?? 'shield-fill-check' }}"></i>
                             </span>
                             <span class="d-none d-md-block" style="vertical-align: center;">
                                 {{ $session['roles'][$session['active_role_id']]['name'] ?? '-' }}

@@ -14,6 +14,7 @@ class MenuService
     public function rules()
     {
         return [
+            'id' => ['nullable','string','max:36'],
             'menu_group_id' => ['required','string','max:36'],
             'name' => ['required','string'],
             'icon' => ['required','string'],
@@ -83,5 +84,25 @@ class MenuService
     public function delete($menuId)
     {
         return Menu::find($menuId)->delete();
+    }
+
+    public function getMenuByMenuGroupId($menuGroupId, $paginate = null, $map = false)
+    {
+        $data = Menu::where('menu_group_id', $menuGroupId);
+
+        if($paginate){
+            $data = $data->paginate($paginate);
+        } else{
+            $data = $data->get();
+            if ($map) {
+                $data = $data->mapWithKeys(function($item){
+                    return [
+                        $item->id => $item
+                    ];
+                });
+            }
+        }
+
+        return $data;
     }
 }

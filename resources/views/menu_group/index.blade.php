@@ -87,6 +87,13 @@
                                     </td>
                                 @endforeach
                                 <td class="nowrap text-center">
+                                    @if ($session['access_menus'][$menu_route]['is_read'] ?? false)
+                                        <a href="{{ route($menu_route.'.read', ['id' => $data->id]) }}"
+                                            class="btn btn-sm btn-primary me-1 btn-action">
+                                            <i class="bi bi-{{ $session['route_menus'][$menu_route]['icon'] ?? 'circle' }}"></i>
+                                            {{ $session['route_menus'][$menu_route]['name'] }}
+                                        </a>
+                                    @endif
                                     @if (session('access_menus.'.$route.'.is_update') ?? false)
                                         <a href="{{ route($route.'.edit', $data->id) }}"
                                             class="btn btn-sm btn-secondary me-1 btn-action">
