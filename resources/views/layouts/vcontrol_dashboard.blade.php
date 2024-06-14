@@ -244,6 +244,26 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation</h5>
+                <p>Did you really want to delete this item?</p>
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle-fill"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">
+                        <i class="bi bi-trash-fill"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('extra-js')
@@ -275,5 +295,37 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Simpan referensi elemen yang akan dihapus
+    let deleteLink = null;
+
+    // Dapatkan semua elemen dengan kelas 'delete'
+    const deleteElements = document.querySelectorAll('.delete');
+
+    // Tambahkan event listener ke setiap elemen 'delete'
+    deleteElements.forEach(element => {
+        element.addEventListener('click', function(event) {
+            event.preventDefault(); // Cegah aksi default (navigasi)
+
+            // Simpan referensi ke elemen yang diklik
+            deleteLink = this;
+
+            // Tampilkan modal
+            const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            deleteModal.show();
+        });
+    });
+
+    // Tambahkan event listener ke tombol konfirmasi di modal
+    document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        if (deleteLink) {
+            window.location.href = deleteLink.href; // Lanjutkan ke URL yang disimpan di 'href'
+            }
+        });
+    });
+</script>
+
 @yield('add-js')
 @endsection

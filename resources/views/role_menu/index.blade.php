@@ -63,7 +63,13 @@
                         @csrf
                         <input type="hidden" name="role_id" value="{{ $role->id }}">
                         @if (sizeof($menus ?? []) > 0)
+                            @php
+                                $noMenu = 0;
+                            @endphp
                             @foreach ($menus as $menuGroup)
+                                @php
+                                    $noMenu += 1;
+                                @endphp
                                 @foreach ($menuGroup as $menu)
                                     @if ($loop->first)
                                         <div class="col-12 fw-bold">{{ $menu->menuGroup->name }}</div>
@@ -76,24 +82,24 @@
                                             </div>
                                             <div class="col-8 d-flex justify-content-between">
                                                 <div class="form-check">
-                                                    <input name="is_read[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="read{{ $loop->iteration }}" {{ @$datas[$menu->id]->is_read == 1 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="read{{ $loop->iteration }}" type="button">Read</label>
+                                                    <input name="is_read[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="read{{ $noMenu.$loop->iteration }}" {{ @$datas[$menu->id]->is_read == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="read{{ $noMenu.$loop->iteration }}" type="button">Read</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input name="is_create[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="create{{ $loop->iteration }}" {{ @$datas[$menu->id]->is_create == 1 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="create{{ $loop->iteration }}" type="button">Create</label>
+                                                    <input name="is_create[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="create{{ $noMenu.$loop->iteration }}" {{ @$datas[$menu->id]->is_create == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="create{{ $noMenu.$loop->iteration }}" type="button">Create</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input name="is_update[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="update{{ $loop->iteration }}" {{ @$datas[$menu->id]->is_update == 1 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="update{{ $loop->iteration }}" type="button">Update</label>
+                                                    <input name="is_update[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="update{{ $noMenu.$loop->iteration }}" {{ @$datas[$menu->id]->is_update == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="update{{ $noMenu.$loop->iteration }}" type="button">Update</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input name="is_delete[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="delete{{ $loop->iteration }}" {{ @$datas[$menu->id]->is_delete == 1 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="delete{{ $loop->iteration }}" type="button">Delete</label>
+                                                    <input name="is_delete[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="delete{{ $noMenu.$loop->iteration }}" {{ @$datas[$menu->id]->is_delete == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="delete{{ $noMenu.$loop->iteration }}" type="button">Delete</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input name="is_validate[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="validate{{ $loop->iteration }}" {{ @$datas[$menu->id]->is_validate == 1 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="validate{{ $loop->iteration }}" type="button">Validate</label>
+                                                    <input name="is_validate[]" class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="validate{{ $noMenu.$loop->iteration }}" {{ @$datas[$menu->id]->is_validate == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="validate{{ $noMenu.$loop->iteration }}" type="button">Validate</label>
                                                 </div>
                                             </div>
                                         </div>

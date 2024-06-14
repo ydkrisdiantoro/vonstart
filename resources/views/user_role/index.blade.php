@@ -131,7 +131,7 @@
                                         <td class="nowrap text-center">
                                             @if (session('access_menus.'.$route.'.is_delete') ?? false)
                                                 <a href="{{ route($route.'.delete', $data->id) }}"
-                                                    class="btn btn-sm btn-danger btn-action">
+                                                    class="btn btn-sm btn-danger btn-action delete">
                                                     <i class="bi bi-trash-fill"></i>
                                                 </a>
                                             @endif
