@@ -108,6 +108,9 @@ class AuthService
                         $query->select('id', 'name', 'order');
                     }]);
                 }])
+                ->withCount(['notification' => function($q){
+                    $q->where('is_read', false);
+                }])
                 ->get();
     
             foreach($roleMenus as $roleMenu){
@@ -117,8 +120,11 @@ class AuthService
                 $menuGroups[$roleMenu->menu->menu_group_id] = $roleMenu->menu->menuGroup->toArray();
                 $menus[$roleMenu->menu->menu_group_id][$roleMenu->menu_id] = $menusArray;
                 $routeMenus[$roleMenu->menu->route] = $menusArray;
-                $notification[$roleMenu->menu->route]['color'] = 'info';
-                $notification[$roleMenu->menu->route]['text'] = null;
+                
+                $notifCount = $roleMenu->notification_count == 0 ? null : $roleMenu->notification_count;
+                $notification[$roleMenu->menu->route]['color'] = 'primary';
+                $notification[$roleMenu->menu->route]['text'] = $notifCount;
+
                 $accessMenus[$roleMenu->menu->route] = [
                     'is_create' => $roleMenu->is_create,
                     'is_read' => $roleMenu->is_read,

@@ -33,4 +33,9 @@ class RoleMenu extends Model
     {
         return $this->menu->name;
     }
+
+    public function notification()
+    {
+        return $this->hasMany(Notification::class, 'menu_id', 'menu_id');
+    }
 }
