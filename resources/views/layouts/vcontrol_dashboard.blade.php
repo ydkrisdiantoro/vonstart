@@ -227,7 +227,7 @@
                     $alert = $session['alert'] ?? false;
                 @endphp
                 @if($alert)
-                    <div class="col-12 mt-3">
+                    <div class="col-12 my-3">
                         <div class="alert alert-{{ $alert[0] }} mb-0">
                             <i class="bi bi-exclamation-triangle-fill me-1"></i>
                             {{ $alert[1] }}
