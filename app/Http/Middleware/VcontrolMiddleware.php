@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\VcontrolHelper;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
 class VcontrolMiddleware
@@ -11,30 +13,17 @@ class VcontrolMiddleware
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-        $menus = Session::get('menus');
-        $routeName = explode('.', $request->route()->getName());
-        $slug = $routeName[0] ?? null;
-        $access = $routeName[1] ?? null;
+        $accessMenus = Session::get('access_menus');
+        $routeMenus = array_keys($accessMenus);
+        $currentRouteName = Route::currentRouteName();
+        $route = explode('.', $currentRouteName);
 
-        // dd($routeName, $menu, $access, $menus, session()->all());
-
-        if($menus != null){
-            $mapAccess = config('vcontrol.map_access.'.$access);
-            $hasAccess = false;
-            foreach ($menus as $route => $listAccess) {
-                if($slug == $route){
-                    if($listAccess[$mapAccess] == 1){
-                        $hasAccess = true;
-                    }
-                }
-            }
-    
-            if (!$hasAccess) {
-                return redirect('/dashboard')->withErrors('error');
-            }
+        if(in_array($route[0], $routeMenus) && isset($accessMenus[$route[0]]['is_read']) && $accessMenus[$route[0]]['is_read'] == 1){
+            return $response;
+        } elseif($route[0] == 'dashboard'){
             return $response;
         }
 
-        return $response;
+        return redirect()->route('dashboard.read')->with('alert', ['danger', 'The address is on Mars. You don`t have any rockets to get there.']);
     }
 }

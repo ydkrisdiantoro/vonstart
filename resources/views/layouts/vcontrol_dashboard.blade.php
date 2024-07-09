@@ -228,7 +228,10 @@
                 @endphp
                 @if($alert)
                     <div class="col-12 mt-3">
-                        <div class="alert alert-{{ $alert[0] }} mb-0">{{ $alert[1] }}</div>
+                        <div class="alert alert-{{ $alert[0] }} mb-0">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                            {{ $alert[1] }}
+                        </div>
                     </div>
                 @endif
 

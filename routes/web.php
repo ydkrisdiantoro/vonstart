@@ -19,7 +19,7 @@ Route::middleware('guest')->group(function (){
     Route::post('/login/process', [AuthController::class, 'goLogin'])->name('login.store');
 });
 
-Route::middleware('auth')->group(function (){
+Route::middleware(['auth', 'access'])->group(function (){
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout.read');
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard.read');
     Route::get('/year/{year}', [AuthController::class, 'year'])->name('year.read');
@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function (){
 });
 
 $slug = 'user';
-Route::middleware('auth')->group(function () use($slug){
+Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [UserController::class, 'index'])->name($slug.'.read');
     Route::get('/'.$slug.'/create', [UserController::class, 'create'])->name($slug.'.create');
     Route::post('/'.$slug.'/store', [UserController::class, 'store'])->name($slug.'.store');
@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () use($slug){
 });
 
 $slug = 'role';
-Route::middleware('auth')->group(function () use($slug){
+Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [RoleController::class, 'index'])->name($slug.'.read');
     Route::get('/'.$slug.'/create', [RoleController::class, 'create'])->name($slug.'.create');
     Route::post('/'.$slug.'/store', [RoleController::class, 'store'])->name($slug.'.store');
@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () use($slug){
 });
 
 $slug = 'menu-group';
-Route::middleware('auth')->group(function () use($slug){
+Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [MenuGroupController::class, 'index'])->name($slug.'.read');
     Route::get('/'.$slug.'/create', [MenuGroupController::class, 'create'])->name($slug.'.create');
     Route::post('/'.$slug.'/store', [MenuGroupController::class, 'store'])->name($slug.'.store');
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () use($slug){
 });
 
 $slug = 'menu';
-Route::middleware('auth')->group(function () use($slug){
+Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [MenuController::class, 'index'])->name($slug.'.read');
     Route::get('/'.$slug.'/create', [MenuController::class, 'create'])->name($slug.'.create');
     Route::post('/'.$slug.'/store', [MenuController::class, 'store'])->name($slug.'.store');
@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function () use($slug){
 });
 
 $slug = 'role-menu';
-Route::middleware('auth')->group(function () use($slug){
+Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [RoleMenuController::class, 'index'])->name($slug.'.read');
     Route::get('/'.$slug.'/create', [RoleMenuController::class, 'create'])->name($slug.'.create');
     Route::post('/'.$slug.'/store', [RoleMenuController::class, 'store'])->name($slug.'.store');
@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function () use($slug){
 });
 
 $slug = 'user-role';
-Route::middleware('auth')->group(function () use($slug){
+Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [UserRoleController::class, 'index'])->name($slug.'.read');
     Route::get('/'.$slug.'/create', [UserRoleController::class, 'create'])->name($slug.'.create');
     Route::post('/'.$slug.'/store', [UserRoleController::class, 'store'])->name($slug.'.store');
