@@ -83,7 +83,7 @@ class AuthService
         return redirect()->route('login.read');
     }
 
-    public function changeRole($role_id)
+    public function changeRole($roleId)
     {
         try {
             $menuGroups = [];
@@ -91,7 +91,7 @@ class AuthService
             $routeMenus = [];
             $notification = [];
             $accessMenus = [];
-            $roleMenus = RoleMenu::where('role_id', $role_id)
+            $roleMenus = RoleMenu::where('role_id', $roleId)
                 ->whereHas('menu', function($query){
                     $query->orderBy('order', 'asc');
                 })
@@ -102,17 +102,20 @@ class AuthService
                     $q->orWhere('is_delete', true);
                     $q->orWhere('is_validate', true);
                 })
-                ->with(['menu' => function($query){
-                    $query->select('id', 'menu_group_id', 'name', 'icon', 'route', 'cluster', 'order', 'is_show');
-                    $query->with(['menuGroup' => function($query){
-                        $query->select('id', 'name', 'order');
-                    }]);
-                }])
-                ->withCount(['notification' => function($q){
-                    $q->where('is_read', false);
-                }])
+                ->with([
+                    'menu' => function($query){
+                        $query->select('id', 'menu_group_id', 'name', 'icon', 'route', 'cluster', 'order', 'is_show');
+                        $query->with(['menuGroup' => function($query){
+                            $query->select('id', 'name', 'order');
+                        }]);
+                    },
+                    'notification' => function($query){
+                        $query->where('is_read', false);
+                    }
+                ])
                 ->get();
     
+            $notifTotal = 0;
             foreach($roleMenus as $roleMenu){
                 $menusArray = $roleMenu->menu->toArray();
                 unset($menusArray['menu_group']);
@@ -121,9 +124,11 @@ class AuthService
                 $menus[$roleMenu->menu->menu_group_id][$roleMenu->menu_id] = $menusArray;
                 $routeMenus[$roleMenu->menu->route] = $menusArray;
                 
-                $notifCount = $roleMenu->notification_count == 0 ? null : $roleMenu->notification_count;
+                $notifCount = $roleMenu->notification->count();
+                $notifTotal += $notifCount;
                 $notification[$roleMenu->menu->route]['color'] = 'primary';
                 $notification[$roleMenu->menu->route]['text'] = $notifCount;
+                $notification[$roleMenu->menu->route]['datas'] = $roleMenu->notification->toArray();
 
                 $accessMenus[$roleMenu->menu->route] = [
                     'is_create' => $roleMenu->is_create,
@@ -135,7 +140,7 @@ class AuthService
             }
     
             Session::has('active_role_id') ? Session::forget('active_role_id') : null;
-            Session::put('active_role_id', $role_id);
+            Session::put('active_role_id', $roleId);
 
             Session::has('menu_groups') ? Session::forget('menu_groups') : null;
             Session::put('menu_groups', $menuGroups);
@@ -165,5 +170,25 @@ class AuthService
         }
 
         return false;
+    }
+
+    public function refresh()
+    {
+        $session = session()->all();
+        $roleId = $session['active_role_id'];
+        $user = User::with('userRoles.role')->findOrFail(Auth::user()->id);
+        $roles = $user->userRoles->mapWithKeys(function($item){
+            return [
+                $item->role_id => $item->role->toArray()
+            ];
+        });
+        $user = $user->toArray();
+        unset($user['userRoles']);
+
+        Session::put('user', $user);
+        Session::put('roles', $roles->toArray());
+        $this->changeRole($roleId);
+
+        return redirect()->back();
     }
 }

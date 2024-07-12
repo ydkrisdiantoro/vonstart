@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -50,8 +51,10 @@ class UserController extends Controller
     {
         $this->validate($request, $this->service->rules());
         $alert = $this->help->returnAlert();
+        $data = $request->except(['_token', 'confirm_password']);
+        $data['password'] = Hash::make($data['password']);
 
-        $stored = $this->service->create($request->except('_token'));
+        $stored = $this->service->create($data);
         if(!$stored){
             $alert = $this->help->returnAlert(false);
         }
@@ -71,17 +74,22 @@ class UserController extends Controller
         $rules = $this->service->rules();
         $rules['email'] = 'required|email';
         $rules['id'] = 'required|string|min:36|max:36';
-        unset($rules['password'], $rules['confirm_password']);
+        $rules['password'] = ['nullable','string'];
+        $rules['confirm_password'] = ['nullable','string','same:password'];
         $this->validate($request, $rules);
+        $data = $request->except(['_token', 'confirm_password']);
+        if($data['password']){
+            $data['password'] = Hash::make($data['password']);
+        }
         $alert = $this->help->returnAlert();
 
         $id = $request->input('id');
-        $updated = $this->service->update($id, $request->except('_token'));
+        $updated = $this->service->update($id, $data);
         if(!$updated){
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
+        return redirect()->back()->with($alert[0], $alert[1]);
     }
 
     public function destroy($id)
@@ -94,5 +102,20 @@ class UserController extends Controller
         }
 
         return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
+    }
+
+    public function personal()
+    {
+        Session::put('active_menu', 'personal');
+        $user = session('user');
+        $datas['title'] = 'Hi, '.$user['name'];
+        $datas['datas'] = $this->service->getUser($user['id']);
+
+        return view($this->route.'.personal', $datas);
+    }
+
+    public function personalUpdate(Request $req)
+    {
+        return $this->update($req);
     }
 }

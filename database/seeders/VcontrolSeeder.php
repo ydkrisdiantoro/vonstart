@@ -41,18 +41,13 @@ class VcontrolSeeder extends Seeder
             // MAIN
 
             // SETTINGS
-            ['819c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'User', 'person', 'user', 1, null, 1],
-            ['829c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'Role', 'eye', 'role', 1, null, 2],
-            ['839c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'Menu Group', 'layers', 'menu-group', 1, null, 3],
-            ['849c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'Menu', 'grid', 'menu', 1, null, 4],
-            ['859c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'Role Menu', 'person-gear', 'role-menu', 0, null, 5],
-            ['869c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47',
-                'User Role', 'person-check', 'user-role', 0, null, 6],
+            ['819c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'User', 'person', 'user', 1, null, 1],
+            ['829c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Role', 'eye', 'role', 1, null, 2],
+            ['839c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Menu Group', 'layers', 'menu-group', 1, null, 3],
+            ['849c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Menu', 'grid', 'menu', 0, null, 4],
+            ['859c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Role Menu', 'person-gear', 'role-menu', 0, null, 5],
+            ['869c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'User Role', 'person-check', 'user-role', 0, null, 6],
+            ['879c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Pretend', 'bug', 'pretend', 1, null, 7],
         ];
         foreach($menuList as $m){
             $menu = [
@@ -73,8 +68,8 @@ class VcontrolSeeder extends Seeder
 
         // ROLES
         $roleList = [
-            ['861b1583-bb92-4c6a-8c18-7a4ad828b68d', 'super', 'Superuser', 'user', 1],
-            ['862b1583-bb92-4c6a-8c18-7a4ad828b68d', 'user', 'User', 'user', 2],
+            ['861b1583-bb92-4c6a-8c18-7a4ad828b68d', 'super', 'Superuser', 'shield-lock-fill', 1],
+            ['862b1583-bb92-4c6a-8c18-7a4ad828b68d', 'user', 'User', 'shield-lock-fill', 2],
         ];
         foreach($roleList as $m){
             $role = [
@@ -101,6 +96,7 @@ class VcontrolSeeder extends Seeder
             ['cde465af-826f-4e54-bddd-e2639e252db5','849c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
             ['cde565af-826f-4e54-bddd-e2639e252db5','859c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
             ['cde665af-826f-4e54-bddd-e2639e252db5','869c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
+            ['cde765af-826f-4e54-bddd-e2639e252db5','879c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
         ];
         foreach($roleMenuList as $m){
             $roleMenu = [
@@ -121,8 +117,7 @@ class VcontrolSeeder extends Seeder
 
         // USER
         $userList = [
-            // sup3rUSER
-            ['997a3d89-b0f6-4cc2-98c4-90ecaaae1649', 'Superuser', 'su@admin.dev', null, null, Hash::make('sup3rUSER'), null],
+            ['997a3d89-b0f6-4cc2-98c4-90ecaaae1649', 'Superuser', 'su@admin.dev', null, null, '$2y$12$1gWawy7aUthKwPFeop1IvebvcyH8bqiRfd1aK2NqHg8hqdEvbvLaS', null],
         ];
         foreach($userList as $m){
             $user = [
@@ -141,10 +136,10 @@ class VcontrolSeeder extends Seeder
         }
 
         // USER ROLE
-        $userList = [
+        $userRoleList = [
             ['04a109c7-8e5e-4520-bc96-7431e3aefee1', '997a3d89-b0f6-4cc2-98c4-90ecaaae1649', '861b1583-bb92-4c6a-8c18-7a4ad828b68d'],
         ];
-        foreach($userList as $m){
+        foreach($userRoleList as $m){
             $user = [
                 'id' => $m[0],
                 'user_id' => $m[1],

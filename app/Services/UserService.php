@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -77,5 +78,23 @@ class UserService
     public function delete($userId)
     {
         return User::find($userId)->delete();
+    }
+
+    /**
+     * Get User
+     * @param uuid $userId optional
+     * @return collection from find() or get()
+     */
+    public function getUserPretend($keyword)
+    {
+        $user = Auth::user();
+        return User::where('id', '!=', $user->id)
+            ->where(function($q) use($keyword){
+                $q->where('email', 'like', '%'.$keyword.'%');
+                $q->orWhere('name', 'like', '%'.$keyword.'%');
+            })
+            ->limit(10)
+            ->with('userRoles.role')
+            ->get();
     }
 }

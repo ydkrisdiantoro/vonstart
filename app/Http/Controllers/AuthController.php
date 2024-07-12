@@ -39,7 +39,7 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             'email' => ['required', 'email'],
-            'password' => ['required','string','min:6', 'max:20'],
+            'password' => ['required','string'],
         ]);
 
         $datas = $request->except('_token');
@@ -100,6 +100,10 @@ class AuthController extends Controller
         } else{
             return redirect()->route('dashboard.read');
         }
+    }
 
+    public function refresh()
+    {
+        return $this->service->refresh();
     }
 }

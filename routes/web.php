@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MenuGroupController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PretendController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleMenuController;
 use App\Http\Controllers\UserController;
@@ -19,11 +21,14 @@ Route::middleware('guest')->group(function (){
     Route::post('/login/process', [AuthController::class, 'goLogin'])->name('login.store');
 });
 
-Route::middleware(['auth', 'access'])->group(function (){
+Route::middleware('auth')->group(function (){
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout.read');
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard.read');
     Route::get('/year/{year}', [AuthController::class, 'year'])->name('year.read');
     Route::get('/change-role/{role_id}', [AuthController::class, 'changeRole'])->name('change-role.read');
+    Route::get('/refresh', [AuthController::class, 'refresh'])->name('refresh.read');
+    Route::get('/personal', [UserController::class, 'personal'])->name('personal.read');
+    Route::post('/personal/update', [UserController::class, 'personalUpdate'])->name('personal.update');
 });
 
 $slug = 'user';
@@ -90,4 +95,23 @@ Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::post('/'.$slug.'/update', [UserRoleController::class, 'update'])->name($slug.'.update');
     Route::get('/'.$slug.'/delete/{id}', [UserRoleController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [UserRoleController::class, 'validate'])->name($slug.'.validate');
+});
+
+$slug = 'notification';
+Route::middleware('auth')->group(function () use($slug){
+    Route::get('/'.$slug, [NotificationController::class, 'index'])->name($slug.'.read');
+    Route::get('/'.$slug.'/create', [NotificationController::class, 'create'])->name($slug.'.create');
+    Route::post('/'.$slug.'/store', [NotificationController::class, 'store'])->name($slug.'.store');
+    Route::get('/'.$slug.'/edit/{id}', [NotificationController::class, 'edit'])->name($slug.'.edit');
+    Route::post('/'.$slug.'/update', [NotificationController::class, 'update'])->name($slug.'.update');
+    Route::get('/'.$slug.'/delete/{id}', [NotificationController::class, 'destroy'])->name($slug.'.delete');
+    Route::get('/'.$slug.'/validate', [NotificationController::class, 'validate'])->name($slug.'.validate');
+});
+
+
+$slug = 'pretend';
+Route::middleware(['auth', 'access'])->group(function () use($slug){
+    Route::get('/'.$slug, [PretendController::class, 'index'])->name($slug.'.read');
+    Route::post('/'.$slug.'/find', [PretendController::class, 'find'])->name($slug.'.find.read');
+    Route::get('/'.$slug.'/select/{id}', [PretendController::class, 'select'])->name($slug.'.select');
 });

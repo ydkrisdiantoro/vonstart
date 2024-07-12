@@ -122,7 +122,17 @@
                 </a>
                 <div class="d-flex">
 
-                    <div class="dropdown">
+                    <a href="{{ route('notification.read') }}"
+                        class="link-hover dropdown-toggle text-decoration-none d-flex text-dark me-4"
+                        style="vertical-align: center;">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge text-bg-secondary p-0 mb-auto"
+                            style="padding: 1px!important; margin-left: -5px!important; font-size: 10px;">
+                            10
+                        </span>
+                    </a>
+
+                    <div class="dropdown me-1">
                         <a class="link-hover dropdown-toggle text-decoration-none d-flex text-dark me-3"
                             href="#"
                             role="button"
@@ -149,7 +159,7 @@
                         @endif
                     </div>
 
-                    <div class="dropdown">
+                    <div class="dropdown me-1">
                         <a class="link-hover dropdown-toggle text-decoration-none d-flex text-dark me-3"
                             href="#"
                             role="button"
@@ -159,6 +169,7 @@
                                 <i class="bi bi-{{ $session['roles'][$session['active_role_id']]['icon'] ?? 'shield-fill-check' }}"></i>
                             </span>
                             <span class="d-none d-md-block" style="vertical-align: center;">
+                                <span class="fst-italic">Role:</span>
                                 {{ $session['roles'][$session['active_role_id']]['name'] ?? '-' }}
                             </span>
                         </a>
@@ -171,7 +182,7 @@
                                             {{ $role['name'] ?? '-' }}
                                         </a>
                                     </li>
-                                    @if ($loop->last == 1)
+                                    @if (sizeof($session['roles']) == 1 && $loop->last)
                                         <li>
                                             <a class="dropdown-item disabled" href="#">
                                                 <small>No Other Role</small>
@@ -189,14 +200,25 @@
                             role="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="bi bi-gear-fill me-1"></i>
-                            <span class="d-none d-md-block me-2 my-auto">Tools</span>
+                            <i class="bi bi-person me-2"></i>
+                            <span class="d-none d-md-block me-2 my-auto">
+                                @if(strlen($session['user']['name']) > 16)
+                                    {{ substr($session['user']['name'], 0, 16).'...' }}
+                                @else
+                                    {{ $session['user']['name'] }}
+                                @endif
+                            </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
                             <li>
-                                <a class="dropdown-item active" href="{{ '#' }}">
-                                    <i class="bi bi-person me-2"></i>
-                                    {{ substr($session['user']['name'], 0, 20).'...' }}
+                                <a class="dropdown-item" href="{{ route('personal.read') }}">
+                                    <i class="bi bi-gear-fill me-1"></i> Settings
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{{ route('refresh.read') }}">
+                                    <i class="bi bi-arrow-repeat me-2"></i> Refresh
                                 </a>
                             </li>
 
@@ -222,6 +244,20 @@
                         @yield('add-content-title')
                     </h4>
                 </div>
+
+                @if (($session['notification'][$session['active_menu']]['datas'] ?? false) && sizeof($session['notification'][$session['active_menu']]['datas']) > 0)
+                    <div class="col-12">
+                        <div class="alert alert-light border-primary">
+                            <h6 class="text-primary"><i class="bi bi-exclamation-triangle-fill"></i> Notification</h6>
+                            @foreach ($session['notification'][$session['active_menu']]['datas'] as $notif)
+                                <span style="color: #999;" class="me-3">
+                                    {{ date('d-m-Y H:i', strtotime($notif['created_at'])) }}
+                                </span>
+                                {{ $notif['notification'] }}
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
                 @php
                     $alert = $session['alert'] ?? false;

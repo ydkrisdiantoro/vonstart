@@ -20,7 +20,7 @@ class VcontrolMiddleware
 
         if(in_array($route[0], $routeMenus) && isset($accessMenus[$route[0]]['is_read']) && $accessMenus[$route[0]]['is_read'] == 1){
             return $response;
-        } elseif($route[0] == 'dashboard'){
+        } elseif(in_array($route[0], ['dashboard', 'personal', 'notification'])){
             return $response;
         }
 
