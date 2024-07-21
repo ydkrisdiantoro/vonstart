@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
+use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -28,14 +29,30 @@ class UserController extends Controller
         Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['route'] = $this->route;
-        $datas['datas'] = $this->service->getUser(userId: null, paginate: 25);
         $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
+        $datas['datas'] = $this->service->getUser(userId: null, paginate: 25, filters: $datas['filters']);
         $datas['show'] = [
             'name' => 'Name',
             'email' => 'Email',
             'phone' => 'Phone',
         ];
         $datas['role_route'] = 'user-role';
+        $datas['roles'] = (new RoleService)->getRole(forSelect: true);
+        $datas['form_filters'] = [
+            'name' => [
+                'title' => 'Name',
+                'type' => 'text',
+            ],
+            'email' => [
+                'title' => 'Email',
+                'type' => 'text',
+            ],
+            'role' => [
+                'title' => 'Role',
+                'type' => 'select',
+                'data' => $datas['roles'],
+            ],
+        ];
 
         return view($this->view.'.index', $datas);
     }
@@ -117,5 +134,26 @@ class UserController extends Controller
     public function personalUpdate(Request $req)
     {
         return $this->update($req);
+    }
+
+
+    public function filter(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'nullable|string',
+            'email' => 'nullable|string',
+            'role' => 'nullable|string|max:36',
+        ]);
+
+        $data = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => $request->input('role'),
+        ];
+
+        Session::put('filters-'.session('active_menu'), $data);
+        $alert = $this->help->returnAlert();
+
+        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 }

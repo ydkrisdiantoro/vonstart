@@ -27,12 +27,12 @@ class MenuGroupService
     public function getMenuGroup($menuGroupId = null, $paginate = null)
     {
         if($menuGroupId != null){
-            $data = MenuGroup::orderBy('order', 'asc')->find($menuGroupId);
+            $data = MenuGroup::withCount('menus')->orderBy('order', 'asc')->find($menuGroupId);
         } else{
             if ($paginate === null) {
-                $data = MenuGroup::orderBy('order', 'asc')->get();
+                $data = MenuGroup::withCount('menus')->orderBy('order', 'asc')->get();
             } else{
-                $data = MenuGroup::orderBy('order', 'asc')->paginate($paginate);
+                $data = MenuGroup::withCount('menus')->orderBy('order', 'asc')->paginate($paginate);
             }
         }
         return $data;

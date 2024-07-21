@@ -27,15 +27,31 @@ class UserService
      * @param uuid $userId optional
      * @return collection from find() or get()
      */
-    public function getUser($userId = null, $paginate = null)
+    public function getUser($userId = null, $paginate = null, $filters = null)
     {
         if($userId != null){
             $data = User::find($userId);
         } else{
             if ($paginate === null) {
-                $data = User::get();
+                $data = User::with('userRoles.role')->get();
             } else{
-                $data = User::paginate($paginate);
+                if ($filters) {
+                    $data = User::with('userRoles.role');
+                    foreach($filters as $column => $value){
+                        if ($value) {
+                            if ($column == 'name' || $column == 'email') {
+                                $data = $data->where($column, 'like', '%'.$value.'%');
+                            } elseif($column == 'role'){
+                                $data = $data->whereRelation('userRoles', 'role_id', '=', $value);
+                            } else{
+                                $data = $data->where($column, $value);
+                            }
+                        }
+                    }
+                    $data = $data->paginate($paginate);
+                } else{
+                    $data = User::with('userRoles.role')->paginate($paginate);
+                }
             }
         }
         return $data;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ErrorLogController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MenuGroupController;
 use App\Http\Controllers\NotificationController;
@@ -40,6 +41,7 @@ Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::post('/'.$slug.'/update', [UserController::class, 'update'])->name($slug.'.update');
     Route::get('/'.$slug.'/delete/{id}', [UserController::class, 'destroy'])->name($slug.'.delete');
     Route::get('/'.$slug.'/validate', [UserController::class, 'validate'])->name($slug.'.validate');
+    Route::post('/'.$slug.'/filter', [UserController::class, 'filter'])->name($slug.'.filter.read');
 });
 
 $slug = 'role';
@@ -114,4 +116,10 @@ Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [PretendController::class, 'index'])->name($slug.'.read');
     Route::post('/'.$slug.'/find', [PretendController::class, 'find'])->name($slug.'.find.read');
     Route::get('/'.$slug.'/select/{id}', [PretendController::class, 'select'])->name($slug.'.select');
+});
+
+$slug = 'error-log';
+Route::middleware(['auth', 'access'])->group(function () use($slug){
+    Route::get('/'.$slug, [ErrorLogController::class, 'index'])->name($slug.'.read');
+    Route::post('/'.$slug.'/filter', [ErrorLogController::class, 'filter'])->name($slug.'.filter.read');
 });

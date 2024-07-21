@@ -135,10 +135,14 @@ body {
 ----------------------------------------------------- */
 
 #content {
-    width: 100%;
+    width: calc(100% - 250px);
     transition: all 0.3s;
     margin-top: 4rem;
     margin-left: 250px;
+}
+
+#content.active{
+    width: 100%;
 }
 
 #content.active, #navbar.active {
@@ -180,6 +184,9 @@ main {
     }
     #content, #navbar{
         margin-left: 0;
+    }
+    #content{
+        width: calc(100%);
     }
 }
 

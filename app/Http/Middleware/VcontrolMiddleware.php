@@ -24,6 +24,6 @@ class VcontrolMiddleware
             return $response;
         }
 
-        return redirect()->route('dashboard.read')->with('alert', ['danger', 'The address is on Mars. You don`t have any rockets to get there.']);
+        return view('errors.401');
     }
 }

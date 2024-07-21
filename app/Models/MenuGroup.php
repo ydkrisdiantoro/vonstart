@@ -14,4 +14,9 @@ class MenuGroup extends Model
     protected $fillable = ['name', 'order'];
     protected $table = 'menu_groups';
     protected $defaultOrderBy = ['order' => 'asc'];
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
 }

@@ -134,7 +134,7 @@
                                 @php
                                     $prevNumber = $datas->currentPage() - 2;
                                     $nextNumber = $datas->currentPage() + 2;
-                                    if($prevNumber < 0){
+                                    if($prevNumber < 1){
                                         $prevNumber = 1;
                                     }
                                     if($nextNumber > $datas->lastPage()){

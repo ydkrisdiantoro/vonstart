@@ -17,7 +17,7 @@ class AuthService
      * @param string $password
      * @return boolean true if logged in
      */
-    public function goLogin($email, $password)
+    public function goLogin($email, $password, $pretend = false)
     {
         $user = (new User)->where('email', $email)
             ->select('id', 'name','email','phone', 'password')
@@ -32,46 +32,63 @@ class AuthService
         $hashedPassword = $user->password ?? null;
 
         if($hashedPassword !== null && Hash::check($password, $hashedPassword)){
-            $firstRole = $user->userRoles->first();
-            if ($firstRole) {
-                try {
-                    $mapRoles = $user->userRoles->mapWithKeys(function($item){
-                        return [
-                            $item->role_id => $item->role
-                        ];
-                    });
-
-                    $changeRole = $this->changeRole($firstRole->role_id)['success'];
-
-                    $userArray = $user->toArray();
-                    unset($userArray['roles']);
-
-                    $useYear = config('vcontrol.year');
-                    if($useYear){
-                        $yearNow = date('Y');
-                        $yearStart = config('vcontrol.year_start') ?? ($yearNow - 3);
-                        $yearEnd = config('vcontrol.year_end') ?? ($yearNow + 1);
-                        for($i = $yearEnd; $i >= $yearStart; $i--){
-                            $years[] = $i;
-                        }
-                        Session::put('years', $years);
-                        Session::put('active_year', $yearNow);
-                    }
-
-                    Session::put('roles', $mapRoles->toArray());
-                    Session::put('user', $userArray);
-                    Session::save();
-
-                    Auth::login($user);
-                } catch (\Throwable $th) {
-                    if(App::environment() == 'local'){
-                        dd($th);
-                    }
-                }
-            }
+            return $this->directLogin($user);
         }
 
         return Auth::check();
+    }
+
+    /**
+     * This user safe to log in
+     * @param collection $user
+     */
+    public function directLogin(User $user)
+    {
+        if (sizeof($user->userRoles) > 0) {
+            try {
+                $firstRole = $user->userRoles->sortBy('order')->first();
+                $mapRoles = $user->userRoles->mapWithKeys(function($item){
+                    return [
+                        $item->role_id => $item->role
+                    ];
+                });
+
+                $this->changeRole($firstRole->role_id, $user);
+                $this->useYear();
+
+                $userArray = $user->toArray();
+                unset($userArray['roles']);
+
+                Session::put('roles', $mapRoles->toArray());
+                Session::put('user', $userArray);
+                Session::save();
+
+                Auth::login($user);
+            } catch (\Throwable $th) {
+                if(App::environment() == 'local'){
+                    dd($th);
+                } else{
+                    return view('errors.500');
+                }
+            }
+        } else{
+            return view('errors.403');
+        }
+    }
+
+    protected function useYear()
+    {
+        $useYear = config('vcontrol.year');
+        if($useYear){
+            $yearNow = date('Y');
+            $yearStart = config('vcontrol.year_start') ?? ($yearNow - 3);
+            $yearEnd = config('vcontrol.year_end') ?? ($yearNow + 1);
+            for($i = $yearEnd; $i >= $yearStart; $i--){
+                $years[] = $i;
+            }
+            Session::put('years', $years);
+            Session::put('active_year', $yearNow);
+        }
     }
 
     public function logout()

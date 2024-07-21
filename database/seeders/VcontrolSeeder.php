@@ -47,7 +47,8 @@ class VcontrolSeeder extends Seeder
             ['849c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Menu', 'grid', 'menu', 0, null, 4],
             ['859c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Role Menu', 'person-gear', 'role-menu', 0, null, 5],
             ['869c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'User Role', 'person-check', 'user-role', 0, null, 6],
-            ['879c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Pretend', 'bug', 'pretend', 1, null, 7],
+            ['879c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Pretend', 'person-badge', 'pretend', 1, null, 7],
+            ['889c913f-dc4f-4a43-9b58-10e7abd99412', '194bd16f-1468-459e-870e-abffcadebc47', 'Error Log', 'bug', 'error-log', 1, null, 8],
         ];
         foreach($menuList as $m){
             $menu = [

@@ -26,12 +26,14 @@ class RoleService
      * @param uuid $roleId optional
      * @return collection from find() or get()
      */
-    public function getRole($roleId = null, $paginate = null)
+    public function getRole($roleId = null, $paginate = null, $forSelect = false)
     {
         if($roleId != null){
             $data = Role::find($roleId);
         } else{
-            if ($paginate === null) {
+            if ($forSelect) {
+                $data = Role::pluck('name', 'id');
+            } elseif ($paginate === null) {
                 $data = Role::get();
             } else{
                 $data = Role::paginate($paginate);

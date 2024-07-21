@@ -30,8 +30,9 @@ class MenuGroupController extends Controller
         $datas['datas'] = $this->service->getMenuGroup(null, 25);
         $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
         $datas['show'] = [
-            'name' => 'Name',
             'order' => 'Order',
+            'name' => 'Name',
+            'menus_count' => 'Menu`s Count',
         ];
         $datas['menu_route'] = 'menu';
 

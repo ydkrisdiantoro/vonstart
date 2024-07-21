@@ -60,7 +60,6 @@
                             @foreach ($show as $column => $title)
                                 <th>{{ $title }}</th>
                             @endforeach
-                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,50 +67,42 @@
                             <tr>
                                 @foreach ($show as $col => $val)
                                     <td>
-                                        @if ($data->{$col} ?? false)
-                                            @if ($col == 'icon')
-                                                <i class="bi bi-{{ $data->{$col} }}"></i>
-                                            @elseif($col == 'code')
-                                                <span class="fst-italic">{{ $data->{$col} }}</span>
-                                            @else
-                                                {{ $data->{$col} ?? '-' }}
-                                            @endif
-                                        @elseif(str($col)->contains('.'))
+                                        @if ($col == 'created_at')
                                             @php
-                                                $print_relation = '-';
-                                                $relations = explode('.', $col);
-                                                if(sizeof($relations) == 2){
-                                                    $print_relation = $data->{$relations[0]}->{$relations[1]};
-                                                } elseif(sizeof($relations) === 3){
-                                                    $print_relation = $data->{$relations[0]}->{$relations[1]}->{$relations[2]};
+                                                $timestamp = strtotime($data->{$col});
+                                                $currentDate = strtotime('today'); // Mendapatkan timestamp untuk hari ini
+                                                
+                                                if (date('Y-m-d', $timestamp) === date('Y-m-d', $currentDate)) {
+                                                    $formattedDate = 'Today at ' . date('H:i', $timestamp);
+                                                } else {
+                                                    $formattedDate = date('Y F d \a\t H:i', $timestamp);
                                                 }
                                             @endphp
-                                            {{ $print_relation }}
+                                            {{ $formattedDate }}
+                                        @elseif ($col == 'file')
+                                            {{ '...'.substr($data->{$col}, -40) }}
+                                        @elseif ($data->{$col} ?? false)
+                                            {{ $data->{$col} ?? '-' }}
+                                        @elseif(str($col)->contains('.'))
+                                            @php
+                                                $print_relation = null;
+                                                $relations = explode('.', $col);
+                                                if(sizeof($relations) == 2){
+                                                    $print_relation = @$data->{$relations[0]}->{$relations[1]};
+                                                } elseif(sizeof($relations) === 3){
+                                                    $print_relation = @$data->{$relations[0]}->{$relations[1]}->{$relations[2]};
+                                                }
+                                            @endphp
+                                            @if ($print_relation)
+                                                {{ $print_relation ?? '-' }}
+                                            @else
+                                                <span class="badge text-bg-danger">Empty</span>
+                                            @endif
                                         @else
                                             <span class="badge text-bg-danger">Empty</span>
                                         @endif
                                     </td>
                                 @endforeach
-                                <td class="nowrap text-center">
-                                    @if ($session['access_menus'][$role_menu_route]['is_read'] ?? false)
-                                        <a href="{{ route($role_menu_route.'.read', ['id' => $data->id]) }}"
-                                            class="btn btn-sm btn-primary me-1 btn-action">
-                                            <i class="bi bi-person-gear"></i> Role Menus
-                                        </a>
-                                    @endif
-                                    @if ($session['access_menus'][$route]['is_update'] ?? false)
-                                        <a href="{{ route($route.'.edit', $data->id) }}"
-                                            class="btn btn-sm btn-secondary me-1 btn-action">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                    @endif
-                                    @if ($session['access_menus'][$route]['is_delete'] ?? false)
-                                        <a href="{{ route($route.'.delete', $data->id) }}"
-                                            class="btn btn-sm btn-danger btn-action delete">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </a>
-                                    @endif
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -125,7 +116,7 @@
                 @endif
             </table>
 
-            @if (sizeof($datas ?? []) > 0)
+            @if (@$datas && sizeof($datas ?? []) > 0)
                 @if($datas->total() > 1)
                     <div class="d-flex justify-content-center">
                         <nav aria-label="...">
@@ -174,10 +165,40 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h4>Filters</h4>
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Apply</button>
-                </div>
+                <form action="{{ route($route.'.filter.read') }}" method="post" class="form">
+                    @csrf
+                    <div class="row mb-3">
+                        @if (@$form_filters && sizeof($form_filters) > 0)
+                            @foreach ($form_filters as $ffcol => $ff)
+                                <div class="col-12 mb-2">
+                                    @switch($ff['type'])
+                                        @case('text')
+                                            <div class="form-floating">
+                                                <input autocomplete="off"
+                                                    type="text"
+                                                    name="{{ $ffcol }}"
+                                                    class="form-control"
+                                                    id="{{ $ffcol }}"
+                                                    placeholder="person"
+                                                    value="{{ old($ffcol) }}"
+                                                    autofocus>
+                                                <label for="{{ $ffcol }}">{{ $ff['title'] }}</label>
+                                            </div>
+                                            @break
+                                        @case(2)
+                                            <div>ini</div>
+                                            @break
+                                        @default
+                                    @endswitch
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

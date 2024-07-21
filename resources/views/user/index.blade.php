@@ -35,11 +35,15 @@
                 @endif
             </div>
             <div class="col-12 mt-2">
-                @if ($filters)
+                @if (@$filters)
                     @foreach ($filters as $filterKey => $filter)
-                        @if ($filter !== null)
+                        @if (!empty($filter))
                             <span class="badge text-bg-secondary">
-                                #{{ $show[$filterKey].': '.$filter }}
+                                @if ($filterKey == 'role')
+                                    #Role: {{ $roles[$filter] }}
+                                @else
+                                    #{{ $show[$filterKey].': '.$filter }}
+                                @endif
                             </span>
                         @endif
                     @endforeach
@@ -69,7 +73,20 @@
                                 @foreach ($show as $col => $val)
                                     <td>
                                         @if ($data->{$col} ?? false)
-                                            {{ $data->{$col} ?? '-' }}
+                                            {{ $data->{$col} ?? '-' }}<br>
+                                            @if ($col == 'name')
+                                                @if (sizeof($data->userRoles) > 0)
+                                                    @foreach ($data->userRoles as $userRole)
+                                                        <span class="badge text-bg-secondary">
+                                                            {{ @$userRole->role->name }}
+                                                        </span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="badge text-bg-danger">
+                                                        No Role
+                                                    </span>
+                                                @endif
+                                            @endif
                                         @elseif(str($col)->contains('.'))
                                             @php
                                                 $print_relation = '-';
@@ -133,7 +150,7 @@
                                 @php
                                     $prevNumber = $datas->currentPage() - 2;
                                     $nextNumber = $datas->currentPage() + 2;
-                                    if($prevNumber < 0){
+                                    if($prevNumber < 1){
                                         $prevNumber = 1;
                                     }
                                     if($nextNumber > $datas->lastPage()){
@@ -168,10 +185,50 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h4>Filters</h4>
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Apply</button>
-                </div>
+                <form action="{{ route($route.'.filter.read') }}" method="post" class="form">
+                    @csrf
+                    <div class="row mb-3">
+                        @if (@$form_filters && sizeof($form_filters) > 0)
+                            @foreach ($form_filters as $ffcol => $ff)
+                                <div class="col-12 mb-2">
+                                    @switch($ff['type'])
+                                        @case('text')
+                                            <div class="form-floating">
+                                                <input autocomplete="off"
+                                                    type="text"
+                                                    name="{{ $ffcol }}"
+                                                    class="form-control"
+                                                    id="{{ $ffcol }}"
+                                                    placeholder="person"
+                                                    value="{{ @$filters[$ffcol] }}"
+                                                    autofocus>
+                                                <label for="{{ $ffcol }}">{{ $ff['title'] }}</label>
+                                            </div>
+                                            @break
+                                        @case('select')
+                                            <div class="form-floating">
+                                                <select name="{{ $ffcol }}" class="form-select" id="{{ $ffcol }}" aria-label="Floating label select example">
+                                                    <option value="{{ NULL }}" selected>-- Choose a Role</option>
+                                                        @if (sizeof($ff['data']) > 0)
+                                                            @foreach ($ff['data'] as $roleId => $roleName)
+                                                                <option value="{{ $roleId }}" {{ @$filters[$ffcol] == $roleId ? 'selected' : '' }}>{{ $roleName }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                </select>
+                                                <label for="{{ $ffcol }}">Roles</label>
+                                            </div>
+                                            @break
+                                        @default
+                                    @endswitch
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
