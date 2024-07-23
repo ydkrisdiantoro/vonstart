@@ -91,8 +91,7 @@ class RoleMenuService
     public function getRoleMenuByRoleId($roleId, $paginate = null, $map = false)
     {
         $data = RoleMenu::where('role_id', $roleId)
-            ->with('menu')
-            ->whereHas('menu');
+            ->leftJoin('');
 
         if($paginate){
             $data = $data->paginate($paginate);
@@ -139,5 +138,21 @@ class RoleMenuService
         }
 
         return true;
+    }
+
+    public function getMenusByRole($roleId)
+    {
+        return RoleMenu::where('role_id', $roleId)
+            ->leftJoin('menus', 'menus.id', '=', 'role_menus.menu_id')
+            ->where(function($q){
+                $q->where('is_read', true);
+                $q->orWhere('is_create', true);
+                $q->orWhere('is_update', true);
+                $q->orWhere('is_delete', true);
+                $q->orWhere('is_validate', true);
+                })
+            ->orderBy('order', 'asc')
+            ->select('menu_id', 'role_id', 'is_read', 'is_create', 'is_update', 'is_delete', 'is_validate', 'name', 'order', 'icon', 'route', 'is_show', 'cluster', 'menu_group_id')
+            ->get();
     }
 }

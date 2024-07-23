@@ -73,4 +73,12 @@ class MenuGroupService
     {
         return MenuGroup::find($menuGroupId)->delete();
     }
+
+    public function getMenuGroupIn($listMenuGroupId)
+    {
+        return MenuGroup::whereIn('id', $listMenuGroupId)
+            ->orderBy('order', 'asc')
+            ->select('id', 'order', 'name')
+            ->get();
+    }
 }

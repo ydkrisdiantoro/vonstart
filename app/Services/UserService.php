@@ -113,4 +113,30 @@ class UserService
             ->with('userRoles.role')
             ->get();
     }
+
+    public function findUser($id = null, $email = null)
+    {
+        if ($id !== null || $email !== null) {
+            $user = User::select('id', 'name','email','phone', 'password')
+                ->where('email', $id ?? $email)
+                ->with([
+                    'userRoles' => function($query){
+                        $query->select(
+                            'user_roles.id',
+                            'user_roles.role_id',
+                            'user_id',
+                            'roles.code',
+                            'roles.name',
+                            'roles.icon',
+                            'roles.order'
+                        );
+                        $query->leftJoin('roles', 'roles.id', '=', 'user_roles.role_id');
+                    }])
+                ->first();
+        } else{
+            $user = null;
+        }
+
+        return $user;
+    }
 }
