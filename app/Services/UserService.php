@@ -117,8 +117,12 @@ class UserService
     public function findUser($id = null, $email = null)
     {
         if ($id !== null || $email !== null) {
+            $column = 'id';
+            if ($email) {
+                $column = 'email';
+            }
             $user = User::select('id', 'name','email','phone', 'password')
-                ->where('email', $id ?? $email)
+                ->where($column, $id ?? $email)
                 ->with([
                     'userRoles' => function($query){
                         $query->select(

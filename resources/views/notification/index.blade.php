@@ -28,7 +28,7 @@
                 </button>
             </div>
             <div class="col text-end">
-                @if ($session['access_menus'][$route]['is_create'] ?? false)
+                @if ($session['menus'][$route]['is_create'] ?? false)
                     <a href="{{ route($route.'.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle-fill me-1"></i> Create
                     </a>

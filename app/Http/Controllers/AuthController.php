@@ -95,7 +95,7 @@ class AuthController extends Controller
         }
 
         $session = session()->all();
-        if(in_array($session['active_menu'], $session['access_menus'])){
+        if(in_array($session['active_menu'], $session['menus'])){
             return redirect()->back();
         } else{
             return redirect()->route('dashboard.read');

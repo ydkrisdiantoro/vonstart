@@ -61,7 +61,7 @@
                         </button>
                     </div>
                     <div class="col text-end">
-                        @if ($session['access_menus'][$route]['is_create'] ?? false)
+                        @if ($session['menus'][$route]['is_create'] ?? false)
                             <a href="{{ route($route.'.create', ['id' => $id]) }}" class="btn btn-primary">
                                 <i class="bi bi-plus-circle-fill me-1"></i> Create
                             </a>
@@ -84,7 +84,7 @@
                     <table class="table tr-hover table-stripe">
                         <caption class="fst-italic text-secondary">
                             <small>
-                                {{ $session['route_menus'][$session['active_menu']]['name'] }} Table
+                                {{ $session['menus'][$session['active_menu']]['name'] }} Table
                             </small>
                         </caption>
                         @if (sizeof($datas ?? []) > 0)

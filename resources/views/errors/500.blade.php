@@ -29,6 +29,14 @@
     </div>
 </div>
 
+@env('local')
+<div class="text-center">
+    <p><b>Message:</b><br>{{ $message }}</p>
+    <p><b>File:</b><br>{{ $file }}</p>
+    <p><b>Line:</b><br>{{ $line }}</p>
+</div>
+@endenv
+
 @endsection
 
 @section('extra-js')

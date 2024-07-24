@@ -92,6 +92,13 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        return response()->view('errors.500', ['code' => $code], 500);
+        $data = [
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'code' => $code,
+        ];
+
+        return response()->view('errors.500', $data, 500);
     }
 }

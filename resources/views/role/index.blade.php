@@ -28,7 +28,7 @@
                 </button>
             </div>
             <div class="col text-end">
-                @if ($session['access_menus'][$route]['is_create'] ?? false)
+                @if ($session['menus'][$route]['is_create'] ?? false)
                     <a href="{{ route($route.'.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle-fill me-1"></i> Create
                     </a>
@@ -51,7 +51,7 @@
             <table class="table tr-hover table-stripe">
                 <caption class="fst-italic text-secondary">
                     <small>
-                        {{ $session['route_menus'][$session['active_menu']]['name'] }} Table
+                        {{ $session['menus'][$session['active_menu']]['name'] }} Table
                     </small>
                 </caption>
                 @if (sizeof($datas ?? []) > 0)
@@ -93,19 +93,19 @@
                                     </td>
                                 @endforeach
                                 <td class="nowrap text-center">
-                                    @if ($session['access_menus'][$role_menu_route]['is_read'] ?? false)
+                                    @if ($session['menus'][$role_menu_route]['is_read'] ?? false)
                                         <a href="{{ route($role_menu_route.'.read', ['id' => $data->id]) }}"
                                             class="btn btn-sm btn-primary me-1 btn-action">
                                             <i class="bi bi-person-gear"></i> Role Menus
                                         </a>
                                     @endif
-                                    @if ($session['access_menus'][$route]['is_update'] ?? false)
+                                    @if ($session['menus'][$route]['is_update'] ?? false)
                                         <a href="{{ route($route.'.edit', $data->id) }}"
                                             class="btn btn-sm btn-secondary me-1 btn-action">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                     @endif
-                                    @if ($session['access_menus'][$route]['is_delete'] ?? false)
+                                    @if ($session['menus'][$route]['is_delete'] ?? false)
                                         <a href="{{ route($route.'.delete', $data->id) }}"
                                             class="btn btn-sm btn-danger btn-action delete">
                                             <i class="bi bi-trash-fill"></i>

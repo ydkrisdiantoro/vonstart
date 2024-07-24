@@ -26,8 +26,12 @@ class HandleAuthorizedUser
     public function handle(AuthorizedUser $event): void
     {
         $user = $event->user;
+        $roleId = @$event->roleId;
         $userRoles = $user->userRoles->sortBy('order');
         $role = $userRoles->first();
+        if ($roleId) {
+            $role = $userRoles->where('role_id', $roleId)->first();
+        }
         $menus = (new RoleMenuService)->getMenusByRole($role->role_id);
         $menuGroups = (new MenuGroupService)->getMenuGroupIn($menus->pluck('menu_group_id'));
         $activeMenu = 'dashboard';
@@ -39,8 +43,10 @@ class HandleAuthorizedUser
             'roles' => $userRoles->keyBy('role_id')->toArray(),
             'role' => $role->toArray(),
             'menus' => $menus->keyBy('route')->toArray(),
+            'sidebar' => $menus->keyBy('route')->groupBy('menu_group_id')->toArray(),
             'menu_groups' => $menuGroups->keyBy('id')->toArray(),
             'active_menu' => $activeMenu,
+            'user' => $user->toArray(),
         ];
 
         Session::forget(array_keys($data));
@@ -48,6 +54,5 @@ class HandleAuthorizedUser
             Session::put($key, $val);
         }
         Session::save();
-        dd($userRoles, $role, $menus, 'yang ini kan', $data);
     }
 }

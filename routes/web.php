@@ -27,7 +27,6 @@ Route::middleware('auth')->group(function (){
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard.read');
     Route::get('/year/{year}', [AuthController::class, 'year'])->name('year.read');
     Route::get('/change-role/{role_id}', [AuthController::class, 'changeRole'])->name('change-role.read');
-    Route::get('/refresh', [AuthController::class, 'refresh'])->name('refresh.read');
     Route::get('/personal', [UserController::class, 'personal'])->name('personal.read');
     Route::post('/personal/update', [UserController::class, 'personalUpdate'])->name('personal.update');
 });

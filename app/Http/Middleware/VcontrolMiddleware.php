@@ -13,7 +13,7 @@ class VcontrolMiddleware
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-        $accessMenus = Session::get('access_menus');
+        $accessMenus = Session::get('menus');
         $routeMenus = array_keys($accessMenus);
         $currentRouteName = Route::currentRouteName();
         $route = explode('.', $currentRouteName);

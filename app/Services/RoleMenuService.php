@@ -90,8 +90,7 @@ class RoleMenuService
 
     public function getRoleMenuByRoleId($roleId, $paginate = null, $map = false)
     {
-        $data = RoleMenu::where('role_id', $roleId)
-            ->leftJoin('');
+        $data = RoleMenu::where('role_id', $roleId);
 
         if($paginate){
             $data = $data->paginate($paginate);

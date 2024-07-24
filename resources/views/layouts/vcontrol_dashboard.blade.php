@@ -3,7 +3,7 @@
 
 @section('title')
     @php
-        $semuaMenu = $session['route_menus'][$session['active_menu']] ?? null;
+        $semuaMenu = $session['menus'][$session['active_menu']] ?? null;
         $namaMenuAktif = 'Dashboard';
         if($semuaMenu !== null){
             $namaMenuAktif = $semuaMenu['name'] ?? '-';
@@ -60,9 +60,9 @@
                         </small>
                     @endif
                 </a>
-                @if (sizeof($session['menu_groups'] ?? []) > 0)
-                    @foreach ($session['menu_groups'] as $menu_group_id => $menu_group)
-                        @if (sizeof($session['menus'][$menu_group_id] ?? []) > 0)
+                @if (sizeof($session['sidebar'] ?? []) > 0)
+                    @foreach ($session['sidebar'] as $menu_group_id => $menus)
+                        @if (sizeof($menus ?? []) > 0)
                             <div type="button"
                                 class="list-group-item border-0 mx-3 py-0 my-2"
                                 data-bs-toggle="collapse"
@@ -72,7 +72,7 @@
                                 href="#">
                                 <div class="row px-2 rounded fw-bold">
                                     <div class="col-auto my-auto">
-                                        <div class="small m-0">{{ strtoupper($menu_group['name']) }}</div>
+                                        <div class="small m-0">{{ strtoupper($session['menu_groups'][$menu_group_id]['name']) }}</div>
                                     </div>
                                     <div class="col my-auto">
                                         <hr class="m-0 text-secondary">
@@ -83,8 +83,8 @@
                                 </div>
                             </div>
                             <div id="group{{ $loop->iteration }}" class="collapse show">
-                                @foreach ($session['menus'][$menu_group_id] as $menu)
-                                    @if ($menu['is_show'] && $session['access_menus'][$menu['route']]['is_read'] == true)
+                                @foreach ($menus as $menu)
+                                    @if ($menu['is_show'] && $session['menus'][$menu['route']]['is_read'] == true)
                                         <a href="{{ route($menu['route'].'.read') }}"
                                             class="link-hover list-group-item list-group-item-action border-0 {{ $session['active_menu'] == $menu['route'] ? 'text-primary' : '' }}">
                                             <div class="my-auto">
@@ -166,19 +166,19 @@
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <span class="d-block me-1" style="vertical-align: center;">
-                                <i class="bi bi-{{ $session['roles'][$session['active_role_id']]['icon'] ?? 'shield-fill-check' }}"></i>
+                                <i class="bi bi-{{ $session['role']['icon'] ?? 'shield-fill-check' }}"></i>
                             </span>
                             <span class="d-none d-md-block" style="vertical-align: center;">
                                 <span class="fst-italic">Role:</span>
-                                {{ $session['roles'][$session['active_role_id']]['name'] ?? '-' }}
+                                {{ $session['role']['name'] ?? '-' }}
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 text-right mt-4 shadow">
                             @if ($session['roles'])
                                 @foreach ($session['roles'] as $role_id => $role)
                                     <li>
-                                        <a class="dropdown-item {{ $role_id == $session['active_role_id'] ? 'active' : '' }}"
-                                            href="{{ $role_id == $session['active_role_id'] ? '#' : route('change-role.read', $role_id) }}">
+                                        <a class="dropdown-item {{ $role_id == $session['role']['id'] ? 'active' : '' }}"
+                                            href="{{ $role_id == $session['role']['id'] ? '#' : route('change-role.read', $role_id) }}">
                                             {{ $role['name'] ?? '-' }}
                                         </a>
                                     </li>
@@ -213,12 +213,6 @@
                             <li>
                                 <a class="dropdown-item" href="{{ route('personal.read') }}">
                                     <i class="bi bi-gear-fill me-1"></i> Settings
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ route('refresh.read') }}">
-                                    <i class="bi bi-arrow-repeat me-2"></i> Refresh
                                 </a>
                             </li>
 

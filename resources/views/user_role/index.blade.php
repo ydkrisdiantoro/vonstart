@@ -54,7 +54,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col text-end">
-                        @if ($session['access_menus'][$route]['is_create'] ?? false)
+                        @if ($session['menus'][$route]['is_create'] ?? false)
                             <form method="POST"
                                 action="{{ route($route.'.store') }}"
                                 class="form">
