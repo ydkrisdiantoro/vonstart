@@ -26,7 +26,7 @@
 <div class="row">
     <div class="col-12 col-lg-3">
         <div class="list-group shadow-card mb-3">
-            <a href="{{ route(session('active_menu').'.read') }}"
+            <a href="{{ route($session['active_menu'].'.read') }}"
                 class="list-group-item list-group-item-action">
                 <i class="bi bi-arrow-left"></i> Back
             </a>

@@ -34,7 +34,7 @@
             <div class="card-body">
                 <h5>{{ $title }}</h5>
                 <form method="POST"
-                    action="{{ route(session('active_menu').'.update') }}"
+                    action="{{ route($session['active_menu'].'.update') }}"
                     class="form">
                     @csrf
                     <input type="hidden" name="id" value="{{ $datas->id }}">

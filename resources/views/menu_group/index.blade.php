@@ -94,13 +94,13 @@
                                             {{ $session['menus'][$menu_route]['name'] }}
                                         </a>
                                     @endif
-                                    @if (session('access_menus.'.$route.'.is_update') ?? false)
+                                    @if ($session['access_menus'][$route]['is_update'] ?? false)
                                         <a href="{{ route($route.'.edit', $data->id) }}"
                                             class="btn btn-sm btn-secondary me-1 btn-action">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                     @endif
-                                    @if (session('access_menus.'.$route.'.is_delete') ?? false)
+                                    @if ($session['access_menus'][$route]['is_delete'] ?? false)
                                         <a href="{{ route($route.'.delete', $data->id) }}"
                                             class="btn btn-sm btn-danger btn-action delete">
                                             <i class="bi bi-trash-fill"></i>

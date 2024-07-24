@@ -22,7 +22,7 @@
 <div class="row">
     <div class="col-12 col-md-3">
         <div class="list-group shadow-card">
-            <a href="{{ route(session('active_menu').'.read') }}"
+            <a href="{{ route($session['active_menu'].'.read') }}"
                 class="list-group-item list-group-item-action">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
@@ -38,7 +38,7 @@
             <div class="card-body">
                 <h5>{{ $title }}</h5>
                 <form method="POST"
-                    action="{{ route(session('active_menu').'.update') }}"
+                    action="{{ route($session['active_menu'].'.update') }}"
                     class="form">
                     @csrf
                     <input type="hidden" name="id" value="{{ $datas->id }}">

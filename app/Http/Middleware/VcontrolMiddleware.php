@@ -13,17 +13,29 @@ class VcontrolMiddleware
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-        $accessMenus = Session::get('menus');
-        $routeMenus = array_keys($accessMenus);
+        $menus = Session::get('menus');
+        $routeMenus = array_keys($menus);
+
         $currentRouteName = Route::currentRouteName();
         $route = explode('.', $currentRouteName);
+        $routeNow = $route[0];
+        $routeAccess = $route[(count($route) - 1)];
 
-        if(in_array($route[0], $routeMenus) && isset($accessMenus[$route[0]]['is_read']) && $accessMenus[$route[0]]['is_read'] == 1){
-            return $response;
-        } elseif(in_array($route[0], ['dashboard', 'personal', 'notification'])){
+        //CRUD Only, no (E)dit or (S)tore
+        if ($routeAccess == 'edit') {
+            $routeAccess = 'update';
+        } elseif($routeAccess == 'store'){
+            $routeAccess = 'create';
+        }
+
+        if(in_array($routeNow, $routeMenus)){
+            if (@$menus[$routeNow]['is_'.$routeAccess] == 1) {
+                return $response;
+            }
+        } elseif(in_array($routeNow, ['dashboard', 'personal', 'notification'])){
             return $response;
         }
 
-        return view('errors.401');
+        return response()->view('errors.401');
     }
 }

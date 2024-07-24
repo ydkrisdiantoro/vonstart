@@ -30,9 +30,9 @@ class ErrorLogController extends Controller
         $datas['show'] = [
             'user.name' => 'User',
             'code' => 'Code',
-            'message' => 'Message',
             'file' => 'File',
             'line' => 'Line',
+            'message' => 'Message',
             'created_at' => 'At',
         ];
         $datas['form_filters'] = [

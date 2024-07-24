@@ -18,7 +18,7 @@
 @endsection
 
 @section('add-content')
-    Welcome back, {{ session('user')['name'] ?? 'Sir' }}!
+    Welcome back, {{ $session['user']['name'] ?? 'Sir' }}!
 @endsection
 
 @section('add-js')
