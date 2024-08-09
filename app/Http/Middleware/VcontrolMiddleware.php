@@ -20,7 +20,7 @@ class VcontrolMiddleware
         $route = explode('.', $currentRouteName);
         $routeNow = $route[0];
         $routeAccess = $route[(count($route) - 1)];
-
+        
         //CRUD Only, no (E)dit or (S)tore
         if ($routeAccess == 'edit') {
             $routeAccess = 'update';

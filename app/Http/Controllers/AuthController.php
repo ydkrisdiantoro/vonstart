@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
 use App\Services\AuthService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -49,8 +48,8 @@ class AuthController extends Controller
             $dashboardRoute = config('vcontrol.dashboard_route');
             return redirect()->route($dashboardRoute);
         } else{
-            $alert = $this->help->returnAlert(false);
-            return redirect()->back()->withErrors('Error');
+            $alert = $this->help->returnAlert(false, 'You`re an alien, not a user here!');
+            return redirect()->back()->with($alert[0], $alert[1]);
         }
     }
 
@@ -75,7 +74,8 @@ class AuthController extends Controller
             'year' => 'required|string|min:4|max:4'
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors('Gagal mengubah tahun!');
+            $alert = $this->help->returnAlert(false);
+            return redirect()->back()->with($alert[0], $alert[1]);
         } else {
             Session::put('active_year', $year);
         }
@@ -89,7 +89,8 @@ class AuthController extends Controller
             'role_id' => 'required|string|min:36|max:36'
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors('Gagal mengubah Role!');
+            $alert = $this->help->returnAlert(false, 'Failed to change the Role!');
+            return redirect()->back()->with($alert[0], $alert[1]);
         } else {
             $this->service->changeRole($role_id);
         }
@@ -100,10 +101,5 @@ class AuthController extends Controller
         } else{
             return redirect()->route('dashboard.read');
         }
-    }
-
-    public function refresh()
-    {
-        return $this->service->refresh();
     }
 }

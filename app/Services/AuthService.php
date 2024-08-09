@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Events\AuthorizedUser;
-use App\Models\RoleMenu;
+use App\Mail\MailPasswordResetToken;
+use App\Models\PasswordReset;
 use App\Models\User;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class AuthService
@@ -67,5 +68,54 @@ class AuthService
         $user = (new UserService)->findUser(id: Auth::user()->id);
         event(new AuthorizedUser($user, $roleId));
         return ['success' => true];
+    }
+
+    public function makeToken($email)
+    {
+        // Check if email already registered
+        $user = User::where('email', $email)->first();
+        if($user){
+            $expiredAt = date('Y-m-d H:i:s', strtotime('+2 minutes', strtotime(date('Y-m-d H:i:s'))));
+            $token = substr(str_shuffle(str_repeat('0123456789', 6)), 0, 6);
+            $save = PasswordReset::create([
+                'user_id' => $user->id,
+                'token' => $token,
+                'expired_at' => $expiredAt
+            ]);
+
+            // Kirim token ke email
+            // Mail::to($email)->send(new MailPasswordResetToken($token));
+
+            if($save){
+                return [
+                    'expired_at' => $expiredAt
+                ];
+            }
+        }
+
+        return false;
+    }
+
+    public function getToken($email)
+    {
+        $data = PasswordReset::whereRelation('user', 'email', $email)
+            ->orderBy('created_at', 'desc')
+            ->where('expired_at', '>=', date('Y-m-d H:i:s'))
+            ->select('expired_at')
+            ->first();
+        
+        if($data){
+            return [
+                'expired_at' => $data->expired_at
+            ];
+        }
+    }
+
+    public function checkOtp($otp)
+    {
+        $now = date('Y-m-d H:i:s');
+        return PasswordReset::where('token', $otp)
+            ->where('expired_at', '>=', $now)
+            ->first();
     }
 }

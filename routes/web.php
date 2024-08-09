@@ -5,12 +5,12 @@ use App\Http\Controllers\ErrorLogController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MenuGroupController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PretendController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleMenuController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRoleController;
-
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +20,10 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function (){
     Route::get('/login', [AuthController::class, 'login'])->name('login.read');
     Route::post('/login/process', [AuthController::class, 'goLogin'])->name('login.store');
+    Route::get('/forget-password', [PasswordResetController::class, 'index'])->name('forget_password');
+    Route::post('/forget-password/request', [PasswordResetController::class, 'sendToken'])->name('send_otp');
+    Route::post('/forget-password/check', [PasswordResetController::class, 'checkToken'])->name('check_otp');
+    Route::post('/change-password/store', [PasswordResetController::class, 'storeNewPassword'])->name('store_password');
 });
 
 Route::middleware('auth')->group(function (){

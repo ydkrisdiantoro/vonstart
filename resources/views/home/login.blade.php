@@ -15,10 +15,6 @@
     <div class="card shadow border-0">
         <div class="card-body text-center px-3 py-5 p-sm-5">
             <h4>Vonstart</h4>
-            <div class="alert alert-primary">
-                <i class="bi bi-info-circle-fill"></i>
-                Just click <b>Login</b> to try!
-            </div>
             <form method="POST" action="{{ route('login.store') }}">
                 @csrf
                 <div class="form-floating">
@@ -52,8 +48,15 @@
                     @enderror
                 </div>
 
+                @if($session['alert'] ?? false)
+                    <div class="mb-3 text-{{ $session['alert'][0] }}">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        {{ $session['alert'][1] }}
+                    </div>
+                @endif
+
                 <div class="mx-auto d-flex justify-content-between">
-                    <a class="link" href="#">
+                    <a class="link" href="{{ route('forget_password') }}">
                         Forgot Password?
                     </a>
                     <button type="submit" class="btn btn-primary">
