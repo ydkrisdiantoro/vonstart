@@ -98,6 +98,7 @@ class VcontrolSeeder extends Seeder
             ['cde565af-826f-4e54-bddd-e2639e252db5','859c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
             ['cde665af-826f-4e54-bddd-e2639e252db5','869c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
             ['cde765af-826f-4e54-bddd-e2639e252db5','879c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 1, 1, 1, 1, 1],
+            ['cde865af-826f-4e54-bddd-e2639e252db5','889c913f-dc4f-4a43-9b58-10e7abd99412', '861b1583-bb92-4c6a-8c18-7a4ad828b68d', 0, 1, 0, 1, 0],
         ];
         foreach($roleMenuList as $m){
             $roleMenu = [
@@ -139,6 +140,7 @@ class VcontrolSeeder extends Seeder
         // USER ROLE
         $userRoleList = [
             ['04a109c7-8e5e-4520-bc96-7431e3aefee1', '997a3d89-b0f6-4cc2-98c4-90ecaaae1649', '861b1583-bb92-4c6a-8c18-7a4ad828b68d'],
+            ['04a109c7-8e5e-4520-bc96-7431e3aefee2', '997a3d89-b0f6-4cc2-98c4-90ecaaae1649', '862b1583-bb92-4c6a-8c18-7a4ad828b68d'],
         ];
         foreach($userRoleList as $m){
             $user = [
