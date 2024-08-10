@@ -28,10 +28,10 @@
                 </button>
             </div>
             <div class="col text-end">
-                @if ($session['menus'][$route]['is_create'] ?? false)
-                    <a href="{{ route($route.'.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle-fill me-1"></i> Create
-                    </a>
+                @if ($session['menus'][$route]['is_delete'] ?? false)
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete">
+                        <i class="bi bi-trash-fill"></i> Batch Delete
+                    </button>
                 @endif
             </div>
             <div class="col-12 mt-2">
@@ -60,6 +60,7 @@
                             @foreach ($show as $column => $title)
                                 <th>{{ $title }}</th>
                             @endforeach
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,6 +104,14 @@
                                         @endif
                                     </td>
                                 @endforeach
+                                <td class="nowrap text-center">
+                                    @if ($session['menus'][$route]['is_delete'] ?? false)
+                                        <a href="{{ route($route.'.delete', $data->id) }}"
+                                            class="btn btn-sm btn-danger btn-action delete">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -159,6 +168,41 @@
     </div>
 </div>
 
+{{-- Modal Detele --}}
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>Delete All Logs Record</h4>
+                <form action="{{ route($route.'.all.delete') }}" method="post" class="form">
+                    @csrf
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <p>This action will delete all logs which older than</p>
+                        </div>
+                        <div class="col-12">
+                            <div class="input-group mb-3">
+                                <input type="number" name="days" id="days" class="form-control" aria-label="Days Ago" aria-describedby="days-ago" value="0" min="0" max="30">
+                                <label class="input-group-text" for="days">days ago</label>
+                            </div>
+                            <small class="text-muted">Leave it 0 to delete everything.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle"></i> Close
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Delete All
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- End of Modal Detele --}}
+
 {{-- Modal Filter --}}
 <div class="modal fade" id="filter" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -195,7 +239,7 @@
                         @endif
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Close</button>
                         <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                 </form>

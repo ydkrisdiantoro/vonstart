@@ -129,7 +129,7 @@
                                             </td>
                                         @endforeach
                                         <td class="nowrap text-center">
-                                            @if ($session['access_menus'][$route]['is_delete'] ?? false)
+                                            @if ($session['menus'][$route]['is_delete'] ?? false)
                                                 <a href="{{ route($route.'.delete', $data->id) }}"
                                                     class="btn btn-sm btn-danger btn-action delete">
                                                     <i class="bi bi-trash-fill"></i>
@@ -202,7 +202,7 @@
             <div class="modal-body">
                 <h4>Filters</h4>
                 <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Close</button>
                     <button type="button" class="btn btn-primary">Apply</button>
                 </div>
             </div>

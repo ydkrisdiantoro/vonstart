@@ -19,12 +19,12 @@ class AuthService
      * @param string $password
      * @return boolean true if logged in
      */
-    public function goLogin($email, $password, $pretend = false)
+    public function goLogin($email, $password)
     {
         $user = (new UserService)->findUser(email: $email);
         $hashedPassword = $user->password ?? null;
 
-        if($hashedPassword !== null && Hash::check($password, $hashedPassword)){
+        if(($hashedPassword !== null && Hash::check($password, $hashedPassword))){
             if(sizeof($user->userRoles) > 0){
                 event(new AuthorizedUser($user));
                 $this->useYear();
@@ -54,12 +54,24 @@ class AuthService
         }
     }
 
-    public function logout()
+    public function flush()
     {
         Auth::logout();
         Session::invalidate();
         Session::regenerateToken();
+    }
 
+    public function logout()
+    {
+        $isPretend = Session::get('back_from_pretend');
+        if($isPretend){
+            $canceled = $this->cancelPretend(Auth::user()->id);
+            if($canceled){
+                return redirect()->route('pretend.read');
+            }
+        }
+
+        $this->flush();
         return redirect()->route('login.read');
     }
 
@@ -117,5 +129,30 @@ class AuthService
         return PasswordReset::where('token', $otp)
             ->where('expired_at', '>=', $now)
             ->first();
+    }
+
+    public function pretend($userNow, $user)
+    {
+        $this->flush();
+        event(new AuthorizedUser($user));
+        $this->useYear();
+        Session::put('back_from_pretend', $userNow);
+        Session::put('active_menu', 'dashboard');
+        Auth::login($user);
+
+        return Auth::check();
+    }
+
+    public function cancelPretend($userId)
+    {
+        $userId = Session::get('back_from_pretend');
+        $user = (new UserService)->findUser(id: $userId);
+        $this->flush();
+
+        event(new AuthorizedUser($user));
+        $this->useYear();
+        Auth::login($user);
+
+        return Auth::check();
     }
 }

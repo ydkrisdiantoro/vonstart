@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\VcontrolHelper;
+use App\Services\AuthService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -54,6 +55,21 @@ class PretendController extends Controller
 
     public function select($userId)
     {
-        $a += 1;
+        $authService = new AuthService;
+        $userNow = Auth::user()->id;
+        $user = (new UserService)->findUser($userId);
+        $logged = $authService->pretend($userNow, $user);
+        if($logged){
+            $dashboardRoute = config('vcontrol.dashboard_route');
+            return redirect()->route($dashboardRoute);
+        } else{
+            $cancelPretend = $authService->cancelPretend($userNow);
+            if ($cancelPretend) {
+                return redirect()->route($this->route.'.read');
+            }
+
+            $alert = VcontrolHelper::returnAlert(false, 'Something wrong in Mars!');
+            return redirect()->route('logout.read')->with($alert[0], $alert[1]);
+        }
     }
 }

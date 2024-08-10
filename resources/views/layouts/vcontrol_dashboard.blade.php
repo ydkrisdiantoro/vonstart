@@ -200,7 +200,12 @@
                             role="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="bi bi-person me-2"></i>
+                            @if ($session['back_from_pretend'] ?? false)
+                                <i class="bi bi-eye-fill text-danger me-2"></i>
+                            @else
+                                <i class="bi bi-person me-2"></i>
+                            @endif
+
                             <span class="d-none d-md-block me-2 my-auto">
                                 @if(strlen($session['user']['name']) > 16)
                                     {{ substr($session['user']['name'], 0, 16).'...' }}
@@ -220,7 +225,12 @@
 
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout.read') }}">
-                                    <i class="bi bi-box-arrow-right me-2 text-danger"></i> Logout
+                                    <i class="bi bi-box-arrow-right me-2 text-danger"></i> 
+                                    @if ($session['back_from_pretend'] ?? false)
+                                        End Pretend
+                                    @else
+                                        Logout
+                                    @endif
                                 </a>
                             </li>
                         </ul>
@@ -233,6 +243,11 @@
         <main>
             <div class="row">
                 <div class="col-12">
+                    @if ($session['back_from_pretend'] ?? false)
+                        <div class="alert alert-danger">
+                            <i class="bi bi-eye-fill"></i> You are now pretending to be <b>{{ $session['user']['name'] }}</b>!
+                        </div>
+                    @endif
                     <h4>
                         {{ $namaMenuAktif }}
                         @yield('add-content-title')

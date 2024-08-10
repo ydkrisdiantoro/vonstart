@@ -123,7 +123,7 @@ class UserController extends Controller
 
     public function personal()
     {
-        Session::put('active_menu', 'personal');
+        Session::put('active_menu', 'user');
         $user = session('user');
         $datas['title'] = 'Hi, '.$user['name'];
         $datas['datas'] = $this->service->getUser($user['id']);

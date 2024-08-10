@@ -225,7 +225,7 @@
                         @endif
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Close</button>
                         <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                 </form>

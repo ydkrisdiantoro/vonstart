@@ -28,12 +28,14 @@ class VcontrolMiddleware
             $routeAccess = 'create';
         }
 
-        if(in_array($routeNow, $routeMenus)){
+        if(in_array($routeNow, ['dashboard', 'personal', 'notification'])){
+            return $response;
+        } elseif(in_array($routeNow, $routeMenus)){
             if (@$menus[$routeNow]['is_'.$routeAccess] == 1) {
                 return $response;
             }
-        } elseif(in_array($routeNow, ['dashboard', 'personal', 'notification'])){
-            return $response;
+        } elseif($routeNow == 'pretend' && Session::has('back_from_pretend')){
+            return redirect()->route('dashboard.read');
         }
 
         return response()->view('errors.401');

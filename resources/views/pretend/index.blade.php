@@ -70,7 +70,7 @@
                             </div>
 
                             @if (sizeof($data->userRoles) > 0)
-                                <a href="{{ route('pretend.select', ['id' => $data->id]) }}" class="btn btn-sm btn-primary mb-auto" style="white-space: nowrap">
+                                <a href="{{ route('pretend.select.read', ['id' => $data->id]) }}" class="btn btn-sm btn-primary mb-auto" style="white-space: nowrap">
                                     <i class="bi bi-eye"></i> Pretend
                                 </a>
                             @else

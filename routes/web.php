@@ -118,11 +118,13 @@ $slug = 'pretend';
 Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [PretendController::class, 'index'])->name($slug.'.read');
     Route::post('/'.$slug.'/find', [PretendController::class, 'find'])->name($slug.'.find.read');
-    Route::get('/'.$slug.'/select/{id}', [PretendController::class, 'select'])->name($slug.'.select');
+    Route::get('/'.$slug.'/select/{id}', [PretendController::class, 'select'])->name($slug.'.select.read');
 });
 
 $slug = 'error-log';
 Route::middleware(['auth', 'access'])->group(function () use($slug){
     Route::get('/'.$slug, [ErrorLogController::class, 'index'])->name($slug.'.read');
     Route::post('/'.$slug.'/filter', [ErrorLogController::class, 'filter'])->name($slug.'.filter.read');
+    Route::get('/'.$slug.'/delete/{id}', [ErrorLogController::class, 'destroy'])->name($slug.'.delete');
+    Route::post('/'.$slug.'/delete-all', [ErrorLogController::class, 'destroyAll'])->name($slug.'.all.delete');
 });

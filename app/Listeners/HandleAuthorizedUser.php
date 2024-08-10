@@ -35,7 +35,7 @@ class HandleAuthorizedUser
         $menus = (new RoleMenuService)->getMenusByRole($role->role_id);
         $menuGroups = (new MenuGroupService)->getMenuGroupIn($menus->pluck('menu_group_id'));
         $activeMenu = 'dashboard';
-        if(Session::has('active_menu')){
+        if(Session::has('active_menu') && !Session::has('back_from_pretend')){
             $activeMenu = Session::get('active_menu');
         }
 

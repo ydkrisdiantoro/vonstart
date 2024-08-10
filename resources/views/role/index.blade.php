@@ -23,7 +23,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-auto">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter" disabled>
                     <i class="bi bi-filter-circle-fill me-1"></i> Filter
                 </button>
             </div>
@@ -175,7 +175,7 @@
             <div class="modal-body">
                 <h4>Filters</h4>
                 <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Close</button>
                     <button type="button" class="btn btn-primary">Apply</button>
                 </div>
             </div>

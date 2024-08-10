@@ -105,6 +105,7 @@ class UserService
     {
         $user = Auth::user();
         return User::where('id', '!=', $user->id)
+            ->whereHas('userRoles')
             ->where(function($q) use($keyword){
                 $q->where('email', 'like', '%'.$keyword.'%');
                 $q->orWhere('name', 'like', '%'.$keyword.'%');
