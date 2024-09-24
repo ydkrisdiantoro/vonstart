@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\{{ modelName }};
+
+class {{ modelName }}Service
+{
+    /**
+     * Rule Validation Data
+     * @return array $rules_validation_data
+     */
+    public function rules()
+    {
+        return {{ rules }};
+    }
+
+    /**
+     * Get {{ modelName }}
+     * @param uuid ${{ snakeModelName }}Id optional
+     * @return collection from find() or get()
+     */
+    public function get{{ modelName }}(${{ snakeModelName }}Id = null, $paginate = null)
+    {
+        if(${{ snakeModelName }}Id != null){
+            $data = {{ modelName }}::with({{ withColumn }})->find(${{ snakeModelName }}Id);
+        } else{
+            if ($paginate === null) {
+                $data = {{ modelName }}::with({{ withColumn }})->get();
+            } else{
+                $data = {{ modelName }}::with({{ withColumn }})->paginate($paginate);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Create {{ modelName }}
+     * @param array $datas
+     * @return collection|false return from save()
+     */
+    public function create($datas)
+    {
+        $createData = (new {{ modelName }})->fill($datas);
+        if($createData->save()){
+            return $createData;
+        } else{
+            return false;
+        }
+    }
+
+    /**
+     * Update {{ modelName }} by Id
+     * @param uuid ${{ snakeModelName }}Id
+     * @param array $datas
+     * @return collection return from update()
+     */
+    public function update(${{ snakeModelName }}Id, $datas)
+    {
+        return {{ modelName }}::find(${{ snakeModelName }}Id)->update($datas);
+    }
+
+    /**
+     * Delete {{ modelName }}
+     * @param uuid ${{ snakeModelName }}Id
+     * @return collection from delete()
+     */
+    public function delete(${{ snakeModelName }}Id)
+    {
+        return {{ modelName }}::find(${{ snakeModelName }}Id)->delete();
+    }
+}

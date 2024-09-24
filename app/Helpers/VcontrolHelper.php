@@ -7,8 +7,8 @@ class VcontrolHelper
     protected const TRUE_COLOR = 'success';
     protected const FALSE_COLOR = 'danger';
 
-    protected const TRUE_MESSAGE = 'Berhasil!';
-    protected const FALSE_MESSAGE = 'Gagal!';
+    protected const TRUE_MESSAGE = 'Success!';
+    protected const FALSE_MESSAGE = 'Failed!';
 
     public static function returnAlert($success = true, $customMessage = null)
     {
