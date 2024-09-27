@@ -20,7 +20,7 @@ class {{ modelName }}Service
      * @param uuid ${{ snakeModelName }}Id optional
      * @return collection from find() or get()
      */
-    public function get{{ modelName }}(${{ snakeModelName }}Id = null, $paginate = null)
+    public function getData(${{ snakeModelName }}Id = null, $paginate = null)
     {
         if(${{ snakeModelName }}Id != null){
             $data = {{ modelName }}::with({{ withColumn }})->find(${{ snakeModelName }}Id);

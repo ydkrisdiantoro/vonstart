@@ -39,11 +39,7 @@
                     @foreach ($filters as $filterKey => $filter)
                         @if (!empty($filter))
                             <span class="badge text-bg-secondary">
-                                @if ($filterKey == 'role')
-                                    #Role: {{ $roles[$filter] }}
-                                @else
-                                    #{{ $show[$filterKey].': '.$filter }}
-                                @endif
+                                #{{ $show[$filterKey].': '.$filter }}
                             </span>
                         @endif
                     @endforeach
@@ -72,22 +68,7 @@
                             <tr>
                                 @foreach ($show as $col => $val)
                                     <td>
-                                        @if ($data->{$col} ?? false)
-                                            {{ $data->{$col} ?? '-' }}<br>
-                                            @if ($col == 'name')
-                                                @if (sizeof($data->userRoles) > 0)
-                                                    @foreach ($data->userRoles as $userRole)
-                                                        <span class="badge text-bg-secondary">
-                                                            {{ @$userRole->role->name }}
-                                                        </span>
-                                                    @endforeach
-                                                @else
-                                                    <span class="badge text-bg-danger">
-                                                        No Role
-                                                    </span>
-                                                @endif
-                                            @endif
-                                        @elseif(str($col)->contains('.'))
+                                        @if(str($col)->contains('.'))
                                             @php
                                                 $print_relation = '-';
                                                 $relations = explode('.', $col);
@@ -98,18 +79,14 @@
                                                 }
                                             @endphp
                                             {{ $print_relation }}
+                                        @elseif ($data->{$col} ?? false)
+                                            {{ $data->{$col} ?? '-' }}
                                         @else
                                             <span class="badge text-bg-danger">Empty</span>
                                         @endif
                                     </td>
                                 @endforeach
                                 <td class="nowrap text-center">
-                                    @if ($session['menus'][$role_route]['is_read'] ?? false)
-                                        <a href="{{ route($role_route.'.read', ['id' => $data->id]) }}"
-                                            class="btn btn-sm btn-primary me-1 btn-action">
-                                            <i class="bi bi-person-gear"></i> User Role
-                                        </a>
-                                    @endif
                                     @if ($session['menus'][$route]['is_update'] ?? false)
                                         <a href="{{ route($route.'.edit', $data->id) }}"
                                             class="btn btn-sm btn-secondary me-1 btn-action">
@@ -199,7 +176,7 @@
                                                     name="{{ $ffcol }}"
                                                     class="form-control"
                                                     id="{{ $ffcol }}"
-                                                    placeholder="person"
+                                                    placeholder="{{ $ff['title'] }}"
                                                     value="{{ @$filters[$ffcol] }}"
                                                     autofocus>
                                                 <label for="{{ $ffcol }}">{{ $ff['title'] }}</label>
@@ -207,15 +184,15 @@
                                             @break
                                         @case('select')
                                             <div class="form-floating">
-                                                <select name="{{ $ffcol }}" class="form-select" id="{{ $ffcol }}" aria-label="Floating label select example">
-                                                    <option value="{{ NULL }}" selected>-- Choose a Role</option>
+                                                <select name="{{ $ffcol }}" class="form-select" id="{{ $ffcol }}" aria-label="Floating label {{ $ff['title'] }}">
+                                                    <option value="{{ NULL }}" selected>-- Choose a {{ $ff['title'] }}</option>
                                                         @if (sizeof($ff['data']) > 0)
-                                                            @foreach ($ff['data'] as $roleId => $roleName)
-                                                                <option value="{{ $roleId }}" {{ @$filters[$ffcol] == $roleId ? 'selected' : '' }}>{{ $roleName }}</option>
+                                                            @foreach ($ff['data'] as $optionId => $optionName)
+                                                                <option value="{{ $optionId }}" {{ @$filters[$ffcol] == $optionId ? 'selected' : '' }}>{{ $optionName }}</option>
                                                             @endforeach
                                                         @endif
                                                 </select>
-                                                <label for="{{ $ffcol }}">Roles</label>
+                                                <label for="{{ $ffcol }}">{{ $ff['title'] }}</label>
                                             </div>
                                             @break
                                         @default

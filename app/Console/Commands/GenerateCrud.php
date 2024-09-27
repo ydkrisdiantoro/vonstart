@@ -43,19 +43,19 @@ class GenerateCrud extends Command
         }
 
         // View type
-        $viewType = $this->ask('View type: [1] Common blade template [2] Livewire', 1);
-        while (!in_array($viewType, ['1', '2'])) {
-            $this->error('Invalid input. Please enter 1 or 2.');
-            $viewType = $this->ask('View type: [1] Common blade template [2] Livewire');
-        }
+        // $viewType = $this->ask('View type: [1] Common blade template [2] Livewire', 1);
+        // while (!in_array($viewType, ['1', '2'])) {
+        //     $this->error('Invalid input. Please enter 1 or 2.');
+        //     $viewType = $this->ask('View type: [1] Common blade template [2] Livewire');
+        // }
 
         // Try to generate CRUD
         try {
             $this->generateModel($modelName, $tableName);
             $this->generateService($tableName, $modelName, $serviceName);
-            $this->generateController($controllerName, $singularTableName);
-            $this->generateViews($singularTableName);
-            $this->generateRoutes($singularTableName);
+            $this->generateController($controllerName, $singularTableName, $tableName);
+            $this->generateViews($tableName, $singularTableName, $modelName);
+            $this->generateRoutes(Str::snake($modelName), $controllerName);
 
             $info = 'CRUD from '.$tableName.' generated successfully';
         } catch (\Throwable $th) {
@@ -97,23 +97,31 @@ class GenerateCrud extends Command
         );
 
         File::put(app_path("/Models/{$modelName}.php"), $modelContent);
+        $this->info("Model {$modelName} added.");
     }
 
-    protected function generateController($name, $tableName)
+    protected function generateController($controllerName, $singularTableName, $tableName)
     {
-        $serviceName = $name.'Service';
-        $controllerName = $name.'Controller';
-        $title = "'".ucwords(str_replace('_', ' ', $tableName), ' ')."'";
-        $route = "'".$tableName."'";
-        $view = "'".$tableName."'";
+        $serviceName = str_replace('Controller', 'Service', $controllerName);
+        $title = "'".ucwords(str_replace('_', ' ', $singularTableName), ' ')."'";
+        $route = "'".$singularTableName."'";
+        $view = "'".$singularTableName."'";
         $tableColumns = '';
+        $refData = '';
+        $importRefData = '';
         $columns = collect(Schema::getColumnListing($tableName));
         foreach($columns as $column){
-            if ($column != 'id' && substr($column, -3) != '_id') {
-                $tableColumns .= "'".$column."' => '".ucwords(str_replace('_', ' ', $column), ' ')."',";
+            if ($column != 'id' && substr($column, -3) != '_id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at'])) {
+                $tableColumns .= "
+            '".$column."' => '".ucwords(str_replace('_', ' ', $column), ' ')."',";
             } elseif(substr($column, -3) == '_id'){
-                $newColumn = '';
-                $tableColumns .= "'".$newColumn."' => '".ucwords(str_replace('_', ' ', $column), ' ')."',";
+                $newColumn = str_replace('_', '', ucwords(substr($column, 0, -3), '_'));
+                $tableColumns .= "
+            '".lcfirst($newColumn).".name' => '".ucwords(str_replace('_', ' ', substr($column, 0, -3)), ' ')."',";
+                $refData .= '$datas['."'".substr($column, 0, -3)."'".'] = '.$newColumn.'::pluck('."'".'name'."'".', '."'".'id'."'".');
+    ';
+                $importRefData .= 'use App\Models\\'.$newColumn.';
+    ';
             }
         }
 
@@ -126,6 +134,8 @@ class GenerateCrud extends Command
                 '{{ route }}',
                 '{{ view }}',
                 '{{ tableColumns }}',
+                '{{ refData }}',
+                '{{ importRefData }}',
             ],
             [
                 $serviceName,
@@ -134,11 +144,14 @@ class GenerateCrud extends Command
                 $route,
                 $view,
                 $tableColumns,
+                $refData,
+                $importRefData,
             ],
             $stub
         );
 
-        File::put(app_path("/Http/Controllers/{$name}Controller.php"), $controllerContent);
+        File::put(app_path("/Http/Controllers/{$controllerName}.php"), $controllerContent);
+        $this->info("{$controllerName} added.");
     }
 
     protected function generateService($tableName, $modelName, $serviceName)
@@ -205,22 +218,122 @@ class GenerateCrud extends Command
         );
 
         File::put(app_path("/Services/{$modelName}Service.php"), $serviceContent);
-        dd('sampe sini dulu ygy');
+        $this->info("Service '.$serviceName.' added.");
     }
 
-    protected function generateViews($name)
+    protected function generateViews($tableName, $singularTableName, $modelName)
     {
-        // $stub = File::get(base_path('stubs/view.stub'));
-        // $viewContent = str_replace('{{ modelName }}', $name, $stub);
+        $stubIndex = File::get(base_path('stubs/index.stub'));
+        $stubCreate = File::get(base_path('stubs/create.stub'));
+        $stubEdit = File::get(base_path('stubs/edit.stub'));
+        $viewIndex = $stubIndex;
 
-        // $viewPath = resource_path("views/{$name}");
-        // if (!File::exists($viewPath)) {
-        //     File::makeDirectory($viewPath);
-        // }
+        // Buat form berdasarkan tabel
+        $columns = Schema::getColumns($tableName);
+        $forms = '';
+        foreach ($columns as $column) {
+            if (substr($column['name'], -3) == '_id') {
+                $refTable = str_replace('_', '', ucwords(substr($column['name'], 0, -3), '_'));
+                $forms .= '
+                    <div class="form-floating">
+                        <select class="form-select"
+                            name="{{ '.substr($column['name'], 0, -3).' }}"
+                            id="{{ '.substr($column['name'], 0, -3).' }}"
+                            aria-label="Floating label {{ '.$refTable.' }}">
+                            @if(sizeof($'.substr($column['name'], 0, -3).' ?? []) > 0)
+                                @foreach($'.substr($column['name'], 0, -3).' as $optionId => $optionName)
+                                    <option value="{{ $optionId }}"
+                                        {{ $optionId == @$datas->'.$column['name'].' ? "selected" : "" }}>
+                                        {{ $optionName }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <label for="{{ '.substr($column['name'], 0, -3).' }}">Works with selects</label>
+                    </div>
+    ';
+            }elseif(!in_array($column['name'], ['created_at', 'updated_at', 'deleted_at'])){
+                $refTable = str_replace('_', ' ', ucwords(substr($column['name'], 0), '_'));
+                $columnType = 'text';
+                if($column['type_name'] == 'date'){
+                    $columnType = 'date';
+                } elseif($column['type_name'] == 'time'){
+                    $columnType = 'time';
+                } elseif(in_array($column['type_name'], ['datetime', 'dateTime', 'datetime-local'])){
+                    $columnType = 'datetime-local';
+                }
 
-        // File::put("{$viewPath}/index.blade.php", $viewContent);
-        // File::put("{$viewPath}/create.blade.php", $viewContent);
-        // File::put("{$viewPath}/edit.blade.php", $viewContent);
-        // File::put("{$viewPath}/show.blade.php", $viewContent);
+                $forms .= '
+                    <div class="form-floating">
+                        <input autocomplete="off"
+                            type="'.$columnType.'"
+                            name="'.$column['name'].'"
+                            class="form-control"
+                            id="floating'.$refTable.'"
+                            placeholder="Bambang"
+                            value="{{ old('."'".$column['name']."'".') ?? ($datas->'.$column['name'].' ?? null) }}"
+                            autofocus>
+                        <label for="floating'.$refTable.'">'.$refTable.'</label>
+                    </div>
+                    <div class="mb-3 text-start">
+                        @error('."'".$column['name']."'".')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+    ';
+            }
+        }
+
+        $viewCreate = str_replace('{{ forms }}', $forms, $stubCreate);
+        $viewEdit = str_replace('{{ forms }}', $forms, $stubEdit);
+
+        $snake = Str::snake($modelName);
+        $viewPath = resource_path("views/{$snake}");
+        if (!File::exists($viewPath)) {
+            File::makeDirectory($viewPath);
+        }
+
+        File::put("{$viewPath}/index.blade.php", $viewIndex);
+        File::put("{$viewPath}/create.blade.php", $viewCreate);
+        File::put("{$viewPath}/edit.blade.php", $viewEdit);
+        $this->info("Blade view added (index, create, edit).");
+    }
+
+    public function generateRoutes($route, $controllerName)
+    {
+        $routePath = base_path('routes/web.php');
+        $routes = File::get($routePath);
+        $useStatement = "use App\Http\Controllers\\{$controllerName};";
+
+        if (!Str::contains($routes, $useStatement) &&
+            Str::contains($routes, "use Illuminate\Support\Facades\Route;")) {
+            $newRoutes = str_replace(
+                "use Illuminate\Support\Facades\Route;", 
+                "use Illuminate\Support\Facades\Route;\n" . $useStatement, 
+                $routes
+            );
+            File::put($routePath, $newRoutes);
+        }
+
+        $routeDefinition = "
+\$slug = '{$route}';
+Route::middleware(['auth', 'access'])->group(function () use(\$slug) {
+    Route::get('/'.\$slug, [{$controllerName}::class, 'index'])->name(\$slug.'.read');
+    Route::post('/'.\$slug.'/create', [{$controllerName}::class, 'create'])->name(\$slug.'.create.read');
+    Route::post('/'.\$slug.'/store', [{$controllerName}::class, 'store'])->name(\$slug.'.store.read');
+    Route::post('/'.\$slug.'/edit', [{$controllerName}::class, 'edit'])->name(\$slug.'.edit.read');
+    Route::post('/'.\$slug.'/update', [{$controllerName}::class, 'update'])->name(\$slug.'.update.read');
+    Route::get('/'.\$slug.'/delete/{id}', [{$controllerName}::class, 'destroy'])->name(\$slug.'.delete');
+});
+";
+
+        if (!Str::contains($routes, "\$slug = '{$route}") && 
+            !Str::contains($routes, "[{$controllerName}::class, 'index']")) {
+            // Jika belum ada, tambahkan ke file routes
+            File::append($routePath, "\n" . $routeDefinition);
+            $this->info("Route {$route} added.");
+        } else {
+            $this->info("Route {$route} already added. Skipped.");
+        }
     }
 }

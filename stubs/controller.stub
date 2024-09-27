@@ -8,6 +8,8 @@ use App\Helpers\VcontrolHelper;
 use App\Services\{{ serviceName }};
 use Illuminate\Support\Facades\Session;
 
+{{ importRefData }}
+
 class {{ controllerName }} extends Controller
 {
     protected $service;
@@ -27,7 +29,7 @@ class {{ controllerName }} extends Controller
         Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['route'] = $this->route;
-        $datas['datas'] = [];
+        $datas['datas'] = $this->service->getData(paginate: 25);
         $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
         $datas['show'] = [{{ tableColumns }}];
 
@@ -37,7 +39,7 @@ class {{ controllerName }} extends Controller
     public function create()
     {
         $datas['title'] = 'Create '.$this->title;
-
+        {{ refData }}
         return view($this->view.'.create', $datas);
     }
 
@@ -57,7 +59,8 @@ class {{ controllerName }} extends Controller
     public function edit($id)
     {
         $datas['title'] = 'Edit '.$this->title;
-        $datas['datas'] = $this->service->getRole($id);
+        $datas['datas'] = $this->service->getData($id);
+        {{ refData }}
         return view($this->route.'.edit', $datas);
     }
 
