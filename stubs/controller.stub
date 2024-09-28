@@ -29,9 +29,10 @@ class {{ controllerName }} extends Controller
         Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['route'] = $this->route;
-        $datas['datas'] = $this->service->getData(paginate: 25);
         $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
         $datas['show'] = [{{ tableColumns }}];
+        $datas['form_filters'] = {{ formFilters }};
+        $datas['datas'] = $this->service->getData(paginate: 25, filters: $datas['filters']);
 
         return view($this->view.'.index', $datas);
     }
@@ -80,6 +81,22 @@ class {{ controllerName }} extends Controller
         return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
     }
 
+    public function filter(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'nullable|string'
+        ]);
+
+        $data = [
+            'name' => $request->input('name'),
+        ];
+
+        Session::put('filters-'.session('active_menu'), $data);
+        $alert = $this->help->returnAlert();
+
+        return redirect()->back()->with($alert[0], $alert[1]);
+    }
+
     public function destroy($id)
     {
         $alert = $this->help->returnAlert();
@@ -89,6 +106,6 @@ class {{ controllerName }} extends Controller
             $alert = $this->help->returnAlert(false);
         }
 
-        return redirect()->route($this->route.'.read')->with($alert[0], $alert[1]);
+        return redirect()->back()->with($alert[0], $alert[1]);
     }
 }

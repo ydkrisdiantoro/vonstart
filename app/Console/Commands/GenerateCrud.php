@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Menu;
+use App\Models\MenuGroup;
+use App\Models\RoleMenu;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
@@ -36,18 +39,22 @@ class GenerateCrud extends Command
 
         // Confirm is model exists
         $isModelExists = $this->ask('Is Model with the name '.$modelName.' already exists? [yes/no]', 'no');
-        if ($isModelExists) {
+        while(!in_array($isModelExists, ['yes','no'])){
+            $isModelExists = $this->ask('Is Model with the name '.$modelName.' already exists? [yes/no]', 'no');
+        }
+
+        if ($isModelExists == 'yes') {
             $modelName = $this->ask('Type new Model Name (singular form in English):');
             $controllerName = $modelName.'Controller';
             $serviceName = $modelName.'Service';
         }
 
-        // View type
-        // $viewType = $this->ask('View type: [1] Common blade template [2] Livewire', 1);
-        // while (!in_array($viewType, ['1', '2'])) {
-        //     $this->error('Invalid input. Please enter 1 or 2.');
-        //     $viewType = $this->ask('View type: [1] Common blade template [2] Livewire');
-        // }
+        $menuGroups = MenuGroup::orderBy('order')->pluck('name', 'order')->toArray();
+        $whichGroupMenu = $this->choice('Choose group menu:', $menuGroups, 1);
+        $selectedGroupMenu = MenuGroup::where('order', array_flip($menuGroups)[$whichGroupMenu])->first()->id;
+        $showMenu = $this->ask('Show menu in sidebar? [yes/no]', 'yes');
+        $showMenu == 'yes' ? $showMenu = 1 : $showMenu = 0;
+        $icon = $this->ask('Bootstrap icon (without bi bi-): ', 'circle');
 
         // Try to generate CRUD
         try {
@@ -56,6 +63,7 @@ class GenerateCrud extends Command
             $this->generateController($controllerName, $singularTableName, $tableName);
             $this->generateViews($tableName, $singularTableName, $modelName);
             $this->generateRoutes(Str::snake($modelName), $controllerName);
+            $this->generateMenuData(Str::snake($modelName), $selectedGroupMenu, $showMenu, $icon);
 
             $info = 'CRUD from '.$tableName.' generated successfully';
         } catch (\Throwable $th) {
@@ -63,6 +71,8 @@ class GenerateCrud extends Command
         }
 
         $this->info($info);
+        $this->call('optimize');
+        $this->info('Optimized!');
     }
 
     protected function camelCase($snakeCase){
@@ -109,9 +119,10 @@ class GenerateCrud extends Command
         $tableColumns = '';
         $refData = '';
         $importRefData = '';
+        $formFilters = '[';
         $columns = collect(Schema::getColumnListing($tableName));
         foreach($columns as $column){
-            if ($column != 'id' && substr($column, -3) != '_id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at'])) {
+            if (substr($column, -3) != '_id' && !in_array($column, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 $tableColumns .= "
             '".$column."' => '".ucwords(str_replace('_', ' ', $column), ' ')."',";
             } elseif(substr($column, -3) == '_id'){
@@ -123,6 +134,25 @@ class GenerateCrud extends Command
                 $importRefData .= 'use App\Models\\'.$newColumn.';
     ';
             }
+
+            if ($column == 'names') {
+                $formFilters .= '
+            '."'name' => [
+                'title' => 'Find Name',
+                'type' => 'text',
+            ],
+        ";
+            }
+        }
+        $formFilters .= ']';
+
+        if ($formFilters == '[]') {
+            $formFilters = '[
+            // column => [
+            //      title => Column Title
+            //      type => text    
+            // ]
+        ]';
         }
 
         $stub = File::get(base_path('stubs/controller.stub'));
@@ -136,6 +166,7 @@ class GenerateCrud extends Command
                 '{{ tableColumns }}',
                 '{{ refData }}',
                 '{{ importRefData }}',
+                '{{ formFilters }}'
             ],
             [
                 $serviceName,
@@ -146,6 +177,7 @@ class GenerateCrud extends Command
                 $tableColumns,
                 $refData,
                 $importRefData,
+                $formFilters,
             ],
             $stub
         );
@@ -252,7 +284,7 @@ class GenerateCrud extends Command
                         <label for="{{ '.substr($column['name'], 0, -3).' }}">Works with selects</label>
                     </div>
     ';
-            }elseif(!in_array($column['name'], ['created_at', 'updated_at', 'deleted_at'])){
+            }elseif(!in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])){
                 $refTable = str_replace('_', ' ', ucwords(substr($column['name'], 0), '_'));
                 $columnType = 'text';
                 if($column['type_name'] == 'date'){
@@ -319,10 +351,11 @@ class GenerateCrud extends Command
 \$slug = '{$route}';
 Route::middleware(['auth', 'access'])->group(function () use(\$slug) {
     Route::get('/'.\$slug, [{$controllerName}::class, 'index'])->name(\$slug.'.read');
-    Route::post('/'.\$slug.'/create', [{$controllerName}::class, 'create'])->name(\$slug.'.create.read');
-    Route::post('/'.\$slug.'/store', [{$controllerName}::class, 'store'])->name(\$slug.'.store.read');
-    Route::post('/'.\$slug.'/edit', [{$controllerName}::class, 'edit'])->name(\$slug.'.edit.read');
-    Route::post('/'.\$slug.'/update', [{$controllerName}::class, 'update'])->name(\$slug.'.update.read');
+    Route::get('/'.\$slug.'/create', [{$controllerName}::class, 'create'])->name(\$slug.'.create');
+    Route::post('/'.\$slug.'/store', [{$controllerName}::class, 'store'])->name(\$slug.'.store');
+    Route::post('/'.\$slug.'/filter', [{$controllerName}::class, 'filter'])->name(\$slug.'.filter.read');
+    Route::get('/'.\$slug.'/edit/{id}', [{$controllerName}::class, 'edit'])->name(\$slug.'.edit');
+    Route::post('/'.\$slug.'/update', [{$controllerName}::class, 'update'])->name(\$slug.'.update');
     Route::get('/'.\$slug.'/delete/{id}', [{$controllerName}::class, 'destroy'])->name(\$slug.'.delete');
 });
 ";
@@ -334,6 +367,47 @@ Route::middleware(['auth', 'access'])->group(function () use(\$slug) {
             $this->info("Route {$route} added.");
         } else {
             $this->info("Route {$route} already added. Skipped.");
+        }
+    }
+
+    public function generateMenuData($route, $menuGroupId, $isShowMenu, $icon)
+    {
+        $last = Menu::where('menu_group_id', $menuGroupId)
+            ->orderBy('order', 'desc')
+            ->first();
+
+        $order = 1;
+        if ($last) {
+            $order = $last->order + 1;
+        }
+
+        $saveMenu = Menu::firstOrCreate([
+            'route' => $route,
+            'menu_group_id' => $menuGroupId,
+        ],[
+            'name' => str_replace('_', ' ', ucwords($route, '_')),
+            'icon' => $icon,
+            'is_show' => $isShowMenu,
+            'cluster' => null,
+            'order' => $order,
+        ]);
+
+        if ($saveMenu) {
+            $this->info("Menu added to Database.");
+            $saveRoleMenu = RoleMenu::firstOrCreate([
+                'menu_id' => $saveMenu->id,
+                'role_id' => config('vcontrol.superuser_role_id'),
+            ],[
+                'is_create' => 1,
+                'is_read' => 1,
+                'is_update' => 1,
+                'is_delete' => 1,
+                'is_validate' => 1,
+            ]);
+
+            if ($saveRoleMenu) {
+                $this->info("Privilege added to Database.");
+            }
         }
     }
 }
