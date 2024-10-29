@@ -30,11 +30,6 @@
                 class="list-group-item list-group-item-action">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
-            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                <i class="bi bi-arrow-return-right"></i>
-                <span class="">{{ $title }}</span>
-                <i class="bi bi-check-circle-fill"></i>
-            </a>
         </div>
         <div class="card shadow-card mb-3 border-0">
             <div class="card-body">

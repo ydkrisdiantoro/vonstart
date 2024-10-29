@@ -49,7 +49,7 @@ class MenuController extends Controller
 
         $datas['menu_group'] = (new MenuGroupService)->getMenuGroup(request()->input('id'));
         $datas['menu_group_columns'] = [
-            'name' => 'Role Name',
+            'name' => 'Menu Group Name',
             'order' => 'Order',
         ];
 

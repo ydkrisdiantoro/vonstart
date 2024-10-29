@@ -14,7 +14,7 @@
 @endsection
 
 @section('add-content-title')
-
+<span class="fs-6"> | {{ $title }}</span>
 @endsection
 
 @section('add-content')

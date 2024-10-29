@@ -23,7 +23,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col-auto">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter"
+                    {{ sizeof($form_filters ?? []) == 0 ? 'disabled' : '' }}>
                     <i class="bi bi-filter-circle-fill me-1"></i> Filter
                 </button>
             </div>

@@ -26,15 +26,10 @@
                 class="list-group-item list-group-item-action">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
-            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                <i class="bi bi-arrow-return-right"></i>
-                <span class="">{{ $title }}</span>
-                <i class="bi bi-check-circle-fill"></i>
-            </a>
         </div>
         <div class="card shadow-card mb-3 border-0">
             <div class="card-body">
-                <p class="fw-bold">Role Details</p>
+                <p class="fw-bold">Menu Group Details</p>
                 @foreach ($menu_group_columns as $menu_group_column => $menu_group_title)
                     <p class="{{ $loop->last ? 'mb-0' : '' }}">
                         <span class="fst-italic">{{ $menu_group_title }}</span><br>
@@ -56,7 +51,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-auto">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#filter"
+                            {{ sizeof($form_filters ?? []) == 0 ? 'disabled' : '' }}>
                             <i class="bi bi-filter-circle-fill me-1"></i> Filter
                         </button>
                     </div>
