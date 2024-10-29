@@ -29,7 +29,7 @@ class {{ controllerName }} extends Controller
         Session::put('active_menu', $this->route);
         $datas['title'] = $this->title;
         $datas['route'] = $this->route;
-        $datas['filters'] = session('filters-'.session('active_menu')) ?? false;
+        $datas['filters'] = session('filters-'.session('active_menu')) ?? [];
         $datas['show'] = [{{ tableColumns }}];
         $datas['form_filters'] = {{ formFilters }};
         $datas['datas'] = $this->service->getData(paginate: 25, filters: $datas['filters']);

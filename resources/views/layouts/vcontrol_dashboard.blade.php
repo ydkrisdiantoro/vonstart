@@ -299,6 +299,9 @@
             <div class="modal-body">
                 <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation</h5>
                 <p>Did you really want to delete this item?</p>
+                <div class="bg-light rounded p-2 mb-3">
+                    <span id="deleteModalMessage"></span>
+                </div>
                 <div class="d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-circle-fill"></i> Cancel
@@ -346,30 +349,23 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Simpan referensi elemen yang akan dihapus
-    let deleteLink = null;
+        let deleteLink = null;
+        const deleteElements = document.querySelectorAll('.delete');
 
-    // Dapatkan semua elemen dengan kelas 'delete'
-    const deleteElements = document.querySelectorAll('.delete');
-
-    // Tambahkan event listener ke setiap elemen 'delete'
-    deleteElements.forEach(element => {
-        element.addEventListener('click', function(event) {
-            event.preventDefault(); // Cegah aksi default (navigasi)
-
-            // Simpan referensi ke elemen yang diklik
-            deleteLink = this;
-
-            // Tampilkan modal
-            const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            deleteModal.show();
+        deleteElements.forEach(element => {
+            element.addEventListener('click', function(event) {
+                event.preventDefault();
+                deleteLink = this;
+                const message = this.getAttribute('data-message');
+                document.getElementById('deleteModalMessage').textContent = message;
+                const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                deleteModal.show();
+            });
         });
-    });
 
-    // Tambahkan event listener ke tombol konfirmasi di modal
-    document.getElementById('confirmDeleteButton').addEventListener('click', function() {
-        if (deleteLink) {
-            window.location.href = deleteLink.href; // Lanjutkan ke URL yang disimpan di 'href'
+        document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            if (deleteLink) {
+                window.location.href = deleteLink.href; // Lanjutkan ke URL yang disimpan di 'href'
             }
         });
     });

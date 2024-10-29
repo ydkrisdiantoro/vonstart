@@ -118,7 +118,8 @@
                                     @endif
                                     @if ($session['menus'][$route]['is_delete'] ?? false)
                                         <a href="{{ route($route.'.delete', $data->id) }}"
-                                            class="btn btn-sm btn-danger btn-action delete">
+                                            class="btn btn-sm btn-danger btn-action delete"
+                                            data-message="{{ @$data->name }}">
                                             <i class="bi bi-trash-fill"></i>
                                         </a>
                                     @endif
