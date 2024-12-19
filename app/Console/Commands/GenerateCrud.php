@@ -267,11 +267,11 @@ class GenerateCrud extends Command
             if (substr($column['name'], -3) == '_id') {
                 $refTable = str_replace('_', '', ucwords(substr($column['name'], 0, -3), '_'));
                 $forms .= '
-                    <div class="form-floating">
+                    <div class="form-floating mb-3">
                         <select class="form-select"
-                            name="{{ '.substr($column['name'], 0, -3).' }}"
-                            id="{{ '.substr($column['name'], 0, -3).' }}"
-                            aria-label="Floating label {{ '.$refTable.' }}">
+                            name="'.$column['name'].'"
+                            id="'.$column['name'].'"
+                            aria-label="Floating label '.$refTable.'">
                             @if(sizeof($'.substr($column['name'], 0, -3).' ?? []) > 0)
                                 @foreach($'.substr($column['name'], 0, -3).' as $optionId => $optionName)
                                     <option value="{{ $optionId }}"
@@ -281,7 +281,7 @@ class GenerateCrud extends Command
                                 @endforeach
                             @endif
                         </select>
-                        <label for="{{ '.substr($column['name'], 0, -3).' }}">Works with selects</label>
+                        <label for="'.substr($column['name'], 0, -3).'">Works with selects</label>
                     </div>
     ';
             }elseif(!in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])){
