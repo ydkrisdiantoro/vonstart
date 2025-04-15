@@ -11,7 +11,6 @@
 
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-icons.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/vonstemp.css') }}">
 
         <style>
             .svg-container{
@@ -30,7 +29,6 @@
         @yield('body')
 
         <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('assets/js/vonstemp.js') }}"></script>
 
         @yield('extra-js')
 

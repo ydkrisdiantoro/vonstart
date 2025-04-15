@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@900&display=swap');
+
+body {
+    background-color: #fafafa;
+    position: relative;
+}
+
+.title-styled {
+    font-family: 'Lato', sans-serif !important;
+}
+
+.height-200px {
+    height: 200px !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler:focus i,
+.nav-item:hover {
+    color: #0d6efd;
+}
+
+.nav-item:hover a,
+.nav-item a.active {
+    color: #0d6efd !important;
+}
+
+.nav-item a {
+    border-bottom: 2px solid #fff;
+    font-weight: 600 !important;
+    color: #343a40 !important;
+    font-size: 1.1rem;
+}
+
+.my-color-1 {
+    color: #0d6efd;
+}
+
+.my-color-2 {
+    color: #0d6efd;
+}
+
+.my-color-3 {
+    color: #fe3f40;
+}
+
+.bg-light-2{
+    background-color: #eee;
+}
+
+#profile{
+    padding-top: 72px;
+}
+
+#experiences {
+    margin-bottom: -2px;
+    margin-top: -2px;
+}
+
+#profile-image {
+    overflow: hidden;
+}
+
+#profile-image img{
+    border-bottom: 4px solid #0d6efd;
+    margin: auto;
+}
+
+@media (min-width: 992px) {
+    #experiences .img-card {
+        border-radius: 70px 0 70px 0;
+    }
+
+    #experiences .ex-cards {
+        margin-left: -150px;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    #experiences .ex-cards .ex-card.card-1 {
+        border-radius: 30px 0 0 0;
+    }
+
+    #experiences .ex-cards .ex-card.card-3 {
+        border-radius: 0 0 30px 0;
+    }
+}
+
+@media (max-width: 992px) {
+    #experiences .ex-cards {
+        margin-top: -80%;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    #experiences .ex-cards .ex-card {
+        margin-bottom: 2rem;
+    }
+}
+
+#experiences .ex-cards .ex-card {
+    background-color: #fafafa;
+    border-radius: 2px;
+    padding: 2rem;
+    height: 100%;
+}
+
+
+#experiences .img-card {
+    /* height: 150px; */
+    overflow: hidden;
+}
+
+#educations div.svg {
+    margin-top: -2px;
+}
+
+#educations img {
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+
+#educations svg {
+    z-index: 0;
+    top: 0;
+    left: 0;
+    margin-top: -2px;
+}
+
+#educations .mask {
+    z-index: 100;
+    background-color: rgb(0, 0, 0, .75);
+}

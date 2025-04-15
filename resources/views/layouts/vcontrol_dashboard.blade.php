@@ -18,6 +18,7 @@
 @endsection
 
 @section('extra-css')
+<link rel="stylesheet" href="{{ asset('assets/css/vonstemp.css') }}">
 @yield('add-css')
 @endsection
 
@@ -342,6 +343,8 @@
 @endsection
 
 @section('extra-js')
+<script src="{{ asset('assets/js/vonstemp.js') }}"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var collapseIcons = document.querySelectorAll('.collapse-icon');

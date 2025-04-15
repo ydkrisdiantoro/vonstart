@@ -264,8 +264,11 @@ class GenerateCrud extends Command
         $columns = Schema::getColumns($tableName);
         $forms = '';
         foreach ($columns as $column) {
+            if (in_array($column['type_name'], ['int', 'tinyint', 'smallint', 'bigint', 'decimal', 'float'])){
+                $formatNumber = true;
+            }
             if (substr($column['name'], -3) == '_id') {
-                $refTable = str_replace('_', '', ucwords(substr($column['name'], 0, -3), '_'));
+                $refTable = str_replace('_', ' ', ucwords(substr($column['name'], 0, -3), '_'));
                 $forms .= '
                     <div class="form-floating mb-3">
                         <select class="form-select"
@@ -281,9 +284,12 @@ class GenerateCrud extends Command
                                 @endforeach
                             @endif
                         </select>
-                        <label for="'.substr($column['name'], 0, -3).'">Works with selects</label>
+                        <label for="'.substr($column['name'], 0, -3).'">'.$refTable.'</label>
                     </div>
     ';
+                if ($formatNumber ?? false) {
+                    $forms = str_replace('{{ $optionName }}', '{{ number_format($optionName) }}', $forms);
+                }
             }elseif(!in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])){
                 $refTable = str_replace('_', ' ', ucwords(substr($column['name'], 0), '_'));
                 $columnType = 'text';

@@ -6,7 +6,7 @@
 @endsection
 
 @section('extra-css')
-{{--  --}}
+<link rel="stylesheet" href="{{ asset('assets/css/vonstemp.css') }}">
 @endsection
 
 @section('body')
